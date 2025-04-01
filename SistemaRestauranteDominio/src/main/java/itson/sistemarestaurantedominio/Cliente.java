@@ -6,19 +6,22 @@
 package itson.sistemarestaurantedominio;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
  */
 @Entity
-@Table(name = "clientes")
+@Table(name = "clientes_frecuentes")
 public class Cliente implements Serializable {
 
     @Id
@@ -26,17 +29,27 @@ public class Cliente implements Serializable {
     @Column(name = "id_cliente")
     private Long id;
 
-    @Column(name = "nombre", length = 100, nullable = false)
+    @Column(name = "nombre", length = 40, nullable = false)
     private String nombre;
 
-    @Column(name = "correo", length = 100)
+    @Column(name = "apellido_paterno", length = 40, nullable = false)
+    private String apellidoPaterno;
+
+    @Column(name = "apellido_materno", length = 40, nullable = false)
+    private String apellidoMaterno;
+
+    @Column(name = "correo", length = 50)
     private String correo;
 
-    @Column(name = "numero_telefono", length = 15)
+    @Column(name = "numero_telefono", length = 10)
     private String numeroTelefono;
 
+    @Column(name = "fecha_registro", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date fechaRegistro;
+
     @Column(name = "puntos_fidelidad", nullable = false)
-    private int puntosFidelidad;
+    private double puntosFidelidad;
 
     @Column(name = "numero_visitas", nullable = false)
     private int numeroVisitas;
@@ -47,10 +60,13 @@ public class Cliente implements Serializable {
     public Cliente() {
     }
 
-    public Cliente(String nombre, String correo, String numeroTelefono, int puntosFidelidad, int numeroVisitas, double totalGastado) {
+    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String numeroTelefono, Date fechaRegistro, double puntosFidelidad, int numeroVisitas, double totalGastado) {
         this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
         this.correo = correo;
         this.numeroTelefono = numeroTelefono;
+        this.fechaRegistro = fechaRegistro;
         this.puntosFidelidad = puntosFidelidad;
         this.numeroVisitas = numeroVisitas;
         this.totalGastado = totalGastado;
@@ -72,6 +88,22 @@ public class Cliente implements Serializable {
         this.nombre = nombre;
     }
 
+    public String getApellidoPaterno() {
+        return apellidoPaterno;
+    }
+
+    public void setApellidoPaterno(String apellidoPaterno) {
+        this.apellidoPaterno = apellidoPaterno;
+    }
+
+    public String getApellidoMaterno() {
+        return apellidoMaterno;
+    }
+
+    public void setApellidoMaterno(String apellidoMaterno) {
+        this.apellidoMaterno = apellidoMaterno;
+    }
+
     public String getCorreo() {
         return correo;
     }
@@ -88,11 +120,19 @@ public class Cliente implements Serializable {
         this.numeroTelefono = numeroTelefono;
     }
 
-    public int getPuntosFidelidad() {
+    public Date getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
+    public double getPuntosFidelidad() {
         return puntosFidelidad;
     }
 
-    public void setPuntosFidelidad(int puntosFidelidad) {
+    public void setPuntosFidelidad(double puntosFidelidad) {
         this.puntosFidelidad = puntosFidelidad;
     }
 
