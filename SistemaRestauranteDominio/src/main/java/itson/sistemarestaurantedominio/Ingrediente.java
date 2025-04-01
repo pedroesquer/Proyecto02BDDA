@@ -1,6 +1,8 @@
 package itson.sistemarestaurantedominio;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,6 +10,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -32,7 +36,11 @@ public class Ingrediente implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "unidad_medida", nullable = false)
     private UnidadMedida unidadMedida;
-
+    
+    @OneToMany(mappedBy = "ingrediente")
+    private List <IngredienteProducto> productos;
+    
+    
     public Ingrediente() {
     }
 
@@ -74,9 +82,14 @@ public class Ingrediente implements Serializable {
     public void setUnidadMedida(UnidadMedida unidadMedida) {
         this.unidadMedida = unidadMedida;
     }
-    
-    
-    
+
+    public List<IngredienteProducto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<IngredienteProducto> productos) {
+        this.productos = productos;
+    }
     
     
     

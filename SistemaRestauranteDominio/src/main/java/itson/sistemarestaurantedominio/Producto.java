@@ -5,6 +5,7 @@
 package itson.sistemarestaurantedominio;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,12 +13,15 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
  */
 @Entity
+@Table(name = "productos")
 public class Producto implements Serializable {
 
     @Id
@@ -34,6 +38,21 @@ public class Producto implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo", nullable = false)
     private TipoProducto tipo;
+    
+    @OneToMany(mappedBy = "producto")
+    private List <IngredienteProducto> ingredientes;
+
+    public List<IngredienteProducto> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<IngredienteProducto> ingredientes) {
+        this.ingredientes = ingredientes;
+    }
+    
+    
+    
+    
 
     public Producto() {}
 
