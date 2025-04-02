@@ -5,8 +5,11 @@
 package itson.sistemarestaurantedominio;
 
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +46,7 @@ public class Cliente implements Serializable {
     @Column(name = "correo", length = 50)
     private String correo;
 
-    @Column(name = "numero_telefono", length = 10)
+    @Column(name = "numero_telefono", length = 50)
     private String numeroTelefono;
 
     @Column(name = "fecha_registro", nullable = false)
@@ -61,6 +64,11 @@ public class Cliente implements Serializable {
 
     @OneToMany(mappedBy = "cliente")
     private List<Comanda> comandas;
+    
+    //clave secreta fija para AES que es de 16 bytes
+    // la clave tiene que ser de 16, 24 o 32 caracteres
+    private static final String CLAVE_SECRETA = "ClaveSecreta1234";
+    
 
     public Cliente() {
     }
@@ -70,12 +78,42 @@ public class Cliente implements Serializable {
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.correo = correo;
-        this.numeroTelefono = numeroTelefono;
+        this.setNumeroTelefono(numeroTelefono);
         this.fechaRegistro = fechaRegistro;
         this.puntosFidelidad = puntosFidelidad;
         this.numeroVisitas = numeroVisitas;
         this.totalGastado = totalGastado;
     }
+    
+    // encriptar con AES
+    private String encriptar(String telefono){
+        try{
+            SecretKeySpec clave = new SecretKeySpec(CLAVE_SECRETA.getBytes("UTF-8"), "AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, clave);
+            byte[] encriptado = cipher.doFinal(telefono.getBytes("UTF-8"));
+            return Base64.getEncoder().encodeToString(encriptado);
+        } catch (Exception e){
+            System.out.println("Error al encriptar: " + e.getMessage());
+            return telefono;
+        }
+    }
+    
+    // desencriptar con AES
+    private String desencriptar(String telefonoEncriptado){
+        try{
+            SecretKeySpec clave = new SecretKeySpec(CLAVE_SECRETA.getBytes("UTF-8"), "AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.DECRYPT_MODE, clave);
+            byte[] desencriptado = cipher.doFinal(Base64.getDecoder().decode(telefonoEncriptado));
+            return new String(desencriptado, "UTF-8");
+        } catch (Exception e){
+            System.out.println("Error al desencriptar: " + e.getMessage());
+            return telefonoEncriptado;
+            // si no jala, devuelve encriptado
+        }
+    }
+    
 
     public Long getId() {
         return id;
@@ -118,11 +156,11 @@ public class Cliente implements Serializable {
     }
 
     public String getNumeroTelefono() {
-        return numeroTelefono;
+        return desencriptar(this.numeroTelefono);
     }
 
     public void setNumeroTelefono(String numeroTelefono) {
-        this.numeroTelefono = numeroTelefono;
+        this.numeroTelefono = encriptar(numeroTelefono);
     }
 
     public Date getFechaRegistro() {
