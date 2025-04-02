@@ -46,13 +46,21 @@ public class Comanda implements Serializable {
     @OneToMany(mappedBy = "comanda", cascade = CascadeType.PERSIST)
     private List<ProductoComanda> productos;
     
-    @ManyToOne(
-    )
+    @ManyToOne()
     @JoinColumn(
         name = "id_mesa",
         nullable = false
     )
     private Mesa mesa;
+    
+    
+    @ManyToOne()
+    @JoinColumn(
+       name = "id_cliente",
+       nullable = false
+    )
+    
+    private Cliente cliente;
 
     public Comanda() {}
 
@@ -123,6 +131,16 @@ public class Comanda implements Serializable {
     public void setMesa(Mesa mesa) {
         this.mesa = mesa;
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+    
+    
     
     
 

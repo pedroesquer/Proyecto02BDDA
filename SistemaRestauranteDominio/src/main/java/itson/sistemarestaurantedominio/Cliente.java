@@ -2,23 +2,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package itson.sistemarestaurantedominio;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
  *
- * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
+ * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
+ * Soto
  */
 @Entity
 @Table(name = "clientes_frecuentes")
@@ -56,6 +58,9 @@ public class Cliente implements Serializable {
 
     @Column(name = "total_gastado", nullable = false)
     private double totalGastado;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<Comanda> comandas;
 
     public Cliente() {
     }
