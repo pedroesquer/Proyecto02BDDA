@@ -6,6 +6,7 @@ package itson.sistemarestaurantedominio;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -41,6 +42,9 @@ public class Producto implements Serializable {
     
     @OneToMany(mappedBy = "producto")
     private List <IngredienteProducto> ingredientes;
+    
+    @OneToMany(mappedBy = "producto")
+    private List<ProductoComanda> comandas;
 
     public List<IngredienteProducto> getIngredientes() {
         return ingredientes;
@@ -56,11 +60,15 @@ public class Producto implements Serializable {
 
     public Producto() {}
 
-    public Producto(String nombre, Float precio, TipoProducto tipo) {
+    public Producto(String nombre, Float precio, TipoProducto tipo, List<IngredienteProducto> ingredientes, List<ProductoComanda> comandas) {
         this.nombre = nombre;
         this.precio = precio;
         this.tipo = tipo;
+        this.ingredientes = ingredientes;
+        this.comandas = comandas;
     }
+
+    
     
     
 
@@ -95,6 +103,15 @@ public class Producto implements Serializable {
     public void setTipo(TipoProducto tipo) {
         this.tipo = tipo;
     }
+
+    public List<ProductoComanda> getComandas() {
+        return comandas;
+    }
+
+    public void setComandas(List<ProductoComanda> comandas) {
+        this.comandas = comandas;
+    }
+    
     
 
     @Override
