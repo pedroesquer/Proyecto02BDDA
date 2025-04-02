@@ -57,7 +57,7 @@ public class Comanda implements Serializable {
     @ManyToOne()
     @JoinColumn(
        name = "id_cliente",
-       nullable = false
+       nullable = true
     )
     
     private Cliente cliente;

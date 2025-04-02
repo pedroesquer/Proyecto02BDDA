@@ -18,7 +18,7 @@ public class PantallaEntrada extends javax.swing.JFrame {
     public PantallaEntrada() {
         initComponents();
         this.setResizable(false);
-        this.setSize(617, 446);
+        this.setSize(619,450);
     }
 
     /**
@@ -58,6 +58,7 @@ public class PantallaEntrada extends javax.swing.JFrame {
         jButton1.setBackground(new java.awt.Color(50, 180, 106));
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Soy Mesero");
+        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
