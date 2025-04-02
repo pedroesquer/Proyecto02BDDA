@@ -116,6 +116,16 @@ public class Comanda implements Serializable {
         this.id = id;
     }
 
+    public Mesa getMesa() {
+        return mesa;
+    }
+
+    public void setMesa(Mesa mesa) {
+        this.mesa = mesa;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
