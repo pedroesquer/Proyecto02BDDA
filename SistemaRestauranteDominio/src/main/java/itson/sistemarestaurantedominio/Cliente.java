@@ -42,7 +42,7 @@ public class Cliente implements Serializable {
     @Column(name = "correo", length = 50)
     private String correo;
 
-    @Column(name = "numero_telefono", length = 255) // tamano para texto encriptado
+    @Column(name = "numero_telefono", length = 255) // el tamano es para texto encriptado.
     private String numeroTelefono;
 
     @Column(name = "fecha_registro", nullable = false)
