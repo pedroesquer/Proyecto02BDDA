@@ -26,7 +26,8 @@ import javax.persistence.criteria.Root;
  * @return cliente frecuente ya registrado
  */
 
-public class ClientesDAO extends IClientesDAO {
+public class ClientesDAO implements IClientesDAO {
+    @Override
     public Cliente registrar(NuevoClienteDTO nuevoCliente){
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         entityManager.getTransaction().begin();
@@ -62,7 +63,8 @@ public class ClientesDAO extends IClientesDAO {
      * @param filtroBusqueda texto a buscar en nombre / apellido
      * @return lista de clientes frecuentes que coincidan
      */
-    public List<Cliente> consultarClientes(String filtroBusqueda){
+    @Override
+    public List<Cliente> consultar(String filtroBusqueda){
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Cliente> criteriaQuery = criteriaBuilder.createQuery(Cliente.class);
