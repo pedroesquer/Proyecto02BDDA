@@ -1,6 +1,8 @@
 package itson.sistemarestaurantedominio.dtos;
 
+import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.TipoProducto;
+import java.util.List;
 
 /**
  *
@@ -16,7 +18,17 @@ public class NuevoProductoDTO {
         this.precio = precio;
         this.tipo = tipo;
     }
-    
-    
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public Float getPrecio() {
+        return precio;
+    }
+
+    public TipoProducto getTipo() {
+        return tipo;
+    }
     
 }

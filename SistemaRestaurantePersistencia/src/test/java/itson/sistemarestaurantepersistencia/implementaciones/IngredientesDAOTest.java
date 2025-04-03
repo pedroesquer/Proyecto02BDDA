@@ -32,7 +32,7 @@ public class IngredientesDAOTest {
         assertNotNull(ingrediente.getId());
         //Verificamos que ciertos atributos del ingrediente que creamos nosotros y el que se registró sean igual.
         assertEquals(nuevoIngrediente.getNombre(), ingrediente.getNombre());
-        assertEquals(nuevoIngrediente.getStock(), ingrediente.getStock());
+        assertEquals(nuevoIngrediente.getStock(), ingrediente.getStock());        
     }
     @Test
     public void testConsultarIngredientesOk(){

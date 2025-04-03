@@ -60,6 +60,14 @@ public class Producto implements Serializable {
 
     public Producto() {}
 
+    public Producto(String nombre, Float precio, TipoProducto tipo) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.tipo = tipo;
+    }
+    
+    
+
     public Producto(String nombre, Float precio, TipoProducto tipo, List<IngredienteProducto> ingredientes, List<ProductoComanda> comandas) {
         this.nombre = nombre;
         this.precio = precio;
