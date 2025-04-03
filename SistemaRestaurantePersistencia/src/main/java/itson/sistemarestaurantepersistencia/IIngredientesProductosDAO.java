@@ -5,6 +5,7 @@
 package itson.sistemarestaurantepersistencia;
 
 import itson.sistemarestaurantedominio.IngredienteProducto;
+import itson.sistemarestaurantedominio.dtos.ActualizarIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevaRelacionIngredienteProductoDTO;
 import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 
@@ -16,4 +17,5 @@ public interface IIngredientesProductosDAO  {
     
    public abstract IngredienteProducto registrar(NuevaRelacionIngredienteProductoDTO relacionIngredienteProductoDTO) throws PersistenciaException;
     
+   public abstract IngredienteProducto actualizar(ActualizarIngredienteProductoDTO actualizarIngredienteProducto) throws PersistenciaException;
 }

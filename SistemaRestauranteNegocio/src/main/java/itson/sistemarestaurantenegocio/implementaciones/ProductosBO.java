@@ -2,10 +2,12 @@
 package itson.sistemarestaurantenegocio.implementaciones;
 
 import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantedominio.dtos.ActualizarProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepersistencia.IProductosDAO;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import java.util.List;
 
 /**
@@ -58,6 +60,23 @@ public class ProductosBO implements IProductosBO {
             throw new NegocioException("El filtro de busqueda es demasiado largo");
         }
         return this.productosDAO.consultar(filtroBusqueda);
+    }
+
+    /**
+     * Método para actualizar un producto en la base de datos, se puede cambiar su nombre y/o precio
+     * @param actualizarProducto
+     * @return
+     * @throws NegocioException 
+     */
+    @Override
+    public Producto actualizar(ActualizarProductoDTO actualizarProducto) throws NegocioException, PersistenciaException {
+        if(actualizarProducto.getPrecio() <= 0 ){
+            throw new NegocioException("El precio debe de ser mayor a 0");
+        }
+        if(actualizarProducto.getNombre().length() > LIMITE_CARACTERES_NOMBRE){
+            throw new NegocioException("El nombre es demasiado largo");
+        }
+        return this.productosDAO.actualizarProducto(actualizarProducto);
     }
     
     

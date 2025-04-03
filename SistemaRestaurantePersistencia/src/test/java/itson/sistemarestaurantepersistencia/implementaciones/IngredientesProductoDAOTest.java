@@ -8,6 +8,7 @@ import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.IngredienteProducto;
 import itson.sistemarestaurantedominio.TipoProducto;
 import itson.sistemarestaurantedominio.UnidadMedida;
+import itson.sistemarestaurantedominio.dtos.ActualizarIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevaRelacionIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
@@ -105,6 +106,18 @@ public class IngredientesProductoDAOTest {
         //Ahora verificamos que se lance el mensaje esperado, en este caso del producto
         String mensajeEsperado = "El ingrediente no existe";
         assertEquals(mensajeEsperado, ex.getMessage());
+        
+    }
+    
+    @Test
+    public void testActualizarCantidadOk() throws PersistenciaException{
+        IngredientesProductoDAO ingredientesProductosDAO = new IngredientesProductoDAO();
+        ActualizarIngredienteProductoDTO actualizarCantidad = new ActualizarIngredienteProductoDTO(1l, 200f);
+
+        IngredienteProducto ingredienteProducto = ingredientesProductosDAO.actualizar(actualizarCantidad);
+        
+        assertEquals(actualizarCantidad.getCantidad(), ingredienteProducto.getCantidad());
+        
         
     }
     

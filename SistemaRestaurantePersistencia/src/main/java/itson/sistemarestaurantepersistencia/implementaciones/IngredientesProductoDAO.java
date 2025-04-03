@@ -7,6 +7,7 @@ package itson.sistemarestaurantepersistencia.implementaciones;
 import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.IngredienteProducto;
 import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantedominio.dtos.ActualizarIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevaRelacionIngredienteProductoDTO;
 import itson.sistemarestaurantepersistencia.IIngredientesProductosDAO;
 import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
@@ -49,6 +50,27 @@ public class IngredientesProductoDAO implements IIngredientesProductosDAO  {
         entityManager.getTransaction().commit();
         
         return relacion;
+    }
+
+    @Override
+    public IngredienteProducto actualizar(ActualizarIngredienteProductoDTO actualizarIngredienteProducto) throws PersistenciaException {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        entityManager.getTransaction().begin();
+        
+        IngredienteProducto ingredienteProducto = entityManager.find(IngredienteProducto.class, 
+                actualizarIngredienteProducto.getId());
+        
+        if(ingredienteProducto != null){
+            ingredienteProducto.setCantidad(actualizarIngredienteProducto.getCantidad());
+        } else {
+            throw new PersistenciaException("No se encontró una relación ");
+        }
+        
+        entityManager.merge(ingredienteProducto);
+        entityManager.getTransaction().commit();
+        return ingredienteProducto;
+        
+        
     }
     
 }
