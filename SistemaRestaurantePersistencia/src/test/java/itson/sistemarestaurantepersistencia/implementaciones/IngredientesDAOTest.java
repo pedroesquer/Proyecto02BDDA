@@ -26,7 +26,7 @@ public class IngredientesDAOTest {
         //Creamos DAO
         IngredientesDAO ingredientesDAO = new IngredientesDAO();
         //Creamos el nuevo ingrediente
-        NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO("Lechuga", 500F, GRAMOS);
+        NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO("a", 500F, GRAMOS);
         //Registramos el nuevo ingrediente
         Ingrediente ingrediente = ingredientesDAO.registrar(nuevoIngrediente);
         //Verificamos que su ID no venga nulo.
@@ -34,6 +34,8 @@ public class IngredientesDAOTest {
         //Verificamos que ciertos atributos del ingrediente que creamos nosotros y el que se registró sean igual.
         assertEquals(nuevoIngrediente.getNombre(), ingrediente.getNombre());
         assertEquals(nuevoIngrediente.getStock(), ingrediente.getStock());
+        
+        ingredientesDAO.eliminar(ingrediente.getId());
     }
 
     @Test
@@ -63,7 +65,7 @@ public class IngredientesDAOTest {
         //Asignamos una variable constante con la cantidad de registros que hay de ingredientes
         final int resultadoIngredienteEsperado = 4;
         //Creamos una lista utilizando el metodo de consultar ingredientes de la DAO
-        List<Ingrediente> ingredientes = ingredientesDAO.consultarIngredientes();
+        List<Ingrediente> ingredientes = ingredientesDAO.consultarIngredientes("GRAMOS");
         //Hacemos un assertNotNull para ver si es que viene nulo
         assertNotNull(ingredientes);
         //Comparamos nuestra variable constante con la longitud de la lista.

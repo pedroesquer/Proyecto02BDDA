@@ -1,10 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.Producto;
+import static itson.sistemarestaurantedominio.Producto_.ingredientes;
+import itson.sistemarestaurantedominio.UnidadMedida;
+import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import java.util.List;
@@ -16,21 +16,21 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
  */
-public class BuscadorProductos extends javax.swing.JFrame {
+public class BuscadorIngredientes extends javax.swing.JFrame {
 
-    private IProductosBO productosBO;
-    private static final Logger LOG = Logger.getLogger(BuscadorProductos.class.getName());
+    private IIngredientesBO ingredientesBO;
+    private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
 
     /**
      * Constructor del frame BuscadorProductos.
      */
-    public BuscadorProductos(IProductosBO productosBO) {
+    public BuscadorIngredientes(IIngredientesBO ingredientesBO) {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setTitle("Buscador Productos");
-        this.productosBO = productosBO;
-        this.llenarTablaProductos();
+        this.setTitle("Buscador Ingredientes");
+        this.ingredientesBO = ingredientesBO;
+        this.llenarTablaIngredientes();
         
     }
     
@@ -38,19 +38,19 @@ public class BuscadorProductos extends javax.swing.JFrame {
     
 
     
-    private void llenarTablaProductos(){
+    private void llenarTablaIngredientes(){
         try{
             String filtroBusqueda = this.txtBuscar.getText();
-            List<Producto> productos = this.productosBO.consultar(filtroBusqueda);
+            List<Ingrediente> ingredientes = this.ingredientesBO.consultar(filtroBusqueda);
             //Este objeto permite interactuar con los elementos de la tabla
-            DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaProductos.getModel();
+            DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaIngredientes.getModel();
             modeloTabla.setRowCount(0);
-            for (Producto producto : productos) {
+            for (Ingrediente ingrediente : ingredientes) {
                 Object[] fila = {
-                    producto.getId(),
-                    producto.getNombre(),
-                    producto.getPrecio(),
-                    producto.getTipo()
+                    ingrediente.getId(),
+                    ingrediente.getNombre(),
+                    ingrediente.getUnidadMedida(),
+                    ingrediente.getStock()
                 };
                 modeloTabla.addRow(fila);
             }
@@ -72,7 +72,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
         txtBuscar = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         pnlTablaProductos = new javax.swing.JScrollPane();
-        tablaProductos = new javax.swing.JTable();
+        tablaIngredientes = new javax.swing.JTable();
         btnLimpiar = new javax.swing.JButton();
         botonSeleccionar = new javax.swing.JButton();
 
@@ -87,12 +87,12 @@ public class BuscadorProductos extends javax.swing.JFrame {
             }
         });
 
-        tablaProductos.setModel(new javax.swing.table.DefaultTableModel(
+        tablaIngredientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Producto", "Precio", "Tipo"
+                "ID", "Ingrediente", "Unidad de Medida", "Stock"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -103,9 +103,14 @@ public class BuscadorProductos extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tablaProductos.setColumnSelectionAllowed(true);
-        pnlTablaProductos.setViewportView(tablaProductos);
-        tablaProductos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        tablaIngredientes.setColumnSelectionAllowed(true);
+        pnlTablaProductos.setViewportView(tablaIngredientes);
+        tablaIngredientes.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        if (tablaIngredientes.getColumnModel().getColumnCount() > 0) {
+            tablaIngredientes.getColumnModel().getColumn(0).setResizable(false);
+            tablaIngredientes.getColumnModel().getColumn(1).setResizable(false);
+            tablaIngredientes.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
@@ -166,23 +171,23 @@ public class BuscadorProductos extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         //Aqui iria la lógica para encontrar las coincidencias
-        this.llenarTablaProductos();
+        this.llenarTablaIngredientes();
         
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         this.txtBuscar.setText("");
-        this.llenarTablaProductos();
+        this.llenarTablaIngredientes();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void botonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSeleccionarActionPerformed
-        int selectedRow = tablaProductos.getSelectedRow();
+        int selectedRow = tablaIngredientes.getSelectedRow();
         
         if(selectedRow != -1){//Verificamos que este una fila seleccionada
-            Long id = (Long) tablaProductos.getValueAt(selectedRow, 0);
-            String nombre = (String) tablaProductos.getValueAt(selectedRow,1);
-            Double precio = (Double) tablaProductos.getValueAt(selectedRow,2);
-            String tipo = (String) tablaProductos.getValueAt(selectedRow,3);
+            Long id = (Long) tablaIngredientes.getValueAt(selectedRow, 0);
+            String nombre = (String) tablaIngredientes.getValueAt(selectedRow,1);
+            String unidad = (String) tablaIngredientes.getValueAt(selectedRow,2);
+            Float stock = (Float) tablaIngredientes.getValueAt(selectedRow,3);
         }
     }//GEN-LAST:event_botonSeleccionarActionPerformed
 
@@ -195,7 +200,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JScrollPane pnlTablaProductos;
-    private javax.swing.JTable tablaProductos;
+    private javax.swing.JTable tablaIngredientes;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

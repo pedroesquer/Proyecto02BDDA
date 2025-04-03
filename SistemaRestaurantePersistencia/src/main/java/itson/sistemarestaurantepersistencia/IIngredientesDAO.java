@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  *
- * @author Pedro Morales Esquer
+ * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
  */
 public interface IIngredientesDAO {
 
@@ -15,7 +15,7 @@ public interface IIngredientesDAO {
     
     public abstract void eliminar(Long idIngrediente);
 
-    public abstract List<Ingrediente> consultarIngredientes();
+    public abstract List<Ingrediente> consultarIngredientes(String filtroBusqueda);
 
     public abstract List<Ingrediente> consultarIngredientesNombre(String nombre);
 

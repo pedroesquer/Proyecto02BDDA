@@ -4,6 +4,7 @@
 
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
 import javax.swing.JFrame;
@@ -16,8 +17,8 @@ public class SistemaRestaurantePresentacion {
 
     public static void main(String[] args) {
         IProductosBO productosBO = FabricaObjetosNegocio.crearProductosBO();
-        
-        BuscadorProductos formBuscadorProductos = new BuscadorProductos(productosBO);
+        IIngredientesBO ingredientesBO = FabricaObjetosNegocio.crearIngredientesBO();
+        BuscadorIngredientes formBuscadorProductos = new BuscadorIngredientes(ingredientesBO);
         formBuscadorProductos.setVisible(true);
         formBuscadorProductos.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

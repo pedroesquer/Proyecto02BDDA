@@ -1,13 +1,16 @@
 package itson.sistemarestaurantepersistencia.implementaciones;
 
 import itson.sistemarestaurantedominio.Ingrediente;
+import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.UnidadMedida;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantepersistencia.IIngredientesDAO;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
@@ -61,13 +64,24 @@ public class IngredientesDAO implements IIngredientesDAO {
      * @return Lista de ingredientes.
      */
     @Override
-    public List<Ingrediente> consultarIngredientes() {
+    public List<Ingrediente> consultarIngredientes(String filtroBusqueda) {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Ingrediente> cq = cb.createQuery(Ingrediente.class);
-        Root<Ingrediente> root = cq.from(Ingrediente.class);
-        List<Ingrediente> ingredientes = entityManager.createQuery(cq).getResultList();
-        return ingredientes;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        
+        CriteriaQuery<Ingrediente> criteriaQuery = criteriaBuilder.createQuery(Ingrediente.class);
+        Root<Ingrediente> root = criteriaQuery.from(Ingrediente.class); 
+        
+        //Primero creamos dos predicados, ya que queremos hacer un OR necesitamos primero separarlo
+        Predicate condicionNombre = criteriaBuilder.like(root.get("nombre"), "%"+filtroBusqueda+"%");
+        Predicate condicionUnidadMedida = criteriaBuilder.like(root.get("unidadMedida"), "%"+ filtroBusqueda +"%");
+        
+        //Ahora combinamos las condiciones con un "or"
+        Predicate condicion = criteriaBuilder.or(condicionNombre, condicionUnidadMedida);
+        
+        //Asignamos la condición ya combinada al where
+        criteriaQuery.where(condicion);
+        TypedQuery<Ingrediente> query = entityManager.createQuery(criteriaQuery);
+        return query.getResultList();
 
     }
 
