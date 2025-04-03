@@ -1,11 +1,22 @@
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantedominio.TipoProducto;
+import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
+import itson.sistemarestaurantenegocio.IProductosBO;
+import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author juanpheras
  */
 public class AgregarProducto extends javax.swing.JFrame {
 
+    
+    private IProductosBO productosBO;
+    private static final Logger LOG = Logger.getLogger(AgregarProducto.class.getName());
     /**
      * Creates new form AgregarProducto
      */
@@ -37,8 +48,8 @@ public class AgregarProducto extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         campoTxtPrecio = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        comboBoxTipo = new javax.swing.JComboBox<>();
+        btnAgregarSinIngredientes = new javax.swing.JButton();
         btnSeleccionarIngredientes = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -111,20 +122,30 @@ public class AgregarProducto extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
         jLabel6.setText("Tipo:");
 
-        jComboBox1.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLATILLO", "BEBIDA", "POSTRE" }));
+        comboBoxTipo.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        comboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLATILLO", "BEBIDA", "POSTRE" }));
 
-        jButton1.setBackground(new java.awt.Color(85, 85, 85));
-        jButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("<html>Agregar sin<br>ingredientes</html> ");
-        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAgregarSinIngredientes.setBackground(new java.awt.Color(85, 85, 85));
+        btnAgregarSinIngredientes.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        btnAgregarSinIngredientes.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregarSinIngredientes.setText("<html>Agregar sin<br>ingredientes</html> ");
+        btnAgregarSinIngredientes.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAgregarSinIngredientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarSinIngredientesActionPerformed(evt);
+            }
+        });
 
         btnSeleccionarIngredientes.setBackground(new java.awt.Color(85, 85, 85));
         btnSeleccionarIngredientes.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         btnSeleccionarIngredientes.setForeground(new java.awt.Color(255, 255, 255));
         btnSeleccionarIngredientes.setText("<html>Seleccionar<br>ingredientes</html>\n");
         btnSeleccionarIngredientes.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnSeleccionarIngredientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSeleccionarIngredientesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -135,7 +156,7 @@ public class AgregarProducto extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(comboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(65, 65, 65)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -155,7 +176,7 @@ public class AgregarProducto extends javax.swing.JFrame {
                 .addContainerGap(278, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAgregarSinIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(17, 17, 17))
         );
         jPanel1Layout.setVerticalGroup(
@@ -175,11 +196,11 @@ public class AgregarProducto extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1))
+                    .addComponent(comboBoxTipo))
                 .addGap(18, 18, 18)
                 .addComponent(btnSeleccionarIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAgregarSinIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(11, Short.MAX_VALUE))
         );
 
@@ -201,47 +222,43 @@ public class AgregarProducto extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnAgregarSinIngredientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarSinIngredientesActionPerformed
+        this.agregarProducto();
+    }//GEN-LAST:event_btnAgregarSinIngredientesActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AgregarProducto().setVisible(true);
-            }
-        });
+    private void btnSeleccionarIngredientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarIngredientesActionPerformed
+        this.agregarProducto();
+    }//GEN-LAST:event_btnSeleccionarIngredientesActionPerformed
+
+    private void agregarProducto(){
+        String nombre = this.campoTxtNombre.getText();
+        Float precio = Float.parseFloat(this.campoTxtPrecio.getText());
+        TipoProducto tipo = (TipoProducto )this.comboBoxTipo.getSelectedItem();
+        
+        NuevoProductoDTO nuevoProducto = new NuevoProductoDTO(nombre, precio, tipo);
+        
+        try{
+            this.productosBO.registrar(nuevoProducto);
+            JOptionPane.showMessageDialog(this, "Exito al regisrar el producto", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch(NegocioException e){
+            LOG.severe("No fue posible registrar el producto " + e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (NumberFormatException e) {
+            LOG.severe("No puedes ingresar letras en el precio");
+            JOptionPane.showMessageDialog(this, "Asegurate que el precio sean solo números", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+
+        }
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarSinIngredientes;
     private javax.swing.JButton btnSeleccionarIngredientes;
     private javax.swing.JTextField campoTxtNombre;
     private javax.swing.JTextField campoTxtPrecio;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> comboBoxTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -119,7 +119,7 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
             }
         });
 
-        botonSeleccionar.setText("Seleccionar producto");
+        botonSeleccionar.setText("Seleccionar ingrediente");
         botonSeleccionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonSeleccionarActionPerformed(evt);

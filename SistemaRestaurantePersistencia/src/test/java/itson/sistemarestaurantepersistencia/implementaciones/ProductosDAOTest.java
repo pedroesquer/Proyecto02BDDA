@@ -6,7 +6,9 @@ package itson.sistemarestaurantepersistencia.implementaciones;
 
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.TipoProducto;
+import itson.sistemarestaurantedominio.dtos.ActualizarProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -104,6 +106,19 @@ public class ProductosDAOTest {
         List<Producto> productos = productosDAO.consultar(filtroBusqueda);
         assertNotNull(productos);
         assertEquals(resultadoEsperado, productos.size());
+    }
+    
+    @Test
+    public void actualizarProductoOk() throws PersistenciaException{
+        ProductosDAO productosDAO = new ProductosDAO();
+        ActualizarProductoDTO actualizarProducto = new ActualizarProductoDTO(4l,"Fanta 300ml ", 30f);
+        
+        Producto producto = productosDAO.actualizarProducto(actualizarProducto);
+        
+        assertEquals(actualizarProducto.getNombre(),producto.getNombre());
+        assertEquals(actualizarProducto.getPrecio(),producto.getPrecio());
+        
+
     }
     
 }

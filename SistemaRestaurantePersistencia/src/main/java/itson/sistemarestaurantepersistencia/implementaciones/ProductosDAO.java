@@ -2,8 +2,10 @@ package itson.sistemarestaurantepersistencia.implementaciones;
 
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.TipoProducto;
+import itson.sistemarestaurantedominio.dtos.ActualizarProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantepersistencia.IProductosDAO;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -55,6 +57,30 @@ public class ProductosDAO implements IProductosDAO{
         
         
         
+        
+    }
+
+    @Override
+    public Producto actualizarProducto(ActualizarProductoDTO actualizarProductoDTO) throws PersistenciaException {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        entityManager.getTransaction().begin();
+
+        //Buscamos un producto
+        Producto producto = entityManager.find(Producto.class, actualizarProductoDTO.getId());
+        
+        if(producto != null){
+            //Actualizamos los campos con el DTO
+            producto.setNombre(actualizarProductoDTO.getNombre());
+            producto.setPrecio(actualizarProductoDTO.getPrecio());
+        } else{
+            throw new PersistenciaException("El producto no existe");
+        }
+        
+
+        entityManager.merge(producto);
+        entityManager.getTransaction().commit();
+        return producto;
+            
         
     }
     
