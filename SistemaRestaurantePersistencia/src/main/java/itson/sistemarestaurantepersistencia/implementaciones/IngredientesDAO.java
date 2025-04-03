@@ -34,10 +34,30 @@ public class IngredientesDAO implements IIngredientesDAO {
         return ingrediente;
     }
 
-        /**
-     * Consulta que regresa la lista de ingredientes que tenemos en la base de datos.
+    
+    /**
+     * Registra un nuevo ingrediente en la base de datos.
      *
+     * @param idIngrediente Id del ingrediente el cual se deseé borrar
+     * 
+     */
+    @Override
+    public void eliminar(Long idIngrediente) {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        entityManager.getTransaction().begin();
+        Ingrediente ingrediente = entityManager.find(Ingrediente.class, idIngrediente);
+        if (ingrediente != null) {
+            entityManager.remove(ingrediente);
+        }
+        entityManager.getTransaction().commit();
 
+    }
+
+    /**
+     * Consulta que regresa la lista de ingredientes que tenemos en la base de
+     * datos.
+     *
+     *
      * @return Lista de ingredientes.
      */
     @Override
@@ -49,6 +69,42 @@ public class IngredientesDAO implements IIngredientesDAO {
         List<Ingrediente> ingredientes = entityManager.createQuery(cq).getResultList();
         return ingredientes;
 
+    }
+
+    /**
+     * Consulta que regresa la lista de ingredientes que tenemos en la base de
+     * datos filtrando por nombre.
+     *
+     * @param nombre El nombre del ingrediente que se deseé buscar
+     * @return Lista de ingredientes filtrada.
+     */
+    @Override
+    public List<Ingrediente> consultarIngredientesNombre(String nombre) {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Ingrediente> cq = cb.createQuery(Ingrediente.class);
+        Root<Ingrediente> root = cq.from(Ingrediente.class);
+        cq.select(root).where(cb.equal(root.get("nombre"), nombre));
+        List<Ingrediente> ingredientes = entityManager.createQuery(cq).getResultList();
+        return ingredientes;
+    }
+
+    /**
+     * Consulta que regresa la lista de ingredientes que tenemos en la base de
+     * datos filtrando por unidad de medida .
+     *
+     * @param unidadMedida Unidad de medida por la que se desee filtrar
+     * @return Lista de ingredientes filtrada.
+     */
+    @Override
+    public List<Ingrediente> consultarIngredientesUnidad(UnidadMedida unidadMedida) {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Ingrediente> cq = cb.createQuery(Ingrediente.class);
+        Root<Ingrediente> root = cq.from(Ingrediente.class);
+        cq.select(root).where(cb.equal(root.get("unidadMedida"), unidadMedida));
+        List<Ingrediente> ingredientes = entityManager.createQuery(cq).getResultList();
+        return ingredientes;
     }
 
 }
