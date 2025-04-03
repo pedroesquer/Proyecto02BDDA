@@ -1,12 +1,15 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package itson.sistemarestaurantenegocio.implementaciones;
 
+import itson.sistemarestaurantedominio.Cliente;
 import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepersistencia.IClientesDAO;
 import java.util.List;
 
 /**
@@ -26,7 +29,7 @@ public class ClientesBO implements IClientesBO{
     }
     
     @Override
-    public ClienteFrecuente registrar(NuevoClienteDTO nuevoCliente) throws NegocioException{
+    public Cliente registrar(NuevoClienteDTO nuevoCliente) throws NegocioException{
         if(nuevoCliente.getNombre()==null || nuevoCliente.getNombre().isBlank()) {
             throw new NegocioException("Debe proporcionar un nombre para el cliente.");
         }
@@ -58,14 +61,12 @@ public class ClientesBO implements IClientesBO{
     }
     
     @Override
-    public List<ClienteFrecuente> consultar(String filtroBusqueda) throws NegocioException{
+    public List<Cliente> consultar(String filtroBusqueda) throws NegocioException{
        if(filtroBusqueda.length()>LIMITE_FILTRO_BUSQUEDA){
            throw new NegocioException("El filtro de busqueda es demasiado largo.");
        } 
        return this.clientesDAO.consultar(filtroBusqueda);
         
     }
-    
-    
-    
+ 
 }
