@@ -57,7 +57,7 @@ public class IngredientesProductoDAOTest {
         NuevaRelacionIngredienteProductoDTO nuevaRelacion= new NuevaRelacionIngredienteProductoDTO();
         
         nuevaRelacion.setIdProducto(1);
-        nuevaRelacion.setIdIngrediente(3);
+        nuevaRelacion.setIdIngrediente(1);
         nuevaRelacion.setCantidad(150f);
         
         IngredienteProducto ingredienteProductoGuardado = ingredientesProductosDAO.registrar(nuevaRelacion);

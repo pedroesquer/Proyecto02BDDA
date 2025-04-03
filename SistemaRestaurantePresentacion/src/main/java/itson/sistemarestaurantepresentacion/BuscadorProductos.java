@@ -4,28 +4,61 @@
  */
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantenegocio.IProductosBO;
+import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import java.util.List;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author juanpheras
  */
 public class BuscadorProductos extends javax.swing.JFrame {
 
+    private IProductosBO productosBO;
+    private static final Logger LOG = Logger.getLogger(BuscadorProductos.class.getName());
+
     /**
-     * Creates new form BuscadorProductos
+     * Constructor del frame BuscadorProductos.
      */
-    public BuscadorProductos() {
+    public BuscadorProductos(IProductosBO productosBO) {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setTitle("Buscador Productos");        
-       
+        this.setTitle("Buscador Productos");
+        this.productosBO = productosBO;
+        this.llenarTablaProductos();
+        
     }
     
     
     
 
     
-    
+    private void llenarTablaProductos(){
+        try{
+            String filtroBusqueda = this.txtBuscar.getText();
+            List<Producto> productos = this.productosBO.consultar(filtroBusqueda);
+            //Este objeto permite interactuar con los elementos de la tabla
+            DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaProductos.getModel();
+            modeloTabla.setRowCount(0);
+            for (Producto producto : productos) {
+                Object[] fila = {
+                    producto.getId(),
+                    producto.getNombre(),
+                    producto.getPrecio(),
+                    producto.getTipo()
+                };
+                modeloTabla.addRow(fila);
+            }
+        } catch(NegocioException ex){
+            LOG.severe("No se pudo llenar la tabla");
+            JOptionPane.showInputDialog(this, ex.getMessage());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,7 +73,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         pnlTablaProductos = new javax.swing.JScrollPane();
         tablaProductos = new javax.swing.JTable();
-        btnNuevo = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
         botonSeleccionar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -70,12 +103,14 @@ public class BuscadorProductos extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tablaProductos.setColumnSelectionAllowed(true);
         pnlTablaProductos.setViewportView(tablaProductos);
+        tablaProductos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        btnNuevo.setText("Limpiar");
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
+                btnLimpiarActionPerformed(evt);
             }
         });
 
@@ -101,7 +136,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBuscar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnNuevo)
+                        .addComponent(btnLimpiar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -117,7 +152,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
                         .addComponent(lblBuscar)
                         .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnBuscar)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -131,64 +166,33 @@ public class BuscadorProductos extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         //Aqui iria la lógica para encontrar las coincidencias
+        this.llenarTablaProductos();
         
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-
-    }//GEN-LAST:event_btnNuevoActionPerformed
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        this.txtBuscar.setText("");
+        this.llenarTablaProductos();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void botonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSeleccionarActionPerformed
         int selectedRow = tablaProductos.getSelectedRow();
         
         if(selectedRow != -1){//Verificamos que este una fila seleccionada
-            Integer id = (Integer) tablaProductos.getValueAt(selectedRow, 0);
+            Long id = (Long) tablaProductos.getValueAt(selectedRow, 0);
             String nombre = (String) tablaProductos.getValueAt(selectedRow,1);
             Double precio = (Double) tablaProductos.getValueAt(selectedRow,2);
             String tipo = (String) tablaProductos.getValueAt(selectedRow,3);
         }
     }//GEN-LAST:event_botonSeleccionarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BuscadorProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BuscadorProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BuscadorProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BuscadorProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new BuscadorProductos().setVisible(true);
-            }
-        });
-    }
+   
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonSeleccionar;
     private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JScrollPane pnlTablaProductos;
     private javax.swing.JTable tablaProductos;
