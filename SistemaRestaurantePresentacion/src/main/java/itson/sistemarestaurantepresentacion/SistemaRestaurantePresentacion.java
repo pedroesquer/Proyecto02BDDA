@@ -18,9 +18,12 @@ public class SistemaRestaurantePresentacion {
     public static void main(String[] args) {
         IProductosBO productosBO = FabricaObjetosNegocio.crearProductosBO();
         IIngredientesBO ingredientesBO = FabricaObjetosNegocio.crearIngredientesBO();
-        BuscadorProductos formBuscadorProductos = new BuscadorProductos(productosBO);
-        AgregarIngredientes agregarIngredientes = new AgregarIngredientes(ingredientesBO);
-        agregarIngredientes.setVisible(true);
-        agregarIngredientes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        BuscadorProductos formBuscadorProductos = new BuscadorProductos(productosBO);
+//        AgregarIngredientes agregarIngredientes = new AgregarIngredientes(ingredientesBO);
+//        agregarIngredientes.setVisible(true);
+//        agregarIngredientes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        AgregarProducto formAgregarProducto = new AgregarProducto(productosBO);
+        formAgregarProducto.setVisible(true);
+        
     }
 }

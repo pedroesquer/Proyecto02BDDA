@@ -45,6 +45,10 @@ public class ProductosBO implements IProductosBO {
         if(nuevoProducto.getNombre().length() > LIMITE_CARACTERES_NOMBRE){
             throw new NegocioException("El nombre del producto es demasiado largo");
         }
+        
+        if(this.productosDAO.existeProductoConNombre(nuevoProducto.getNombre())){
+            throw new NegocioException("El producto ya existe");
+        }
         return this.productosDAO.registrar(nuevoProducto);
     }
 

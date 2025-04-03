@@ -16,4 +16,6 @@ public interface IProductosDAO {
     public abstract List<Producto> consultar(String filtroBusqueda);
     
     public abstract Producto actualizarProducto(ActualizarProductoDTO actualizarProductoDTO) throws PersistenciaException;
+    
+    public Boolean existeProductoConNombre(String nombre);
 }

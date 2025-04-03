@@ -2,6 +2,9 @@ package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.TipoProducto;
+import static itson.sistemarestaurantedominio.TipoProducto.BEBIDA;
+import static itson.sistemarestaurantedominio.TipoProducto.PLATILLO;
+import static itson.sistemarestaurantedominio.TipoProducto.POSTRE;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
@@ -19,13 +22,15 @@ public class AgregarProducto extends javax.swing.JFrame {
     private static final Logger LOG = Logger.getLogger(AgregarProducto.class.getName());
     /**
      * Creates new form AgregarProducto
+     * @param productosBO
      */
-    public AgregarProducto() {
+    public AgregarProducto(IProductosBO productosBO) {
         initComponents();
         this.setTitle("Agregar productos");
         this.setResizable(false);
         this.setSize(760,500);
         this.setLocationRelativeTo(null);
+        this.productosBO = productosBO;
     }
 
     /**
@@ -48,9 +53,9 @@ public class AgregarProducto extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         campoTxtPrecio = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        comboBoxTipo = new javax.swing.JComboBox<>();
         btnAgregarSinIngredientes = new javax.swing.JButton();
         btnSeleccionarIngredientes = new javax.swing.JButton();
+        comboBoxTipo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -122,9 +127,6 @@ public class AgregarProducto extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
         jLabel6.setText("Tipo:");
 
-        comboBoxTipo.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        comboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLATILLO", "BEBIDA", "POSTRE" }));
-
         btnAgregarSinIngredientes.setBackground(new java.awt.Color(85, 85, 85));
         btnAgregarSinIngredientes.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         btnAgregarSinIngredientes.setForeground(new java.awt.Color(255, 255, 255));
@@ -147,32 +149,31 @@ public class AgregarProducto extends javax.swing.JFrame {
             }
         });
 
+        comboBoxTipo.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        comboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new TipoProducto[] { PLATILLO, BEBIDA, POSTRE }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(65, 65, 65)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSeleccionarIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(comboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(campoTxtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(campoTxtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(campoTxtPrecio))))
-                            .addComponent(btnSeleccionarIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(campoTxtPrecio))
+                            .addComponent(comboBoxTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(278, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -195,9 +196,9 @@ public class AgregarProducto extends javax.swing.JFrame {
                     .addComponent(campoTxtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(comboBoxTipo))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel6)
+                    .addComponent(comboBoxTipo, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSeleccionarIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAgregarSinIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -258,7 +259,7 @@ public class AgregarProducto extends javax.swing.JFrame {
     private javax.swing.JButton btnSeleccionarIngredientes;
     private javax.swing.JTextField campoTxtNombre;
     private javax.swing.JTextField campoTxtPrecio;
-    private javax.swing.JComboBox<String> comboBoxTipo;
+    private javax.swing.JComboBox<TipoProducto> comboBoxTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

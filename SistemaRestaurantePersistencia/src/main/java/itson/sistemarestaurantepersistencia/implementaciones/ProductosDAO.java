@@ -84,6 +84,21 @@ public class ProductosDAO implements IProductosDAO{
         
     }
     
-    
+     /**
+     * Método que hace una consulta a la base de datos y regresa un true si encuentra coincidencias con el nombre enviado.
+     * @param nombre El nombre del producto que se intenta registrar.
+     * @return True si encuentra coincidencias, falso si no.
+     */
+    @Override
+    public Boolean existeProductoConNombre(String nombre) {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+
+        String jpql = "SELECT COUNT(p) FROM Producto p WHERE p.nombre = :nombre";
+        Long count = entityManager.createQuery(jpql, Long.class)
+                .setParameter("nombre", nombre)
+                .getSingleResult();
+
+        return count > 0;
+    }
     
 }
