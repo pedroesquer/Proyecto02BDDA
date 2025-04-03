@@ -77,6 +77,19 @@ public class Cliente implements Serializable {
         this.totalGastado = totalGastado;
     }
 
+    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String numeroTelefono, Date fechaRegistro) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.correo = correo;
+        this.numeroTelefono = numeroTelefono;
+        this.fechaRegistro = fechaRegistro;
+        this.puntosFidelidad = 0;
+        this.numeroVisitas = 0;
+    }
+    
+    
+
 
     public Long getId() {
         return id;

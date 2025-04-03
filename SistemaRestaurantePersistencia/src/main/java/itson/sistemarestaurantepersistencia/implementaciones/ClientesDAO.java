@@ -37,8 +37,7 @@ public class ClientesDAO implements IClientesDAO {
                 nuevoCliente.getApellidoMaterno(),
                 nuevoCliente.getCorreo(),
                 nuevoCliente.getNumeroTelefono(),
-                nuevoCliente.getFechaRegistro(),
-                nuevoCliente.getPuntosFidelidad()
+                nuevoCliente.getFechaRegistro()
         );
         entityManager.persist(cliente);
         entityManager.getTransaction().commit();
