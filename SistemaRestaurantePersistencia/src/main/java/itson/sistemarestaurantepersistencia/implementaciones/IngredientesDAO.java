@@ -1,7 +1,6 @@
 package itson.sistemarestaurantepersistencia.implementaciones;
 
 import itson.sistemarestaurantedominio.Ingrediente;
-import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.UnidadMedida;
 import itson.sistemarestaurantedominio.dtos.ActualizarStockIngredienteDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
@@ -16,7 +15,7 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author pedro
+ * @author Pedro Morales Esquer
  */
 public class IngredientesDAO implements IIngredientesDAO {
 

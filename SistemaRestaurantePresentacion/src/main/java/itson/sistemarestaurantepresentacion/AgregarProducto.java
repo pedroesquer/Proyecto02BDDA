@@ -139,7 +139,7 @@ public class AgregarProducto extends javax.swing.JFrame {
         btnSeleccionarIngredientes.setBackground(new java.awt.Color(85, 85, 85));
         btnSeleccionarIngredientes.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         btnSeleccionarIngredientes.setForeground(new java.awt.Color(255, 255, 255));
-        btnSeleccionarIngredientes.setText("<html>Seleccionar<br>ingredientes</html>\n");
+        btnSeleccionarIngredientes.setText("<html>Seleccionar<br>ingredientes</html> ");
         btnSeleccionarIngredientes.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnSeleccionarIngredientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
