@@ -3,8 +3,10 @@ package itson.sistemarestaurantepersistencia.implementaciones;
 import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.UnidadMedida;
 import static itson.sistemarestaurantedominio.UnidadMedida.GRAMOS;
+import itson.sistemarestaurantedominio.dtos.ActualizarStockIngredienteDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import java.util.List;
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,6 +40,18 @@ public class IngredientesDAOTest {
         ingredientesDAO.eliminar(ingrediente.getId());
     }
 
+    @Test 
+    public void testActualizarStockOk(){
+        //Creamos DAO
+        IngredientesDAO ingredientesDAO = new IngredientesDAO();
+        ActualizarStockIngredienteDTO ingredienteActualizado = new ActualizarStockIngredienteDTO(1L, 1500F);
+        
+        Ingrediente ingrediente = ingredientesDAO.agregarStock(ingredienteActualizado);
+        
+        assertEquals(ingrediente.getStock(), ingredienteActualizado.getStock());
+    }
+    
+    
     @Test
     public void testRegistrarIngredienteSinNombre() {
         //Creamos DAO

@@ -3,6 +3,7 @@ package itson.sistemarestaurantepersistencia.implementaciones;
 import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.UnidadMedida;
+import itson.sistemarestaurantedominio.dtos.ActualizarStockIngredienteDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantepersistencia.IIngredientesDAO;
 import java.util.List;
@@ -24,7 +25,7 @@ public class IngredientesDAO implements IIngredientesDAO {
      *
      * @param nuevoIngrediente Objeto DTO que contiene los datos de un nuevo
      * ingrediente.
-     * @return Objeto recién creado y persistido en la base de datos.
+     * @return Objeto ingrediente recién creado y persistido en la base de datos.
      */
     @Override
     public Ingrediente registrar(NuevoIngredienteDTO nuevoIngrediente) {
@@ -37,12 +38,30 @@ public class IngredientesDAO implements IIngredientesDAO {
         return ingrediente;
     }
 
-    
+    /**
+     * Actualiza el stock de un ingrediente en la base de datos.
+     *
+     * @param ingredienteActualizado Objeto DTO que contiene la cantidad (stock) de un ingrediente
+     * @return Objeto ingrediente con stock actualizado.
+     */
+    @Override
+    public Ingrediente agregarStock(ActualizarStockIngredienteDTO ingredienteActualizado) {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        entityManager.getTransaction().begin();
+        Ingrediente ingrediente = entityManager.find(Ingrediente.class, ingredienteActualizado.getId());
+        if (ingrediente != null) {
+            ingrediente.setStock(ingredienteActualizado.getStock());
+        }
+        entityManager.merge(ingrediente);
+        entityManager.getTransaction().commit();
+        return ingrediente;
+    }
+
     /**
      * Registra un nuevo ingrediente en la base de datos.
      *
      * @param idIngrediente Id del ingrediente el cual se deseé borrar
-     * 
+     *
      */
     @Override
     public void eliminar(Long idIngrediente) {
@@ -67,17 +86,17 @@ public class IngredientesDAO implements IIngredientesDAO {
     public List<Ingrediente> consultarIngredientes(String filtroBusqueda) {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        
+
         CriteriaQuery<Ingrediente> criteriaQuery = criteriaBuilder.createQuery(Ingrediente.class);
-        Root<Ingrediente> root = criteriaQuery.from(Ingrediente.class); 
-        
+        Root<Ingrediente> root = criteriaQuery.from(Ingrediente.class);
+
         //Primero creamos dos predicados, ya que queremos hacer un OR necesitamos primero separarlo
-        Predicate condicionNombre = criteriaBuilder.like(root.get("nombre"), "%"+filtroBusqueda+"%");
-        Predicate condicionUnidadMedida = criteriaBuilder.like(root.get("unidadMedida"), "%"+ filtroBusqueda +"%");
-        
+        Predicate condicionNombre = criteriaBuilder.like(root.get("nombre"), "%" + filtroBusqueda + "%");
+        Predicate condicionUnidadMedida = criteriaBuilder.like(root.get("unidadMedida"), "%" + filtroBusqueda + "%");
+
         //Ahora combinamos las condiciones con un "or"
         Predicate condicion = criteriaBuilder.or(condicionNombre, condicionUnidadMedida);
-        
+
         //Asignamos la condición ya combinada al where
         criteriaQuery.where(condicion);
         TypedQuery<Ingrediente> query = entityManager.createQuery(criteriaQuery);

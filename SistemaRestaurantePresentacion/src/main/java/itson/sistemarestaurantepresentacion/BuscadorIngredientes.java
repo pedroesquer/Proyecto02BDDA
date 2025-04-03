@@ -35,9 +35,6 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
     }
     
     
-    
-
-    
     private void llenarTablaIngredientes(){
         try{
             String filtroBusqueda = this.txtBuscar.getText();
