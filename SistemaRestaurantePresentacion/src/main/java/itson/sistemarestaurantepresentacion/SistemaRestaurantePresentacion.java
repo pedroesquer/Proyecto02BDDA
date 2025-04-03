@@ -18,7 +18,7 @@ public class SistemaRestaurantePresentacion {
     public static void main(String[] args) {
         IProductosBO productosBO = FabricaObjetosNegocio.crearProductosBO();
         IIngredientesBO ingredientesBO = FabricaObjetosNegocio.crearIngredientesBO();
-        BuscadorIngredientes formBuscadorProductos = new BuscadorIngredientes(ingredientesBO);
+        BuscadorProductos formBuscadorProductos = new BuscadorProductos(productosBO);
         formBuscadorProductos.setVisible(true);
         formBuscadorProductos.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
