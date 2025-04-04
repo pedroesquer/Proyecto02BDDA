@@ -86,10 +86,8 @@ public class Cliente implements Serializable {
         this.fechaRegistro = fechaRegistro;
         this.puntosFidelidad = 0;
         this.numeroVisitas = 0;
+        this.totalGastado = 0.0; //inicializado en 0 para que se calcule en la capa de negocio
     }
-    
-    
-
 
     public Long getId() {
         return id;
@@ -169,6 +167,14 @@ public class Cliente implements Serializable {
 
     public void setTotalGastado(double totalGastado) {
         this.totalGastado = totalGastado;
+    }
+
+    public List<Comanda> getComandas() {
+        return comandas;
+    }
+
+    public void setComandas(List<Comanda> comandas) {
+        this.comandas = comandas;
     }
 
     @Override
