@@ -8,6 +8,7 @@ import static itson.sistemarestaurantedominio.TipoProducto.POSTRE;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepresentacion.control.Control;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
@@ -224,24 +225,34 @@ public class AgregarProducto extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void btnAgregarSinIngredientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarSinIngredientesActionPerformed
-        this.agregarProducto();
+        Producto producto = this.agregarProducto();
+        if(producto != null) {
+            JOptionPane.showMessageDialog(this, "Exito al regisrar el producto", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnAgregarSinIngredientesActionPerformed
 
     private void btnSeleccionarIngredientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarIngredientesActionPerformed
-        this.agregarProducto();
+        Producto producto = this.agregarProducto(); //Agregamos el producto a la base y lo asignamos a una instancia para obtener su id
+        if(producto != null){ //Revisamos si en realidad se perisitió el producto
+            Control.getInstancia().abrirAgregarIngredientesProducto(producto.getId()); //Si todo esta bien y el producto esta creado, abrimos la sig pantalla
+        }
     }//GEN-LAST:event_btnSeleccionarIngredientesActionPerformed
 
-    private void agregarProducto(){
-        String nombre = this.campoTxtNombre.getText();
-        Float precio = Float.parseFloat(this.campoTxtPrecio.getText());
-        TipoProducto tipo = (TipoProducto )this.comboBoxTipo.getSelectedItem();
-        
-        NuevoProductoDTO nuevoProducto = new NuevoProductoDTO(nombre, precio, tipo);
+    /**
+     * Método que intenta persistir un producto en la base de datos, haciendo las validaciones necesarias.
+     * @return El producto persistido, null si no se pudo. 
+     */
+    private Producto agregarProducto(){
         
         try{
-            this.productosBO.registrar(nuevoProducto);
-            JOptionPane.showMessageDialog(this, "Exito al regisrar el producto", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            String nombre = this.campoTxtNombre.getText();
+            Float precio = Float.parseFloat(this.campoTxtPrecio.getText());
+            TipoProducto tipo = (TipoProducto) this.comboBoxTipo.getSelectedItem();
 
+            NuevoProductoDTO nuevoProducto = new NuevoProductoDTO(nombre, precio, tipo);
+            Producto producto = this.productosBO.registrar(nuevoProducto);
+            return producto;
+            
         } catch(NegocioException e){
             LOG.severe("No fue posible registrar el producto " + e.getMessage());
             JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
@@ -251,6 +262,7 @@ public class AgregarProducto extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Asegurate que el precio sean solo números", "Informacion", JOptionPane.INFORMATION_MESSAGE);
 
         }
+        return null;
     }
     
 

@@ -10,15 +10,18 @@ package itson.sistemarestaurantepresentacion;
  */
 public class AgregarIngredientesProducto extends javax.swing.JFrame {
 
+    Long idProductoActualizar;
     /**
      * Creates new form AgregarIngredientesProducto
+     * @param idProductoActualizar id del producto al cual se le relacionaran los ingredientes.
      */
-    public AgregarIngredientesProducto() {
+    public AgregarIngredientesProducto(Long idProductoActualizar) {
         initComponents();
         this.setTitle("Seleccionar ingredientes");
         this.setResizable(false);
         this.setSize(760,500);
         this.setLocationRelativeTo(null);
+        this.idProductoActualizar = idProductoActualizar;
     }
 
     /**
@@ -93,6 +96,11 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame {
         botonLimpiarTabla.setForeground(new java.awt.Color(255, 255, 255));
         botonLimpiarTabla.setText("Limpiar tabla");
         botonLimpiarTabla.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonLimpiarTabla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonLimpiarTablaActionPerformed(evt);
+            }
+        });
 
         botonBuscarIngrediente.setBackground(new java.awt.Color(85, 85, 85));
         botonBuscarIngrediente.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
@@ -198,6 +206,10 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void botonLimpiarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarTablaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botonLimpiarTablaActionPerformed
 
     
 
