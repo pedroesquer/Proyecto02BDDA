@@ -40,6 +40,11 @@ public class IngredientesBO implements IIngredientesBO {
             throw new NegocioException("El stock debe ser mayor a 0");
         }
 
+        if (ingredientesDAO.consultarIngredientePorNombreYUnidad(nuevoIngrediente.getNombre(),
+                nuevoIngrediente.getUnidadMedida()) != null) {
+            throw new NegocioException("Ya existe un ingrediente con el mismo nombre y unidad de medida.");
+
+        }
 
         return this.ingredientesDAO.registrar(nuevoIngrediente);
     }

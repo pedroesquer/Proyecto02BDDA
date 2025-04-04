@@ -193,7 +193,7 @@ public class Ingredientes extends javax.swing.JFrame {
 
     private void iconBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconBuscarMouseClicked
         this.dispose();
-        Control.getInstancia().abrirActualizarStockIngredientes();
+        Control.getInstancia().abrirListaIngredientes();
     }//GEN-LAST:event_iconBuscarMouseClicked
 
     private void iconActualizarStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconActualizarStockMouseClicked

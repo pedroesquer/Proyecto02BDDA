@@ -34,13 +34,7 @@ public class IngredientesDAO implements IIngredientesDAO {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         entityManager.getTransaction().begin();
 
-        Ingrediente ingredienteExistente = consultarIngredientePorNombreYUnidad(
-                nuevoIngrediente.getNombre(), nuevoIngrediente.getUnidadMedida());
 
-        if (ingredienteExistente != null) {
-            entityManager.getTransaction().rollback();
-            throw new PersistenceException("Ya existe un ingrediente con el mismo nombre y unidad de medida.");
-        }
         Ingrediente ingrediente = new Ingrediente(nuevoIngrediente.getNombre(),
                 nuevoIngrediente.getStock(), nuevoIngrediente.getUnidadMedida());
         entityManager.persist(ingrediente);
@@ -157,6 +151,7 @@ public class IngredientesDAO implements IIngredientesDAO {
      * @param unidadMedida Unidad de medida del producto que se quiere consultar.
      * @return Si la lista está vacía regresa null, si la lista viene con algo regresa el ingrediente.
     */
+    @Override
     public Ingrediente consultarIngredientePorNombreYUnidad(String nombre, UnidadMedida unidadMedida) {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

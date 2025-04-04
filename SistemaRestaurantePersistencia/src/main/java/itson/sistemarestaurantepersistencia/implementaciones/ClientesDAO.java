@@ -114,4 +114,9 @@ public class ClientesDAO implements IClientesDAO {
         Cliente clienteActualizado = entityManager.merge(cliente);
         return clienteActualizado; 
     }
+
+    @Override
+    public Cliente consultarClienteporCorreo(String correo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

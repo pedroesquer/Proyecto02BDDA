@@ -23,5 +23,7 @@ public interface IIngredientesDAO {
     public abstract List<Ingrediente> consultarIngredientesNombre(String nombre);
 
     public abstract List<Ingrediente> consultarIngredientesUnidad(UnidadMedida unidadMedida);
+    
+    public abstract Ingrediente consultarIngredientePorNombreYUnidad(String nombre, UnidadMedida unidadMedida);
 
 }

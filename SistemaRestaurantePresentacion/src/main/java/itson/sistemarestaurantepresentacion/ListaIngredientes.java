@@ -1,6 +1,7 @@
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Ingrediente;
+import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
@@ -13,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Sooto
  */
-public class ActualizarIngredientes extends javax.swing.JFrame {
+public class ListaIngredientes extends javax.swing.JFrame {
 
     /**
      * Creates new form Productos
@@ -21,9 +22,9 @@ public class ActualizarIngredientes extends javax.swing.JFrame {
     
     private IIngredientesBO ingredientesBO;
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
-    public ActualizarIngredientes(IIngredientesBO ingredientesBO) {
+    public ListaIngredientes(IIngredientesBO ingredientesBO) {
         initComponents();
-        this.setTitle("Ingredientes");
+        this.setTitle("Lista ingredientes");
         this.setResizable(false);
         this.setSize(760,500);
         this.setLocationRelativeTo(null);
@@ -52,6 +53,30 @@ public class ActualizarIngredientes extends javax.swing.JFrame {
             JOptionPane.showInputDialog(this, ex.getMessage());
         }
     }
+    
+    
+    public void actualizarIngredientesSeleccionados(List<NuevoIngredienteDTO> ingredientesSeleccionados) {
+    try {
+        // Este objeto permite interactuar con los elementos de la tabla
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaIngredientes.getModel();
+        modeloTabla.setRowCount(0); // Limpiamos la tabla antes de llenarla nuevamente
+
+        // Llenamos la tabla con los ingredientes seleccionados
+        for (NuevoIngredienteDTO ingredienteDTO : ingredientesSeleccionados) {
+            Object[] fila = {
+                ingredienteDTO.getId(),
+                ingredienteDTO.getNombre(),
+                ingredienteDTO.getUnidadMedida(),
+                ingredienteDTO.getStock()
+            };
+            modeloTabla.addRow(fila);
+        }
+    } catch (Exception ex) {
+        LOG.severe("No se pudo actualizar la tabla con los ingredientes seleccionados");
+        JOptionPane.showInputDialog(this, ex.getMessage());
+    }
+}
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -68,9 +93,9 @@ public class ActualizarIngredientes extends javax.swing.JFrame {
         iconIngrediente = new javax.swing.JLabel();
         pnlTablaProductos = new javax.swing.JScrollPane();
         tablaIngredientes = new javax.swing.JTable();
-        iconBuscar = new javax.swing.JLabel();
-        iconAgregar = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        btnBuscar = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -133,14 +158,26 @@ public class ActualizarIngredientes extends javax.swing.JFrame {
         tablaIngredientes.setColumnSelectionAllowed(true);
         pnlTablaProductos.setViewportView(tablaIngredientes);
 
-        iconAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/aniadir.png"))); // NOI18N
-        iconAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                iconAgregarMouseClicked(evt);
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("Agregar stock");
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
+
+        btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelGeneralLayout = new javax.swing.GroupLayout(panelGeneral);
         panelGeneral.setLayout(panelGeneralLayout);
@@ -148,42 +185,33 @@ public class ActualizarIngredientes extends javax.swing.JFrame {
             panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelSuperior, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelGeneralLayout.createSequentialGroup()
-                .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addGap(325, 325, 325)
-                        .addComponent(iconAgregar)
-                        .addGap(31, 31, 31))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addGap(55, 55, 55)))
-                .addComponent(iconBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(225, 225, 225)
+                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(83, 83, 83)
+                .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGeneralLayout.createSequentialGroup()
-                    .addGap(152, 152, 152)
-                    .addComponent(pnlTablaProductos)
-                    .addGap(152, 152, 152)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(132, 132, 132))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(339, 339, 339))
         );
         panelGeneralLayout.setVerticalGroup(
             panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelGeneralLayout.createSequentialGroup()
                 .addComponent(panelSuperior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 210, Short.MAX_VALUE)
-                .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
-                        .addComponent(iconBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
-                        .addComponent(iconAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1)
-                        .addGap(41, 41, 41))))
-            .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGeneralLayout.createSequentialGroup()
-                    .addGap(128, 128, 128)
-                    .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(221, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBuscar)
+                    .addComponent(btnLimpiar))
+                .addGap(37, 37, 37)
+                .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addComponent(btnVolver)
+                .addGap(65, 65, 65))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -200,9 +228,20 @@ public class ActualizarIngredientes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void iconAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconAgregarMouseClicked
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        this.dispose();
+        Control.getInstancia().abrirMenuAdministrador();
+    }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        this.dispose();
         Control.getInstancia().abrirBuscadorIngredientes();
-    }//GEN-LAST:event_iconAgregarMouseClicked
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        this.dispose();
+        Control.getInstancia().abrirListaIngredientes();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -211,11 +250,11 @@ public class ActualizarIngredientes extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel iconAgregar;
-    private javax.swing.JLabel iconBuscar;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JLabel iconChefSoft;
     private javax.swing.JLabel iconIngrediente;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblTituloIngrediente;
     private javax.swing.JPanel panelGeneral;
     private javax.swing.JPanel panelSuperior;
