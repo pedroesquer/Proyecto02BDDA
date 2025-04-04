@@ -30,8 +30,9 @@ public class SistemaRestaurantePresentacion {
 //        AgregarProducto formAgregarProducto = new AgregarProducto(productosBO);
 //        formAgregarProducto.setVisible(true);
 
-        ListaProductos listaProductos = new ListaProductos(productosBO);
-        listaProductos.setVisible(true);
+        //ListaProductos listaProductos = new ListaProductos(productosBO);
+        MenuAdministrador menuAdministrador = new MenuAdministrador();
+        menuAdministrador.setVisible(true);
         
 
         

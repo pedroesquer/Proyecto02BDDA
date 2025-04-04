@@ -39,6 +39,8 @@ public class IngredientesBO implements IIngredientesBO {
         if (nuevoIngrediente.getStock() < 0) {
             throw new NegocioException("El stock debe ser mayor a 0");
         }
+
+
         return this.ingredientesDAO.registrar(nuevoIngrediente);
     }
 

@@ -7,11 +7,13 @@ import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantepersistencia.IIngredientesDAO;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,12 +26,21 @@ public class IngredientesDAO implements IIngredientesDAO {
      *
      * @param nuevoIngrediente Objeto DTO que contiene los datos de un nuevo
      * ingrediente.
-     * @return Objeto ingrediente recién creado y persistido en la base de datos.
+     * @return Objeto ingrediente recién creado y persistido en la base de
+     * datos.
      */
     @Override
     public Ingrediente registrar(NuevoIngredienteDTO nuevoIngrediente) {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         entityManager.getTransaction().begin();
+
+        Ingrediente ingredienteExistente = consultarIngredientePorNombreYUnidad(
+                nuevoIngrediente.getNombre(), nuevoIngrediente.getUnidadMedida());
+
+        if (ingredienteExistente != null) {
+            entityManager.getTransaction().rollback();
+            throw new PersistenceException("Ya existe un ingrediente con el mismo nombre y unidad de medida.");
+        }
         Ingrediente ingrediente = new Ingrediente(nuevoIngrediente.getNombre(),
                 nuevoIngrediente.getStock(), nuevoIngrediente.getUnidadMedida());
         entityManager.persist(ingrediente);
@@ -40,7 +51,8 @@ public class IngredientesDAO implements IIngredientesDAO {
     /**
      * Actualiza el stock de un ingrediente en la base de datos.
      *
-     * @param ingredienteActualizado Objeto DTO que contiene la cantidad (stock) de un ingrediente
+     * @param ingredienteActualizado Objeto DTO que contiene la cantidad (stock)
+     * de un ingrediente
      * @return Objeto ingrediente con stock actualizado.
      */
     @Override
@@ -137,6 +149,33 @@ public class IngredientesDAO implements IIngredientesDAO {
         cq.select(root).where(cb.equal(root.get("unidadMedida"), unidadMedida));
         List<Ingrediente> ingredientes = entityManager.createQuery(cq).getResultList();
         return ingredientes;
+    }
+
+    /**
+     * Consulta que regresa si existe un ingrediente con el nombre y la unidad igual al que se quiere registrar.
+     * @param nombre Nombre del producto que se quiere consultar
+     * @param unidadMedida Unidad de medida del producto que se quiere consultar.
+     * @return Si la lista está vacía regresa null, si la lista viene con algo regresa el ingrediente.
+    */
+    public Ingrediente consultarIngredientePorNombreYUnidad(String nombre, UnidadMedida unidadMedida) {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Ingrediente> criteriaQuery = criteriaBuilder.createQuery(Ingrediente.class);
+        Root<Ingrediente> root = criteriaQuery.from(Ingrediente.class);
+
+        Predicate nombreCondicion = criteriaBuilder.equal(root.get("nombre"), nombre);
+        Predicate unidadCondicion = criteriaBuilder.equal(root.get("unidadMedida"), unidadMedida);
+
+        criteriaQuery.where(criteriaBuilder.and(nombreCondicion, unidadCondicion));
+        TypedQuery<Ingrediente> query = entityManager.createQuery(criteriaQuery);
+
+        List<Ingrediente> ingredientes = query.getResultList();
+
+        if (ingredientes.isEmpty()) {
+            return null; 
+        } else {
+            return ingredientes.get(0); 
+        }
     }
 
 }

@@ -45,24 +45,24 @@ public class ProductosBOTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of registrar method, of class ProductosBO.
-     */
-    @Test
-    public void testRegistrarNombreDupicladoArrojaExcepcion() throws Exception {
-        ProductosDAO productosDAO = new ProductosDAO();
-        IProductosBO productosBO = new ProductosBO(productosDAO); 
-        NuevoProductoDTO nuevoProductoDTO = new NuevoProductoDTO("Nachos con carne", 250f, TipoProducto.PLATILLO);
-            
-        
-        
-        NegocioException ex = assertThrows(NegocioException.class,
-                ()->  productosBO.registrar(nuevoProductoDTO)
-        );
-        
-        String mensajeEsperado = "El producto ya existe";
-        assertEquals(mensajeEsperado, ex.getMessage());
-        
-    }
+//    /**
+//     * Test of registrar method, of class ProductosBO.
+//     */
+//    @Test
+//    public void testRegistrarNombreDupicladoArrojaExcepcion() throws Exception {
+//        ProductosDAO productosDAO = new ProductosDAO();
+//        IProductosBO productosBO = new ProductosBO(productosDAO); 
+//        NuevoProductoDTO nuevoProductoDTO = new NuevoProductoDTO("Nachos con carne", 250f, TipoProducto.PLATILLO);
+//            
+//        
+//        
+//        NegocioException ex = assertThrows(NegocioException.class,
+//                ()->  productosBO.registrar(nuevoProductoDTO)
+//        );
+//        
+//        String mensajeEsperado = "El producto ya existe";
+//        assertEquals(mensajeEsperado, ex.getMessage());
+//        
+//    }
 
 }

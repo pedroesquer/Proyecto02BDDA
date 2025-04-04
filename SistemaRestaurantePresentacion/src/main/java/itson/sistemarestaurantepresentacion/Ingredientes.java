@@ -192,14 +192,17 @@ public class Ingredientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void iconBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconBuscarMouseClicked
+        this.dispose();
         Control.getInstancia().abrirActualizarStockIngredientes();
     }//GEN-LAST:event_iconBuscarMouseClicked
 
     private void iconActualizarStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconActualizarStockMouseClicked
+        this.dispose();
         Control.getInstancia().abrirActualizarStockIngredientes();
     }//GEN-LAST:event_iconActualizarStockMouseClicked
 
     private void iconAgregarIngredienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconAgregarIngredienteMouseClicked
+        this.dispose();
         Control.getInstancia().abrirAgregarIngredientes();
     }//GEN-LAST:event_iconAgregarIngredienteMouseClicked
 

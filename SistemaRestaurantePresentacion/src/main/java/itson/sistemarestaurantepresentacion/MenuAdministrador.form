@@ -95,7 +95,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="comandasLabel2" min="-2" pref="131" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="comandasLabel3" min="-2" pref="149" max="-2" attributes="0"/>
+                      <Component id="lblIngredientes" min="-2" pref="149" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="comandasLabel4" min="-2" pref="131" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -123,7 +123,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="comandasLabel" min="-2" pref="97" max="-2" attributes="0"/>
                           <Component id="comandasLabel2" alignment="0" min="-2" pref="97" max="-2" attributes="0"/>
-                          <Component id="comandasLabel3" alignment="0" min="-2" pref="97" max="-2" attributes="0"/>
+                          <Component id="lblIngredientes" alignment="0" min="-2" pref="97" max="-2" attributes="0"/>
                           <Component id="comandasLabel4" min="-2" pref="97" max="-2" attributes="0"/>
                           <Component id="comandasLabel1" min="-2" pref="97" max="-2" attributes="0"/>
                       </Group>
@@ -131,10 +131,8 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -190,7 +188,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="comandasLabel3">
+            <Component class="javax.swing.JLabel" name="lblIngredientes">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="d0" green="e6" red="eb" type="rgb"/>
@@ -205,6 +203,9 @@
                   </Border>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblIngredientesMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="comandasLabel4">
               <Properties>

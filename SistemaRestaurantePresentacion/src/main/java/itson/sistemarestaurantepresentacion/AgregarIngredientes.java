@@ -10,6 +10,7 @@ import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
 import java.util.logging.Logger;
+import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 
 /**
@@ -209,6 +210,7 @@ public class AgregarIngredientes extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
+        Control.getInstancia().abrirIngredientes();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private boolean agregarIngrediente() {
@@ -226,7 +228,11 @@ public class AgregarIngredientes extends javax.swing.JFrame {
 
         } catch (NumberFormatException e) {
             LOG.severe("No puedes ingresar letras en el stock");
-            JOptionPane.showMessageDialog(this, "Asegurate que el precio sean solo números", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Asegurate que el stock sean solo números", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (PersistenceException e) {
+            LOG.severe("Ya existe un ingrediente con el mismo nombre y unidad de medida." + e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
 
         }
         return false;
