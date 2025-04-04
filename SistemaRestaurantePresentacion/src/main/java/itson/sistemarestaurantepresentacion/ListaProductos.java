@@ -25,7 +25,7 @@ public class ListaProductos extends javax.swing.JFrame {
         initComponents();
         this.setTitle("ListaProductos");
         this.setResizable(false);
-        this.setSize(760,500);
+        this.setSize(770,510);
         this.setLocationRelativeTo(null);
         this.productosBO = productosBO;
         this.cargarTabla("");
@@ -140,7 +140,7 @@ public class ListaProductos extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(149, 149, 149)
                 .addComponent(jLabel1)
-                .addContainerGap(215, Short.MAX_VALUE))
+                .addContainerGap(225, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                     .addContainerGap(672, Short.MAX_VALUE)
@@ -219,7 +219,7 @@ public class ListaProductos extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonActualizarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(botonActualizarProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

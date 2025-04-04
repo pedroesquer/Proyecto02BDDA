@@ -60,6 +60,13 @@ public class Control {
         formAgregarIngredientes.setVisible(true);
     }
     
+    /**
+     * Método que abre la pantalla para actualizar un producto
+     * @param id del producto a actualizar.
+     */
+    public void abrirActualizarProducto(Long id){
+        
+    }
     
 
 }
