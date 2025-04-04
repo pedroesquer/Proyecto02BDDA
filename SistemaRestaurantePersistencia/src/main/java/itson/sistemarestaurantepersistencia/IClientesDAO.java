@@ -16,4 +16,8 @@ import java.util.List;
 public interface IClientesDAO {
     Cliente registrar(NuevoClienteDTO nuevoCliente);
     List<Cliente> consultar(String filtroBusqueda);
+    void eliminar(Long idCliente);
+    Cliente consultarClienteporCorreo(String correo);
+    Cliente buscarPorId(Long id);
+    Cliente actualizar(Cliente cliente);
 }
