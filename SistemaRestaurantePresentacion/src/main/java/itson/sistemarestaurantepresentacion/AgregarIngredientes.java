@@ -200,10 +200,9 @@ public class AgregarIngredientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarIngredienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarIngredienteActionPerformed
-        this.agregarIngrediente();
         if (this.agregarIngrediente()) {
-            Control.getInstancia().abrirMenuAdministrador();
             this.dispose();
+            Control.getInstancia().abrirMenuAdministrador();
 
         }
     }//GEN-LAST:event_btnAgregarIngredienteActionPerformed
@@ -213,12 +212,11 @@ public class AgregarIngredientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private boolean agregarIngrediente() {
-        String nombre = this.campoTxtNombre.getText();
-        Float stock = Float.parseFloat(this.campoTxtStock.getText());
-        UnidadMedida unidad = (UnidadMedida) this.comboBoxUnidad.getSelectedItem();
-        NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(nombre, stock, unidad);
-
         try {
+            String nombre = this.campoTxtNombre.getText();
+            Float stock = Float.parseFloat(this.campoTxtStock.getText());
+            UnidadMedida unidad = (UnidadMedida) this.comboBoxUnidad.getSelectedItem();
+            NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(nombre, stock, unidad);
             this.ingredientesBO.registrar(nuevoIngrediente);
             JOptionPane.showMessageDialog(this, "Exito al registrar el ingrediente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
             return true;

@@ -5,6 +5,7 @@ import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
 import itson.sistemarestaurantepresentacion.ActualizarIngredientes;
 import itson.sistemarestaurantepresentacion.AgregarIngredientes;
 import itson.sistemarestaurantepresentacion.AgregarIngredientesProducto;
+import itson.sistemarestaurantepresentacion.Ingredientes;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
 
 /**
@@ -45,16 +46,25 @@ public class Control {
         formAgregarIngredientesProducto.setVisible(true);
     }
 
+    /**
+    * Método que abre la pantalla para actualizar el stock de ingredientes.
+    */
     public void abrirActualizarStockIngredientes() {
         ActualizarIngredientes formActualizarIngredientes = new ActualizarIngredientes(ingredientesBO);
         formActualizarIngredientes.setVisible(true);
     }
 
+    /**
+    * Método que abre la pantalla del menú del administrador.
+    */
     public void abrirMenuAdministrador() {
         MenuAdministrador formMenuAdministrador = new MenuAdministrador();
         formMenuAdministrador.setVisible(true);
     }
 
+    /**
+    * Método que abre la pantalla de agregar ingredientes.
+    */
     public void abrirAgregarIngredientes() {
         AgregarIngredientes formAgregarIngredientes = new AgregarIngredientes(ingredientesBO);
         formAgregarIngredientes.setVisible(true);
@@ -66,6 +76,14 @@ public class Control {
      */
     public void abrirActualizarProducto(Long id){
         
+    }
+    
+    /**
+    * Método que abre la pantalla de opciones de ingrediente.
+    */
+    public void abrirIngredientes(){
+        Ingredientes formIngredientes = new Ingredientes(ingredientesBO);
+        formIngredientes.setVisible(true);
     }
     
 
