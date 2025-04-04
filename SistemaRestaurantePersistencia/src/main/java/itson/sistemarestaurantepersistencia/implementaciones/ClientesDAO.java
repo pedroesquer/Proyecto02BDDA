@@ -93,4 +93,25 @@ public class ClientesDAO implements IClientesDAO {
         List<Cliente> resultados = query.getResultList();
         return resultados.isEmpty() ? null : resultados.get(0);
     }
+    
+    /**
+     * Busca un cliente por id
+     * @param id del cliente que se quiere buscar
+     * @return cliente encontrado / null si no existe
+     */
+    public Cliente buscarPorId(Long id){
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        return entityManager.find(Cliente.class, id);
+    }
+    
+    /**
+     * Actualiza cliente que ya existe en la base de datos
+     * @param cliente - Cliente con datos actualizados
+     * @return cliente actualizado
+     */
+    public Cliente actualizar(Cliente cliente){
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        Cliente clienteActualizado = entityManager.merge(cliente);
+        return clienteActualizado; 
+    }
 }
