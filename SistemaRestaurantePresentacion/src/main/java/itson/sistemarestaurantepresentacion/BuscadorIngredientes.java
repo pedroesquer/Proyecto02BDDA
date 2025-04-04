@@ -256,6 +256,7 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonSeleccionarActionPerformed
 
+    
    
 
     

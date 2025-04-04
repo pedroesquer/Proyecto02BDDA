@@ -27,6 +27,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
 
     /**
      * Constructor del frame BuscadorProductos.
+     * @param productosBO
      */
     public BuscadorProductos(IProductosBO productosBO) {
         initComponents();
@@ -243,7 +244,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         this.txtBuscar.setText("");
-        this.cargarTabla();
+            this.cargarTabla();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void botonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSeleccionarActionPerformed
