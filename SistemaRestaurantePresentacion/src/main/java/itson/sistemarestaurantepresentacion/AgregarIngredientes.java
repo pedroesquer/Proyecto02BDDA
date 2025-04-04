@@ -8,6 +8,7 @@ import static itson.sistemarestaurantedominio.UnidadMedida.PIEZAS;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepresentacion.control.Control;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
@@ -199,14 +200,19 @@ public class AgregarIngredientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarIngredienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarIngredienteActionPerformed
-        this.agregarProducto();
+        this.agregarIngrediente();
+        if (this.agregarIngrediente()) {
+            Control.getInstancia().abrirMenuAdministrador();
+            this.dispose();
+
+        }
     }//GEN-LAST:event_btnAgregarIngredienteActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void agregarProducto() {
+    private boolean agregarIngrediente() {
         String nombre = this.campoTxtNombre.getText();
         Float stock = Float.parseFloat(this.campoTxtStock.getText());
         UnidadMedida unidad = (UnidadMedida) this.comboBoxUnidad.getSelectedItem();
@@ -214,8 +220,8 @@ public class AgregarIngredientes extends javax.swing.JFrame {
 
         try {
             this.ingredientesBO.registrar(nuevoIngrediente);
-            JOptionPane.showMessageDialog(this, "Exito al regisrar el ingrediente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
-
+            JOptionPane.showMessageDialog(this, "Exito al registrar el ingrediente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            return true;
         } catch (NegocioException e) {
             LOG.severe("No fue posible registrar el ingrediente " + e.getMessage());
             JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
@@ -225,10 +231,9 @@ public class AgregarIngredientes extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Asegurate que el precio sean solo números", "Informacion", JOptionPane.INFORMATION_MESSAGE);
 
         }
+        return false;
     }
 
-    
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarIngrediente;

@@ -1,15 +1,13 @@
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Ingrediente;
-import itson.sistemarestaurantedominio.Producto;
-import static itson.sistemarestaurantedominio.Producto_.ingredientes;
-import itson.sistemarestaurantedominio.UnidadMedida;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
-import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -33,6 +31,76 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
         this.llenarTablaIngredientes();
         
     }
+    
+    private void cargarTabla() {
+        tablaIngredientes.setDefaultRenderer(Object.class, new Render());
+
+        String[] columnas = new String[]{"ID", "Ingrediente", "Unidad", "Stock", "Seleccion"};
+        boolean[] editable = {false, false, false, false, true};
+        Class[] types = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class};
+
+        DefaultTableModel mModel = new DefaultTableModel(columnas, 0) {
+            public Class getColumnClass(int i) {
+                return types[i];
+            }
+
+            public boolean isCellEditable(int row, int column) {
+                return editable[column];
+            }
+        };
+
+        LimpiarTabla(tablaIngredientes, mModel);
+
+        Object[] datos = new Object[columnas.length];
+        try {
+            String filtroBusqueda = this.txtBuscar.getText();
+            List<Ingrediente> ingredientes = this.ingredientesBO.consultar(filtroBusqueda);
+            for (Ingrediente ingrediente : ingredientes) {
+                
+                datos[0] = String.valueOf(ingrediente.getId());
+                datos[1] = ingrediente.getNombre();
+                datos[2] = String.valueOf(ingrediente.getUnidadMedida());
+                datos[3] = String.valueOf(ingrediente.getStock());
+                datos[4] = false;
+                
+                mModel.addRow(datos);
+            }
+            
+            tablaIngredientes.setModel(mModel);
+            
+            // Implementar un listener para cambiar el estado del checkbox
+        tablaIngredientes.getModel().addTableModelListener(e -> {
+            if (e.getType() == TableModelEvent.UPDATE) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (column == 4) {  // Si la columna seleccionada es la de los checkboxes (índice 4)
+                    boolean selected = (boolean) mModel.getValueAt(row, column);
+                    // Si el checkbox de esa fila se seleccionó, desmarcar los demás
+                    if (selected) {
+                        for (int i = 0; i < mModel.getRowCount(); i++) {
+                            if (i != row) {
+                                mModel.setValueAt(false, i, 4);  // Desmarcar las otras filas
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        } catch (NegocioException ex) {
+            JOptionPane.showInputDialog(this, ex.getMessage());            
+        }
+    }
+    
+    
+        public void LimpiarTabla(JTable tabla, DefaultTableModel modeloTabla) {
+        if (modeloTabla.getRowCount() > 0) {
+            for (int i = 0; i < tabla.getRowCount(); i++) {
+                modeloTabla.removeRow(i);
+                i -= 1;
+            }
+        }
+    }
+    
     
     
     private void llenarTablaIngredientes(){
