@@ -3,6 +3,7 @@ package itson.sistemarestaurantepresentacion;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepresentacion.control.Control;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -15,22 +16,23 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ListaProductos extends javax.swing.JFrame {
 
-    
     private IProductosBO productosBO;
+
     /**
      * Creates new form ListaProductos
+     *
      * @param productosBO
      */
     public ListaProductos(IProductosBO productosBO) {
         initComponents();
         this.setTitle("ListaProductos");
         this.setResizable(false);
-        this.setSize(770,510);
+        this.setSize(770, 510);
         this.setLocationRelativeTo(null);
         this.productosBO = productosBO;
         this.cargarTabla("");
     }
-    
+
     private void cargarTabla(String filtroBusqueda) {
         tablaProductos.setDefaultRenderer(Object.class, new Render());
 
@@ -52,44 +54,44 @@ public class ListaProductos extends javax.swing.JFrame {
 
         Object[] datos = new Object[columnas.length];
         try {
-            
+
             List<Producto> productos = this.productosBO.consultar(filtroBusqueda);
             for (Producto producto : productos) {
-                
+
                 datos[0] = String.valueOf(producto.getId());
                 datos[1] = producto.getNombre();
                 datos[2] = String.valueOf(producto.getPrecio());
                 datos[3] = String.valueOf(producto.getTipo());
                 datos[4] = false;
-                
+
                 mModel.addRow(datos);
             }
-            
+
             tablaProductos.setModel(mModel);
-            
+
             // Implementar un listener para cambiar el estado del checkbox
-        tablaProductos.getModel().addTableModelListener(e -> {
-            if (e.getType() == TableModelEvent.UPDATE) {
-                int row = e.getFirstRow();
-                int column = e.getColumn();
-                if (column == 4) {  // Si la columna seleccionada es la de los checkboxes (índice 4)
-                    boolean selected = (boolean) mModel.getValueAt(row, column);
-                    // Si el checkbox de esa fila se seleccionó, desmarcar los demás
-                    if (selected) {
-                        for (int i = 0; i < mModel.getRowCount(); i++) {
-                            if (i != row) {
-                                mModel.setValueAt(false, i, 4);  // Desmarcar las otras filas
+            tablaProductos.getModel().addTableModelListener(e -> {
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    int row = e.getFirstRow();
+                    int column = e.getColumn();
+                    if (column == 4) {  // Si la columna seleccionada es la de los checkboxes (índice 4)
+                        boolean selected = (boolean) mModel.getValueAt(row, column);
+                        // Si el checkbox de esa fila se seleccionó, desmarcar los demás
+                        if (selected) {
+                            for (int i = 0; i < mModel.getRowCount(); i++) {
+                                if (i != row) {
+                                    mModel.setValueAt(false, i, 4);  // Desmarcar las otras filas
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
         } catch (NegocioException ex) {
-            JOptionPane.showInputDialog(this, ex.getMessage());            
+            JOptionPane.showInputDialog(this, ex.getMessage());
         }
     }
-    
+
     public void LimpiarTabla(JTable tabla, DefaultTableModel modeloTabla) {
         if (modeloTabla.getRowCount() > 0) {
             for (int i = 0; i < tabla.getRowCount(); i++) {
@@ -188,6 +190,11 @@ public class ListaProductos extends javax.swing.JFrame {
         botonActualizarProducto.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         botonActualizarProducto.setText("Actualizar producto");
         botonActualizarProducto.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonActualizarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonActualizarProductoActionPerformed(evt);
+            }
+        });
 
         botonActualizarProducto1.setBackground(new java.awt.Color(204, 255, 255));
         botonActualizarProducto1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
@@ -236,7 +243,30 @@ public class ListaProductos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+    private Long seleccionarIdProducto() {
+        for (int i = 0; i < tablaProductos.getRowCount(); i++) {
+            //Verificamos si el checkbox, que esta en la columna 4, esta marcada
+            Boolean isSelected = (Boolean) tablaProductos.getValueAt(i, 4);
+
+            //Se verifica que en efecto este seleccionada la tabla o no, y luego si es postiva
+            if (isSelected != null && isSelected) {
+                Long id = Long.valueOf((String) tablaProductos.getValueAt(i, 0));
+
+                return id; //Aqui iria un return para matar el proceso y mandar el producto seleccionado
+            }
+        }
+        JOptionPane.showMessageDialog(this, "No seleccionaste nada");
+        return null;
+    }
+
+    private void botonActualizarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarProductoActionPerformed
+        Long idProducto = this.seleccionarIdProducto();
+        if (!(idProducto == null)) {
+            Control.getInstancia().abrirActualizarProducto(idProducto);            
+            
+        } 
+    }//GEN-LAST:event_botonActualizarProductoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonActualizarProducto;

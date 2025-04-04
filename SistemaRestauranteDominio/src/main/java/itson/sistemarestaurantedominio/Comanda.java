@@ -59,7 +59,6 @@ public class Comanda implements Serializable {
        name = "id_cliente",
        nullable = true
     )
-    
     private Cliente cliente;
 
     public Comanda() {}

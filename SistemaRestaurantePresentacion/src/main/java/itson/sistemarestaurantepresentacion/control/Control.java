@@ -3,6 +3,7 @@ package itson.sistemarestaurantepresentacion.control;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
 import itson.sistemarestaurantepresentacion.ActualizarIngredientes;
+import itson.sistemarestaurantepresentacion.ActualizarProducto;
 import itson.sistemarestaurantepresentacion.AgregarIngredientes;
 import itson.sistemarestaurantepresentacion.AgregarIngredientesProducto;
 import itson.sistemarestaurantepresentacion.Ingredientes;
@@ -75,6 +76,8 @@ public class Control {
      * @param id del producto a actualizar.
      */
     public void abrirActualizarProducto(Long id){
+        ActualizarProducto formActualizarProducto = new ActualizarProducto(id);
+        formActualizarProducto.setVisible(true);
         
     }
     

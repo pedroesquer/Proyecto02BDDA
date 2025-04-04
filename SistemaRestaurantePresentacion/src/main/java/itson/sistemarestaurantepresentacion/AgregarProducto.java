@@ -235,6 +235,7 @@ public class AgregarProducto extends javax.swing.JFrame {
         Producto producto = this.agregarProducto(); //Agregamos el producto a la base y lo asignamos a una instancia para obtener su id
         if(producto != null){ //Revisamos si en realidad se perisitió el producto
             Control.getInstancia().abrirAgregarIngredientesProducto(producto.getId()); //Si todo esta bien y el producto esta creado, abrimos la sig pantalla
+            this.dispose();
         }
     }//GEN-LAST:event_btnSeleccionarIngredientesActionPerformed
 
