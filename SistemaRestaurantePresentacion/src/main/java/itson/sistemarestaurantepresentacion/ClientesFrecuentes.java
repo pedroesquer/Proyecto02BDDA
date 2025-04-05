@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package itson.sistemarestaurantepresentacion;
-
 /**
  *
  * @author victoria
@@ -183,12 +182,12 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         this.dispose();
-        Control.getInstancia().abrirBuscadorIngredientes();
+        javax.swing.JOptionPane.showMessageDialog(this, "");
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         this.dispose();
-        Control.getInstancia().abrirListaIngredientes();
+        javax.swing.JOptionPane.showMessageDialog(this, "");
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     /**
@@ -219,10 +218,8 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ClientesFrecuentes().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ClientesFrecuentes().setVisible(true);
         });
     }
 
