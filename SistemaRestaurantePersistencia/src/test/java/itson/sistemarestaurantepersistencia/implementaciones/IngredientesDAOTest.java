@@ -28,7 +28,7 @@ public class IngredientesDAOTest {
         //Creamos DAO
         IngredientesDAO ingredientesDAO = new IngredientesDAO();
         //Creamos el nuevo ingrediente
-        NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO("a", 500F, GRAMOS);
+        NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO("a", 500, GRAMOS);
         //Registramos el nuevo ingrediente
         Ingrediente ingrediente = ingredientesDAO.registrar(nuevoIngrediente);
         //Verificamos que su ID no venga nulo.
@@ -44,7 +44,7 @@ public class IngredientesDAOTest {
     public void testActualizarStockOk(){
         //Creamos DAO
         IngredientesDAO ingredientesDAO = new IngredientesDAO();
-        ActualizarStockIngredienteDTO ingredienteActualizado = new ActualizarStockIngredienteDTO(1L, 1500F);
+        ActualizarStockIngredienteDTO ingredienteActualizado = new ActualizarStockIngredienteDTO(1L, 1500);
         
         Ingrediente ingrediente = ingredientesDAO.agregarStock(ingredienteActualizado);
         
@@ -57,7 +57,7 @@ public class IngredientesDAOTest {
         //Creamos DAO
         IngredientesDAO ingredientesDAO = new IngredientesDAO();
         //Creamos el nuevo ingrediente con nombre nulo
-        NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(null, 500F, GRAMOS);
+        NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(null, 500, GRAMOS);
         //Realizamos un assertThrows que se encarga de verificar si tira la excepción, si la tira es que no deja agregar ingredientes sin nombre
         Exception ex = assertThrows(Exception.class, () -> ingredientesDAO.registrar(nuevoIngrediente));
     }

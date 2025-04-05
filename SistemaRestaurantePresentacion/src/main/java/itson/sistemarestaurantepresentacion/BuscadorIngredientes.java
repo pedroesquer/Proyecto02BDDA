@@ -21,8 +21,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class BuscadorIngredientes extends javax.swing.JFrame {
 
-    List<NuevoIngredienteDTO> ingredientes = new ArrayList<>();
-
+    private NuevoIngredienteDTO nuevoIngredienteDTO;
     private IIngredientesBO ingredientesBO;
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
 
@@ -240,7 +239,6 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        //Aqui iria la lógica para encontrar las coincidencias
         this.llenarTablaIngredientes();
 
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -252,31 +250,30 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
 
     private void botonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSeleccionarActionPerformed
         for (int i = 0; i < tablaIngredientes.getRowCount(); i++) {
-            //Verificamos si el checkbox, que esta en la columna 4, esta marcada
             Boolean isSelected = (Boolean) tablaIngredientes.getValueAt(i, 4);
 
-            //Se verifica que en efecto este seleccionada la tabla o no, y luego si es postiva
-            if (isSelected != null && isSelected) {
-                Long id = Long.parseLong((String) tablaIngredientes.getValueAt(i, 0));
-                String nombre = (String) tablaIngredientes.getValueAt(i, 1);
-                String unidadMedidaString = (String) tablaIngredientes.getValueAt(i, 2);
+            if (Boolean.TRUE.equals(isSelected)) {
+                Object idObj = tablaIngredientes.getValueAt(i, 0);
+                Long id = (idObj instanceof Long) ? (Long) idObj : Long.valueOf(idObj.toString());
+
+                String nombre = tablaIngredientes.getValueAt(i, 1).toString();
+                String unidadMedidaString = tablaIngredientes.getValueAt(i, 2).toString();
                 UnidadMedida unidadMedida = UnidadMedida.valueOf(unidadMedidaString);
-                String stockString = (String) tablaIngredientes.getValueAt(i, 3);
-                Float stock = Float.parseFloat(stockString);
 
-                JOptionPane.showMessageDialog(this, "ID:  " + id + " nombre: " + nombre + " unidadMedida: " + unidadMedida + " stock: "
-                        + stock);
+                String stockString = tablaIngredientes.getValueAt(i, 3).toString();
+                Integer stock = Integer.valueOf(stockString);
+
+                JOptionPane.showMessageDialog(this, "ID:  " + id + " nombre: " + nombre + " unidadMedida: " + unidadMedida + " stock: " + stock);
+
                 NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(id, nombre, stock, unidadMedida);
-                ingredientes.add(nuevoIngrediente);
-                break; //Aqui iria un return para matar el proceso y mandar el producto seleccionado
+                this.nuevoIngredienteDTO = nuevoIngrediente;
+                break;
             }
+        }
 
-        }
-        if (ingredientes.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No seleccionaste nada");
-        } else {
-            Control.getInstancia().abrirListaIngredientesFiltrada(ingredientes);
-        }
+        //Control.getInstancia().abrirListaIngredientesFiltrada(nuevoIngredienteDTO);
+        Control.getInstancia().abrirActualizarStock(nuevoIngredienteDTO);
+
     }//GEN-LAST:event_botonSeleccionarActionPerformed
 
 

@@ -216,7 +216,7 @@ public class AgregarIngredientes extends javax.swing.JFrame {
     private boolean agregarIngrediente() {
         try {
             String nombre = this.campoTxtNombre.getText();
-            Float stock = Float.parseFloat(this.campoTxtStock.getText());
+            Integer stock = Integer.valueOf(this.campoTxtStock.getText());
             UnidadMedida unidad = (UnidadMedida) this.comboBoxUnidad.getSelectedItem();
             NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(nombre, stock, unidad);
             this.ingredientesBO.registrar(nuevoIngrediente);

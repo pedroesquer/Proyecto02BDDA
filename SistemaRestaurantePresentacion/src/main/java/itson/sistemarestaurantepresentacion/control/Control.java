@@ -5,6 +5,7 @@ import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
 import itson.sistemarestaurantepresentacion.ActualizarIngredientes;
 import itson.sistemarestaurantepresentacion.ActualizarProducto;
+import itson.sistemarestaurantepresentacion.ActualizarStock;
 import itson.sistemarestaurantepresentacion.AgregarIngredientes;
 import itson.sistemarestaurantepresentacion.AgregarIngredientesProducto;
 import itson.sistemarestaurantepresentacion.BuscadorIngredientes;
@@ -107,9 +108,19 @@ public class Control {
         formListaIngredientes.setVisible(true);
     }
 
-    public void abrirListaIngredientesFiltrada(List<NuevoIngredienteDTO> listaIngredientes) {
+    public void abrirListaIngredientesFiltrada(NuevoIngredienteDTO ingredienteSeleccionado) {
         ListaIngredientes formListaIngredientes = new ListaIngredientes(ingredientesBO);
-        formListaIngredientes.actualizarIngredientesSeleccionados(listaIngredientes); // Llama a un método que actualiza la tabla
+        formListaIngredientes.actualizarIngredientesSeleccionados(ingredienteSeleccionado); // Llama a un método que actualiza la tabla
         formListaIngredientes.setVisible(true);
+    }
+    
+    /**
+     * Método que abre la pantalla del actualizador de stock.
+     * @param ingredienteSeleccionado
+     */
+    public void abrirActualizarStock(NuevoIngredienteDTO ingredienteSeleccionado) {
+        ActualizarStock formBuscadorIngredientes = new ActualizarStock(ingredientesBO);
+        formBuscadorIngredientes.actualizarIngredientesSeleccionados(ingredienteSeleccionado);
+        formBuscadorIngredientes.setVisible(true);
     }
 }

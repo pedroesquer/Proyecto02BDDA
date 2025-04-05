@@ -55,22 +55,21 @@ public class ListaIngredientes extends javax.swing.JFrame {
     }
     
     
-    public void actualizarIngredientesSeleccionados(List<NuevoIngredienteDTO> ingredientesSeleccionados) {
+    public void actualizarIngredientesSeleccionados(NuevoIngredienteDTO ingredienteSeleccionado) {
     try {
         // Este objeto permite interactuar con los elementos de la tabla
         DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaIngredientes.getModel();
         modeloTabla.setRowCount(0); // Limpiamos la tabla antes de llenarla nuevamente
 
         // Llenamos la tabla con los ingredientes seleccionados
-        for (NuevoIngredienteDTO ingredienteDTO : ingredientesSeleccionados) {
             Object[] fila = {
-                ingredienteDTO.getId(),
-                ingredienteDTO.getNombre(),
-                ingredienteDTO.getUnidadMedida(),
-                ingredienteDTO.getStock()
+                ingredienteSeleccionado.getId(),
+                ingredienteSeleccionado.getNombre(),
+                ingredienteSeleccionado.getUnidadMedida(),
+                ingredienteSeleccionado.getStock()
             };
             modeloTabla.addRow(fila);
-        }
+        
     } catch (Exception ex) {
         LOG.severe("No se pudo actualizar la tabla con los ingredientes seleccionados");
         JOptionPane.showInputDialog(this, ex.getMessage());
@@ -185,9 +184,9 @@ public class ListaIngredientes extends javax.swing.JFrame {
             panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelSuperior, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelGeneralLayout.createSequentialGroup()
-                .addGap(225, 225, 225)
+                .addGap(212, 212, 212)
                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(83, 83, 83)
+                .addGap(96, 96, 96)
                 .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()

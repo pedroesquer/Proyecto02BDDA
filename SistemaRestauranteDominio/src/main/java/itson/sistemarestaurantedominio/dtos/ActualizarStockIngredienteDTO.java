@@ -6,9 +6,9 @@ package itson.sistemarestaurantedominio.dtos;
  */
 public class ActualizarStockIngredienteDTO {
     private Long id;
-    private Float stock;
+    private Integer stock;
 
-    public ActualizarStockIngredienteDTO(Long id, Float stock) {
+    public ActualizarStockIngredienteDTO(Long id, Integer stock) {
         this.id = id;
         this.stock = stock;
     }
@@ -17,7 +17,7 @@ public class ActualizarStockIngredienteDTO {
         return id;
     }
 
-    public Float getStock() {
+    public int getStock() {
         return stock;
     }
     

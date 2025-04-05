@@ -9,16 +9,16 @@ import itson.sistemarestaurantedominio.UnidadMedida;
 public class NuevoIngredienteDTO {
     private Long id;
     private String nombre;
-    private Float stock;
+    private Integer stock;
     private UnidadMedida unidadMedida;
 
-    public NuevoIngredienteDTO(String nombre, Float stock, UnidadMedida unidadMedida) {
+    public NuevoIngredienteDTO(String nombre, Integer stock, UnidadMedida unidadMedida) {
         this.nombre = nombre;
         this.stock = stock;
         this.unidadMedida = unidadMedida;
     }
 
-    public NuevoIngredienteDTO(Long id, String nombre, Float stock, UnidadMedida unidadMedida) {
+    public NuevoIngredienteDTO(Long id, String nombre, Integer stock, UnidadMedida unidadMedida) {
         this.id = id;
         this.nombre = nombre;
         this.stock = stock;
@@ -31,7 +31,7 @@ public class NuevoIngredienteDTO {
         return nombre;
     }
 
-    public Float getStock() {
+    public Integer getStock() {
         return stock;
     }
 

@@ -31,7 +31,7 @@ public class Ingrediente implements Serializable {
     private String nombre;
     
     @Column(name = "stock", nullable = false)
-    private Float stock;
+    private Integer stock;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "unidad_medida", nullable = false)
@@ -44,7 +44,7 @@ public class Ingrediente implements Serializable {
     public Ingrediente() {
     }
 
-    public Ingrediente(String nombre, Float stock, UnidadMedida unidadMedida) {
+    public Ingrediente(String nombre, Integer stock, UnidadMedida unidadMedida) {
         this.nombre = nombre;
         this.stock = stock;
         this.unidadMedida = unidadMedida;
@@ -67,11 +67,11 @@ public class Ingrediente implements Serializable {
         this.nombre = nombre;
     }
 
-    public Float getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(Float stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
