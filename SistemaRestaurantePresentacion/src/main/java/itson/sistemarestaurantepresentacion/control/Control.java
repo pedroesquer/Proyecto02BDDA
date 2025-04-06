@@ -12,6 +12,7 @@ import itson.sistemarestaurantepresentacion.BuscadorIngredientes;
 import itson.sistemarestaurantepresentacion.Ingredientes;
 import itson.sistemarestaurantepresentacion.ListaIngredientes;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
+import itson.sistemarestaurantepresentacion.Productos;
 import java.util.List;
 
 /**
@@ -128,6 +129,12 @@ public class Control {
         ActualizarStock formBuscadorIngredientes = new ActualizarStock(ingredientesBO);
         formBuscadorIngredientes.actualizarIngredientesSeleccionados(ingredienteSeleccionado);
         formBuscadorIngredientes.setVisible(true);
+    }
+
+    
+    public void abrirProductos(){
+        Productos formProductos = new Productos();
+        formProductos.setVisible(true);
     }
 
 }

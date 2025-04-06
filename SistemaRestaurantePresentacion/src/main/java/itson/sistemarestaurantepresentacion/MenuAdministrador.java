@@ -69,6 +69,11 @@ public class MenuAdministrador extends javax.swing.JFrame {
         comandasLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         comandasLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/platilloIcon.png"))); // NOI18N
         comandasLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        comandasLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                comandasLabel2MouseClicked(evt);
+            }
+        });
 
         lblIngredientes.setBackground(new java.awt.Color(235, 230, 208));
         lblIngredientes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -89,7 +94,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         jLabel2.setText("Comandas");
 
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        jLabel3.setText("Platillos");
+        jLabel3.setText("Productos");
 
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel4.setText("Ingredientes");
@@ -197,6 +202,12 @@ public class MenuAdministrador extends javax.swing.JFrame {
         Control.getInstancia().abrirIngredientes();
         this.setVisible(false);
     }//GEN-LAST:event_lblIngredientesMouseClicked
+
+    private void comandasLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comandasLabel2MouseClicked
+        // TODO add your handling code here:
+        Control.getInstancia().abrirProductos();
+        this.setVisible(false);
+    }//GEN-LAST:event_comandasLabel2MouseClicked
 
     
    
