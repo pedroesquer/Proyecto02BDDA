@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author pedro
+ * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
  */
 public class AgregarIngredientes extends javax.swing.JFrame {
 
@@ -213,6 +213,13 @@ public class AgregarIngredientes extends javax.swing.JFrame {
         Control.getInstancia().abrirIngredientes();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    /**
+     * Agrega un nuevo ingrediente al sistema. Registra un ingrediente con los
+     * datos proporcionados por el usuario.
+     *
+     * @return true si el ingrediente fue registrado exitosamente, false en caso
+     * contrario.
+     */
     private boolean agregarIngrediente() {
         try {
             String nombre = this.campoTxtNombre.getText();

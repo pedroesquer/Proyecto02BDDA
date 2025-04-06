@@ -98,29 +98,36 @@ public class Control {
     /**
      * Método que abre la pantalla del buscador de ingrediente.
      */
-    public void abrirBuscadorIngredientes() {
-        BuscadorIngredientes formBuscadorIngredientes = new BuscadorIngredientes(ingredientesBO);
+    public void abrirBuscadorIngredientes(String origen) {
+        BuscadorIngredientes formBuscadorIngredientes = new BuscadorIngredientes(ingredientesBO, origen);
         formBuscadorIngredientes.setVisible(true);
     }
 
+    /**
+     * Método que abre la pantalla de la lista de ingredientes.
+     */
     public void abrirListaIngredientes() {
         ListaIngredientes formListaIngredientes = new ListaIngredientes(ingredientesBO);
         formListaIngredientes.setVisible(true);
     }
 
+    /**
+     * Método que abre la pantalla de la lista de ingredientes filtrada.
+     */
     public void abrirListaIngredientesFiltrada(NuevoIngredienteDTO ingredienteSeleccionado) {
         ListaIngredientes formListaIngredientes = new ListaIngredientes(ingredientesBO);
-        formListaIngredientes.actualizarIngredientesSeleccionados(ingredienteSeleccionado); // Llama a un método que actualiza la tabla
+        formListaIngredientes.actualizarIngredientesSeleccionados(ingredienteSeleccionado);
         formListaIngredientes.setVisible(true);
     }
     
     /**
      * Método que abre la pantalla del actualizador de stock.
-     * @param ingredienteSeleccionado
+     * @param ingredienteSeleccionado NuevoIngredienteDTO que se genera por medio de la selección dentro del buscador de productos
      */
     public void abrirActualizarStock(NuevoIngredienteDTO ingredienteSeleccionado) {
         ActualizarStock formBuscadorIngredientes = new ActualizarStock(ingredientesBO);
         formBuscadorIngredientes.actualizarIngredientesSeleccionados(ingredienteSeleccionado);
         formBuscadorIngredientes.setVisible(true);
     }
+
 }

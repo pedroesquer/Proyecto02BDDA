@@ -1,12 +1,15 @@
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Ingrediente;
+import itson.sistemarestaurantedominio.UnidadMedida;
+import itson.sistemarestaurantedominio.dtos.ActualizarStockIngredienteDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
 import java.util.List;
 import java.util.logging.Logger;
+import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,6 +23,7 @@ public class ActualizarStock extends javax.swing.JFrame {
     /**
      * Creates new form Productos
      */
+    private Long idIngrediente;
     private IIngredientesBO ingredientesBO;
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
 
@@ -71,7 +75,9 @@ public class ActualizarStock extends javax.swing.JFrame {
             };
             modeloTabla.addRow(fila);
 
-            lblStockActual.setText(String.valueOf(ingredienteSeleccionado.getStock()));
+            lblStockActualNumero.setText(String.valueOf(ingredienteSeleccionado.getStock()));
+
+            this.idIngrediente = ingredienteSeleccionado.getId();
 
         } catch (Exception ex) {
             LOG.severe("No se pudo actualizar la tabla con los ingredientes seleccionados");
@@ -103,6 +109,7 @@ public class ActualizarStock extends javax.swing.JFrame {
         lblStockActualizar = new javax.swing.JLabel();
         lblStockActualMostrar = new javax.swing.JLabel();
         btnActualizar = new javax.swing.JButton();
+        lblStockActualNumero = new javax.swing.JLabel();
 
         jTextField1.setText("jTextField1");
 
@@ -130,9 +137,9 @@ public class ActualizarStock extends javax.swing.JFrame {
                 .addComponent(iconChefSoft)
                 .addGap(117, 117, 117)
                 .addComponent(lblTituloIngrediente)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(83, 83, 83)
                 .addComponent(iconIngrediente)
-                .addGap(52, 52, 52))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelSuperiorLayout.setVerticalGroup(
             panelSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,9 +151,7 @@ public class ActualizarStock extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelSuperiorLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(iconChefSoft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelSuperiorLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(iconIngrediente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(iconIngrediente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -186,6 +191,9 @@ public class ActualizarStock extends javax.swing.JFrame {
             }
         });
 
+        lblStockActualNumero.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
+        lblStockActualNumero.setText("-");
+
         javax.swing.GroupLayout panelGeneralLayout = new javax.swing.GroupLayout(panelGeneral);
         panelGeneral.setLayout(panelGeneralLayout);
         panelGeneralLayout.setHorizontalGroup(
@@ -194,60 +202,61 @@ public class ActualizarStock extends javax.swing.JFrame {
             .addGroup(panelGeneralLayout.createSequentialGroup()
                 .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelGeneralLayout.createSequentialGroup()
-                                .addGap(119, 119, 119)
-                                .addComponent(lblStockActualizar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(campoStock, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(54, 54, 54))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(286, 286, 286)))
+                        .addGap(117, 117, 117)
+                        .addComponent(lblStockActualizar)
+                        .addGap(18, 18, 18)
+                        .addComponent(campoStock, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(124, 124, 124)
                         .addComponent(iconBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelGeneralLayout.createSequentialGroup()
                         .addGap(205, 205, 205)
                         .addComponent(lblStockActual)
-                        .addGap(165, 165, 165)
-                        .addComponent(lblStockActualMostrar)))
+                        .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelGeneralLayout.createSequentialGroup()
+                                .addGap(36, 36, 36)
+                                .addComponent(lblStockActualMostrar))
+                            .addGroup(panelGeneralLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(lblStockActualNumero))))
+                    .addGroup(panelGeneralLayout.createSequentialGroup()
+                        .addGap(366, 366, 366)
+                        .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelGeneralLayout.createSequentialGroup()
+                        .addGap(127, 127, 127)
+                        .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGeneralLayout.createSequentialGroup()
-                    .addGap(152, 152, 152)
-                    .addComponent(pnlTablaProductos)
-                    .addGap(152, 152, 152)))
         );
         panelGeneralLayout.setVerticalGroup(
             panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelGeneralLayout.createSequentialGroup()
                 .addComponent(panelSuperior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
-                .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblStockActual)
-                    .addComponent(lblStockActualMostrar))
-                .addGap(55, 55, 55)
+                .addGap(18, 18, 18)
+                .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addComponent(lblStockActualMostrar)
+                .addGap(35, 35, 35)
                 .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(iconBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblStockActual)
+                            .addComponent(lblStockActualNumero))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblStockActualizar)
                             .addComponent(campoStock, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(31, 31, 31)
-                        .addComponent(btnActualizar)))
-                .addGap(49, 49, 49))
-            .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGeneralLayout.createSequentialGroup()
-                    .addGap(128, 128, 128)
-                    .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(293, Short.MAX_VALUE)))
+                        .addGap(46, 46, 46))
+                    .addGroup(panelGeneralLayout.createSequentialGroup()
+                        .addComponent(iconBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnActualizar)
+                .addGap(19, 19, 19))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 802, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,7 +267,22 @@ public class ActualizarStock extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        // TODO add your handling code here:
+        try {
+            Integer stock = Integer.valueOf(this.campoStock.getText());
+            ActualizarStockIngredienteDTO ingredienteNuevoStock = new ActualizarStockIngredienteDTO(idIngrediente, stock);
+            this.ingredientesBO.actualizar(ingredienteNuevoStock);
+            JOptionPane.showMessageDialog(this, "Exito al actualizar el stock del ingrediente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        } catch (NegocioException e) {
+            LOG.severe("No fue posible actualizar el stock del ingrediente " + e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (NumberFormatException e) {
+            LOG.severe("No puedes ingresar letras en el stock");
+            JOptionPane.showMessageDialog(this, "Asegurate que el stock sean solo números", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+
+        } 
+        this.dispose();
+        Control.getInstancia().abrirIngredientes();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     /**
@@ -275,6 +299,7 @@ public class ActualizarStock extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblStockActual;
     private javax.swing.JLabel lblStockActualMostrar;
+    private javax.swing.JLabel lblStockActualNumero;
     private javax.swing.JLabel lblStockActualizar;
     private javax.swing.JLabel lblTituloIngrediente;
     private javax.swing.JPanel panelGeneral;

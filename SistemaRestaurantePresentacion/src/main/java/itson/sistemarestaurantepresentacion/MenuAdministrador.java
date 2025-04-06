@@ -195,7 +195,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
 
     private void lblIngredientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblIngredientesMouseClicked
         Control.getInstancia().abrirIngredientes();
-        this.dispose();
+        this.setVisible(false);
     }//GEN-LAST:event_lblIngredientesMouseClicked
 
     

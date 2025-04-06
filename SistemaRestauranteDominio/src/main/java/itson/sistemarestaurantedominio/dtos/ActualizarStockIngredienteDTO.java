@@ -17,7 +17,7 @@ public class ActualizarStockIngredienteDTO {
         return id;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
     

@@ -12,31 +12,34 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Sooto
+ * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
+ * Sooto
  */
 public class ListaIngredientes extends javax.swing.JFrame {
 
     /**
      * Creates new form Productos
      */
-    
     private IIngredientesBO ingredientesBO;
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
+
     public ListaIngredientes(IIngredientesBO ingredientesBO) {
         initComponents();
         this.setTitle("Lista ingredientes");
         this.setResizable(false);
-        this.setSize(760,500);
+        this.setSize(760, 500);
         this.setLocationRelativeTo(null);
         this.ingredientesBO = ingredientesBO;
         this.llenarTablaIngredientes();
     }
 
-    private void llenarTablaIngredientes(){
-        try{
-            
+    /**
+     * Llena la tabla con todos los ingredientes disponibles. Consulta los
+     * ingredientes y los agrega a la tabla.
+     */
+    private void llenarTablaIngredientes() {
+        try {
             List<Ingrediente> ingredientes = this.ingredientesBO.consultar("");
-            //Este objeto permite interactuar con los elementos de la tabla
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaIngredientes.getModel();
             modeloTabla.setRowCount(0);
             for (Ingrediente ingrediente : ingredientes) {
@@ -48,20 +51,22 @@ public class ListaIngredientes extends javax.swing.JFrame {
                 };
                 modeloTabla.addRow(fila);
             }
-        } catch(NegocioException ex){
+        } catch (NegocioException ex) {
             LOG.severe("No se pudo llenar la tabla");
             JOptionPane.showInputDialog(this, ex.getMessage());
         }
     }
-    
-    
-    public void actualizarIngredientesSeleccionados(NuevoIngredienteDTO ingredienteSeleccionado) {
-    try {
-        // Este objeto permite interactuar con los elementos de la tabla
-        DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaIngredientes.getModel();
-        modeloTabla.setRowCount(0); // Limpiamos la tabla antes de llenarla nuevamente
 
-        // Llenamos la tabla con los ingredientes seleccionados
+    /**
+     * Actualiza la tabla con los datos de un ingrediente seleccionado.
+     *
+     * @param ingredienteSeleccionado El ingrediente a mostrar en la tabla.
+     */
+    public void actualizarIngredientesSeleccionados(NuevoIngredienteDTO ingredienteSeleccionado) {
+        try {
+            DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaIngredientes.getModel();
+            modeloTabla.setRowCount(0); // Limpiamos la tabla antes de llenarla nuevamente
+
             Object[] fila = {
                 ingredienteSeleccionado.getId(),
                 ingredienteSeleccionado.getNombre(),
@@ -69,12 +74,12 @@ public class ListaIngredientes extends javax.swing.JFrame {
                 ingredienteSeleccionado.getStock()
             };
             modeloTabla.addRow(fila);
-        
-    } catch (Exception ex) {
-        LOG.severe("No se pudo actualizar la tabla con los ingredientes seleccionados");
-        JOptionPane.showInputDialog(this, ex.getMessage());
+
+        } catch (Exception ex) {
+            LOG.severe("No se pudo actualizar la tabla con los ingredientes seleccionados");
+            JOptionPane.showInputDialog(this, ex.getMessage());
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -229,12 +234,12 @@ public class ListaIngredientes extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         this.dispose();
-        Control.getInstancia().abrirMenuAdministrador();
+        Control.getInstancia().abrirIngredientes();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         this.dispose();
-        Control.getInstancia().abrirBuscadorIngredientes();
+        Control.getInstancia().abrirBuscadorIngredientes("buscar");
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -245,8 +250,6 @@ public class ListaIngredientes extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-   
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;

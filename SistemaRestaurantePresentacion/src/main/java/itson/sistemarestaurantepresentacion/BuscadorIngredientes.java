@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class BuscadorIngredientes extends javax.swing.JFrame {
 
+    private String origen;
     private NuevoIngredienteDTO nuevoIngredienteDTO;
     private IIngredientesBO ingredientesBO;
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
@@ -28,14 +29,14 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
     /**
      * Constructor del frame BuscadorProductos.
      */
-    public BuscadorIngredientes(IIngredientesBO ingredientesBO) {
+    public BuscadorIngredientes(IIngredientesBO ingredientesBO, String origen) {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setTitle("Buscador Ingredientes");
         this.ingredientesBO = ingredientesBO;
-        //this.llenarTablaIngredientes();
         this.cargarTabla();
+        this.origen = origen;
     }
 
     private void cargarTabla() {
@@ -263,16 +264,21 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
                 String stockString = tablaIngredientes.getValueAt(i, 3).toString();
                 Integer stock = Integer.valueOf(stockString);
 
-                JOptionPane.showMessageDialog(this, "ID:  " + id + " nombre: " + nombre + " unidadMedida: " + unidadMedida + " stock: " + stock);
+                JOptionPane.showMessageDialog(this, "Ingrediente seleccionado: " + nombre);
 
                 NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(id, nombre, stock, unidadMedida);
                 this.nuevoIngredienteDTO = nuevoIngrediente;
                 break;
             }
         }
+        if (origen.equals("actualizar")) {
+            Control.getInstancia().abrirActualizarStock(nuevoIngredienteDTO);
+        } else if (origen.equals("buscar")) {
+            Control.getInstancia().abrirListaIngredientesFiltrada(nuevoIngredienteDTO);
+        }
+        this.dispose();
+                            
 
-        //Control.getInstancia().abrirListaIngredientesFiltrada(nuevoIngredienteDTO);
-        Control.getInstancia().abrirActualizarStock(nuevoIngredienteDTO);
 
     }//GEN-LAST:event_botonSeleccionarActionPerformed
 
