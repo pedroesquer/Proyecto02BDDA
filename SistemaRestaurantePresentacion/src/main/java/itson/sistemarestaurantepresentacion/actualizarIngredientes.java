@@ -202,7 +202,7 @@ public class ActualizarIngredientes extends javax.swing.JFrame {
 
     private void iconAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconAgregarMouseClicked
         this.dispose();
-        Control.getInstancia().abrirBuscadorIngredientes("actualizar");
+        Control.getInstancia().abrirBuscadorIngredientesActualizar();
     }//GEN-LAST:event_iconAgregarMouseClicked
 
     /**

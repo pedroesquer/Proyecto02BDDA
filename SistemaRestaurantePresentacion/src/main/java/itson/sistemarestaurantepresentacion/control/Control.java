@@ -20,6 +20,7 @@ import itson.sistemarestaurantepresentacion.ListaProductos;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
 import itson.sistemarestaurantepresentacion.Productos;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  *
@@ -107,8 +108,26 @@ public class Control {
     /**
      * Método que abre la pantalla del buscador de ingrediente.
      */
-    public void abrirBuscadorIngredientes(String origen) {
-        BuscadorIngredientes formBuscadorIngredientes = new BuscadorIngredientes(ingredientesBO, origen);
+    public void abrirBuscadorIngredientesActualizar() {
+        Consumer<NuevoIngredienteDTO> onIngredienteSeleccionado = ingrediente -> {
+            Control.getInstancia().abrirActualizarStock(ingrediente);
+
+        };
+
+        BuscadorIngredientes formBuscadorIngredientes = new BuscadorIngredientes(ingredientesBO, onIngredienteSeleccionado);
+        formBuscadorIngredientes.setVisible(true);
+    }
+    
+    /**
+     * Método que abre la pantalla del buscador de ingrediente.
+     */
+    public void abrirBuscadorIngredientesLista() {
+        Consumer<NuevoIngredienteDTO> onIngredienteSeleccionado = ingrediente -> {
+            Control.getInstancia().abrirListaIngredientesFiltrada(ingrediente);
+
+        };
+
+        BuscadorIngredientes formBuscadorIngredientes = new BuscadorIngredientes(ingredientesBO, onIngredienteSeleccionado);
         formBuscadorIngredientes.setVisible(true);
     }
 
@@ -128,10 +147,12 @@ public class Control {
         formListaIngredientes.actualizarIngredientesSeleccionados(ingredienteSeleccionado);
         formListaIngredientes.setVisible(true);
     }
-    
+
     /**
      * Método que abre la pantalla del actualizador de stock.
-     * @param ingredienteSeleccionado NuevoIngredienteDTO que se genera por medio de la selección dentro del buscador de productos
+     *
+     * @param ingredienteSeleccionado NuevoIngredienteDTO que se genera por
+     * medio de la selección dentro del buscador de productos
      */
     public void abrirActualizarStock(NuevoIngredienteDTO ingredienteSeleccionado) {
         ActualizarStock formBuscadorIngredientes = new ActualizarStock(ingredientesBO);
@@ -142,34 +163,35 @@ public class Control {
     /**
      * Método que abre la pantalla de menu de Productos.
      */
-    public void abrirProductos(){
+    public void abrirProductos() {
         Productos formProductos = new Productos();
         formProductos.setVisible(true);
     }
+
     /**
      * Método que abre el frame de agregar el Producto.
      */
-    public void abrirAgregarProducto(){
+    public void abrirAgregarProducto() {
         AgregarProducto formAgregarProducto = new AgregarProducto(productosBO);
         formAgregarProducto.setVisible(true);
     }
-    
+
     /**
-     * Método que abre la lista de Productos en existencia despues de haber seleccionado actualizar o ver productos.
+     * Método que abre la lista de Productos en existencia despues de haber
+     * seleccionado actualizar o ver productos.
      */
-    public void abrirListaProductos(){
+    public void abrirListaProductos() {
         ListaProductos formListaProductos = new ListaProductos(productosBO);
         formListaProductos.setVisible(true);
     }
-    
+
     /**
-     * Método que abre la pantalla de detalles de un producto, donde muestra sus ingredientes y su nombre.
+     * Método que abre la pantalla de detalles de un producto, donde muestra sus
+     * ingredientes y su nombre.
      */
-    public void abrirDetallesProducto(Producto productoDetallar){
+    public void abrirDetallesProducto(Producto productoDetallar) {
         DetallesProducto formDetallesProducto = new DetallesProducto(productoDetallar, ingredientesProductoBO);
         formDetallesProducto.setVisible(true);
     }
-    
-    
 
 }

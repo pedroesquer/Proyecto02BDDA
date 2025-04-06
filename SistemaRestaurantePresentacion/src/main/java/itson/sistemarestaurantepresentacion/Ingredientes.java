@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantenegocio.IIngredientesBO;
@@ -9,7 +5,7 @@ import itson.sistemarestaurantepresentacion.control.Control;
 
 /**
  *
- * @author juanpheras
+ * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
  */
 public class Ingredientes extends javax.swing.JFrame {
 

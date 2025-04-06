@@ -8,6 +8,7 @@ import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -20,8 +21,9 @@ import javax.swing.table.DefaultTableModel;
  * Soto
  */
 public class BuscadorIngredientes extends javax.swing.JFrame {
+    
 
-    private String origen;
+    private Consumer<NuevoIngredienteDTO> onIngredienteSeleccionado; 
     private NuevoIngredienteDTO nuevoIngredienteDTO;
     private IIngredientesBO ingredientesBO;
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
@@ -29,14 +31,15 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
     /**
      * Constructor del frame BuscadorProductos.
      */
-    public BuscadorIngredientes(IIngredientesBO ingredientesBO, String origen) {
+    public BuscadorIngredientes(IIngredientesBO ingredientesBO, Consumer<NuevoIngredienteDTO> onIngredienteSeleccionado) {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setTitle("Buscador Ingredientes");
         this.ingredientesBO = ingredientesBO;
         this.cargarTabla();
-        this.origen = origen;
+        this.onIngredienteSeleccionado = onIngredienteSeleccionado; 
+
     }
 
     private void cargarTabla() {
@@ -264,20 +267,18 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
                 String stockString = tablaIngredientes.getValueAt(i, 3).toString();
                 Integer stock = Integer.valueOf(stockString);
 
-                JOptionPane.showMessageDialog(this, "Ingrediente seleccionado: " + nombre);
-
+                // Crear el DTO para pasar al callback
                 NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(id, nombre, stock, unidadMedida);
-                this.nuevoIngredienteDTO = nuevoIngrediente;
+
+                // Llamar al callback
+                if (onIngredienteSeleccionado != null) {
+                    onIngredienteSeleccionado.accept(nuevoIngrediente); // Ejecuta la acción que definió el llamador
+                }
+
                 break;
             }
         }
-        if (origen.equals("actualizar")) {
-            Control.getInstancia().abrirActualizarStock(nuevoIngredienteDTO);
-        } else if (origen.equals("buscar")) {
-            Control.getInstancia().abrirListaIngredientesFiltrada(nuevoIngredienteDTO);
-        }
         this.dispose();
-                            
 
 
     }//GEN-LAST:event_botonSeleccionarActionPerformed
