@@ -4,6 +4,8 @@
  */
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantepresentacion.control.Control;
+
 /**
  *
  * @author juanpheras
@@ -107,6 +109,11 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame {
         botonBuscarIngrediente.setForeground(new java.awt.Color(255, 255, 255));
         botonBuscarIngrediente.setText("Buscar ingrediente\n");
         botonBuscarIngrediente.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonBuscarIngrediente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonBuscarIngredienteActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -210,6 +217,11 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame {
     private void botonLimpiarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarTablaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_botonLimpiarTablaActionPerformed
+
+    private void botonBuscarIngredienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarIngredienteActionPerformed
+        // TODO add your handling code here:
+        //Control.getInstancia().abrirBuscadorIngredientes(origen); Falta que se corrija el constructor de buscadorIngredientes
+    }//GEN-LAST:event_botonBuscarIngredienteActionPerformed
 
     
 

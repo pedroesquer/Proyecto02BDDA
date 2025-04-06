@@ -4,6 +4,8 @@
  */
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantepresentacion.control.Control;
+
 /**
  *
  * @author juanpheras
@@ -35,11 +37,11 @@ public class Productos extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        actualizarProductosLbl = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        nuevoProductoLbl = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        verProductosLbl = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -89,17 +91,32 @@ public class Productos extends javax.swing.JFrame {
                     .addContainerGap()))
         );
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/updateIcon.png"))); // NOI18N
+        actualizarProductosLbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/updateIcon.png"))); // NOI18N
+        actualizarProductosLbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                actualizarProductosLblMouseClicked(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel4.setText("Actualizar productos");
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/aniadir.png"))); // NOI18N
+        nuevoProductoLbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/aniadir.png"))); // NOI18N
+        nuevoProductoLbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nuevoProductoLblMouseClicked(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel7.setText("Nuevo Producto");
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/buscarIcon.png"))); // NOI18N
+        verProductosLbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/buscarIcon.png"))); // NOI18N
+        verProductosLbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                verProductosLblMouseClicked(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel9.setText("Ver productos");
@@ -119,11 +136,11 @@ public class Productos extends javax.swing.JFrame {
                 .addGap(27, 27, 27))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(72, 72, 72)
-                .addComponent(jLabel6)
+                .addComponent(nuevoProductoLbl)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
+                .addComponent(verProductosLbl)
                 .addGap(128, 128, 128)
-                .addComponent(jLabel5)
+                .addComponent(actualizarProductosLbl)
                 .addGap(82, 82, 82))
         );
         jPanel1Layout.setVerticalGroup(
@@ -132,9 +149,9 @@ public class Productos extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(85, 85, 85)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(actualizarProductosLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(verProductosLbl, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                    .addComponent(nuevoProductoLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
@@ -158,19 +175,37 @@ public class Productos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void nuevoProductoLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nuevoProductoLblMouseClicked
+        // TODO add your handling code here:
+        Control.getInstancia().abrirAgregarProducto();
+        this.dispose();
+    }//GEN-LAST:event_nuevoProductoLblMouseClicked
+
+    private void verProductosLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verProductosLblMouseClicked
+        // TODO add your handling code here:
+        Control.getInstancia().abrirListaProductos();
+        this.dispose();
+    }//GEN-LAST:event_verProductosLblMouseClicked
+
+    private void actualizarProductosLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_actualizarProductosLblMouseClicked
+        // TODO add your handling code here:
+        Control.getInstancia().abrirListaProductos();
+        this.dispose();
+    }//GEN-LAST:event_actualizarProductosLblMouseClicked
+
   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel actualizarProductosLbl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel nuevoProductoLbl;
+    private javax.swing.JLabel verProductosLbl;
     // End of variables declaration//GEN-END:variables
 }

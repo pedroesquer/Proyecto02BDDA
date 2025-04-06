@@ -8,10 +8,13 @@ import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.IngredienteProducto;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.dtos.ActualizarIngredienteProductoDTO;
+import itson.sistemarestaurantedominio.dtos.DetalleIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevaRelacionIngredienteProductoDTO;
 import itson.sistemarestaurantepersistencia.IIngredientesProductosDAO;
 import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -72,5 +75,27 @@ public class IngredientesProductoDAO implements IIngredientesProductosDAO  {
         
         
     }
+
+    @Override
+    public List<DetalleIngredienteProductoDTO> consultarIngredientesProducto(Long idProducto) {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        
+        String jpqlQuery = """
+                SELECT new itson.sistemarestaurantedominio.dtos.DetalleIngredienteProductoDTO(
+                           IP.cantidad, I.unidadMedida, I.nombre
+            )
+            FROM IngredienteProducto IP
+            JOIN IP.producto  P                         
+            JOIN IP.ingrediente i
+            WHERE P.id = :idProducto              
+        """;
+        
+        TypedQuery<DetalleIngredienteProductoDTO> query = entityManager.createQuery(jpqlQuery, 
+                DetalleIngredienteProductoDTO.class);
+        query.setParameter("idProducto", idProducto);
+        
+        return query.getResultList();
+    }
+    
     
 }

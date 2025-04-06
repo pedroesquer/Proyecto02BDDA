@@ -20,4 +20,6 @@ public interface IProductosBO {
     
     public abstract Producto actualizar(ActualizarProductoDTO actualizarProducto) throws NegocioException, PersistenciaException;
     
+    public abstract Producto consultarProductoIndividual(Long idProducto);
+    
 }

@@ -100,5 +100,11 @@ public class ProductosDAO implements IProductosDAO{
 
         return count > 0;
     }
+
+    @Override
+    public Producto consultarProductoIndividual(Long idProducto) {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        return entityManager.find(Producto.class, idProducto);
+    }
     
 }

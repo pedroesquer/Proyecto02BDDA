@@ -82,6 +82,11 @@ public class ProductosBO implements IProductosBO {
         }
         return this.productosDAO.actualizarProducto(actualizarProducto);
     }
+
+    @Override
+    public Producto consultarProductoIndividual(Long idProducto) {
+        return this.productosDAO.consultarProductoIndividual(idProducto);
+    }
     
     
     

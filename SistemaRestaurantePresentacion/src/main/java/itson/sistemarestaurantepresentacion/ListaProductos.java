@@ -118,7 +118,7 @@ public class ListaProductos extends javax.swing.JFrame {
         pnlTablaProductos = new javax.swing.JScrollPane();
         tablaProductos = new javax.swing.JTable();
         botonActualizarProducto = new javax.swing.JButton();
-        botonActualizarProducto1 = new javax.swing.JButton();
+        botonDetallesProducto = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -196,10 +196,15 @@ public class ListaProductos extends javax.swing.JFrame {
             }
         });
 
-        botonActualizarProducto1.setBackground(new java.awt.Color(204, 255, 255));
-        botonActualizarProducto1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        botonActualizarProducto1.setText("Detalles producto");
-        botonActualizarProducto1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonDetallesProducto.setBackground(new java.awt.Color(204, 255, 255));
+        botonDetallesProducto.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        botonDetallesProducto.setText("Detalles producto");
+        botonDetallesProducto.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonDetallesProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonDetallesProductoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -212,7 +217,7 @@ public class ListaProductos extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(botonActualizarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(82, 82, 82)
-                        .addComponent(botonActualizarProducto1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(botonDetallesProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(117, 117, 117))
         );
@@ -225,7 +230,7 @@ public class ListaProductos extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonActualizarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonActualizarProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(botonDetallesProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -242,7 +247,7 @@ public class ListaProductos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+ 
     private Long seleccionarIdProducto() {
         for (int i = 0; i < tablaProductos.getRowCount(); i++) {
             //Verificamos si el checkbox, que esta en la columna 4, esta marcada
@@ -263,14 +268,20 @@ public class ListaProductos extends javax.swing.JFrame {
         Long idProducto = this.seleccionarIdProducto();
         if (!(idProducto == null)) {
             Control.getInstancia().abrirActualizarProducto(idProducto);            
-            
+            this.dispose();
         } 
     }//GEN-LAST:event_botonActualizarProductoActionPerformed
+
+    private void botonDetallesProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDetallesProductoActionPerformed
+        Producto producto = this.productosBO.consultarProductoIndividual(this.seleccionarIdProducto());
+        Control.getInstancia().abrirDetallesProducto(producto);
+        this.dispose();
+    }//GEN-LAST:event_botonDetallesProductoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonActualizarProducto;
-    private javax.swing.JButton botonActualizarProducto1;
+    private javax.swing.JButton botonDetallesProducto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -1,16 +1,22 @@
 package itson.sistemarestaurantepresentacion.control;
 
+import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
+import itson.sistemarestaurantenegocio.IIngredientesProductosBO;
+import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
 import itson.sistemarestaurantepresentacion.ActualizarIngredientes;
 import itson.sistemarestaurantepresentacion.ActualizarProducto;
 import itson.sistemarestaurantepresentacion.ActualizarStock;
 import itson.sistemarestaurantepresentacion.AgregarIngredientes;
 import itson.sistemarestaurantepresentacion.AgregarIngredientesProducto;
+import itson.sistemarestaurantepresentacion.AgregarProducto;
 import itson.sistemarestaurantepresentacion.BuscadorIngredientes;
+import itson.sistemarestaurantepresentacion.DetallesProducto;
 import itson.sistemarestaurantepresentacion.Ingredientes;
 import itson.sistemarestaurantepresentacion.ListaIngredientes;
+import itson.sistemarestaurantepresentacion.ListaProductos;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
 import itson.sistemarestaurantepresentacion.Productos;
 import java.util.List;
@@ -23,6 +29,8 @@ public class Control {
 
     private static Control instance;
     IIngredientesBO ingredientesBO = FabricaObjetosNegocio.crearIngredientesBO();
+    IProductosBO productosBO = FabricaObjetosNegocio.crearProductosBO();
+    IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();
 
     /**
      * Constructor privado para evitar la creación externa de instancias.
@@ -131,10 +139,37 @@ public class Control {
         formBuscadorIngredientes.setVisible(true);
     }
 
-    
+    /**
+     * Método que abre la pantalla de menu de Productos.
+     */
     public void abrirProductos(){
         Productos formProductos = new Productos();
         formProductos.setVisible(true);
     }
+    /**
+     * Método que abre el frame de agregar el Producto.
+     */
+    public void abrirAgregarProducto(){
+        AgregarProducto formAgregarProducto = new AgregarProducto(productosBO);
+        formAgregarProducto.setVisible(true);
+    }
+    
+    /**
+     * Método que abre la lista de Productos en existencia despues de haber seleccionado actualizar o ver productos.
+     */
+    public void abrirListaProductos(){
+        ListaProductos formListaProductos = new ListaProductos(productosBO);
+        formListaProductos.setVisible(true);
+    }
+    
+    /**
+     * Método que abre la pantalla de detalles de un producto, donde muestra sus ingredientes y su nombre.
+     */
+    public void abrirDetallesProducto(Producto productoDetallar){
+        DetallesProducto formDetallesProducto = new DetallesProducto(productoDetallar, ingredientesProductoBO);
+        formDetallesProducto.setVisible(true);
+    }
+    
+    
 
 }
