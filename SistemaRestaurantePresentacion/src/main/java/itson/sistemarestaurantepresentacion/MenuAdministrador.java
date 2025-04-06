@@ -35,10 +35,10 @@ public class MenuAdministrador extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         comandasLabel = new javax.swing.JLabel();
-        comandasLabel1 = new javax.swing.JLabel();
-        comandasLabel2 = new javax.swing.JLabel();
+        lblReportes = new javax.swing.JLabel();
+        lblProductos = new javax.swing.JLabel();
         lblIngredientes = new javax.swing.JLabel();
-        comandasLabel4 = new javax.swing.JLabel();
+        lblClientes = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -60,18 +60,18 @@ public class MenuAdministrador extends javax.swing.JFrame {
         comandasLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comandasIcon.png"))); // NOI18N
         comandasLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        comandasLabel1.setBackground(new java.awt.Color(235, 230, 208));
-        comandasLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        comandasLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportesIcon.png"))); // NOI18N
-        comandasLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblReportes.setBackground(new java.awt.Color(235, 230, 208));
+        lblReportes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportesIcon.png"))); // NOI18N
+        lblReportes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        comandasLabel2.setBackground(new java.awt.Color(235, 230, 208));
-        comandasLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        comandasLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/platilloIcon.png"))); // NOI18N
-        comandasLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        comandasLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblProductos.setBackground(new java.awt.Color(235, 230, 208));
+        lblProductos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/platilloIcon.png"))); // NOI18N
+        lblProductos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblProductos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                comandasLabel2MouseClicked(evt);
+                lblProductosMouseClicked(evt);
             }
         });
 
@@ -85,10 +85,10 @@ public class MenuAdministrador extends javax.swing.JFrame {
             }
         });
 
-        comandasLabel4.setBackground(new java.awt.Color(235, 230, 208));
-        comandasLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        comandasLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/clientesIcon.png"))); // NOI18N
-        comandasLabel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblClientes.setBackground(new java.awt.Color(235, 230, 208));
+        lblClientes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/clientesIcon.png"))); // NOI18N
+        lblClientes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel2.setText("Comandas");
@@ -112,22 +112,22 @@ public class MenuAdministrador extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(comandasLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(comandasLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(comandasLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(comandasLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabel2)
-                .addGap(65, 65, 65)
+                .addGap(59, 59, 59)
                 .addComponent(jLabel3)
-                .addGap(68, 68, 68)
+                .addGap(54, 54, 54)
                 .addComponent(jLabel4)
-                .addGap(65, 65, 65)
+                .addGap(62, 62, 62)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel6)
@@ -138,10 +138,10 @@ public class MenuAdministrador extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(comandasLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comandasLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comandasLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comandasLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
@@ -203,20 +203,17 @@ public class MenuAdministrador extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_lblIngredientesMouseClicked
 
-    private void comandasLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comandasLabel2MouseClicked
+    private void lblProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblProductosMouseClicked
         // TODO add your handling code here:
         Control.getInstancia().abrirProductos();
         this.setVisible(false);
-    }//GEN-LAST:event_comandasLabel2MouseClicked
+    }//GEN-LAST:event_lblProductosMouseClicked
 
     
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel comandasLabel;
-    private javax.swing.JLabel comandasLabel1;
-    private javax.swing.JLabel comandasLabel2;
-    private javax.swing.JLabel comandasLabel4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -227,6 +224,9 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblClientes;
     private javax.swing.JLabel lblIngredientes;
+    private javax.swing.JLabel lblProductos;
+    private javax.swing.JLabel lblReportes;
     // End of variables declaration//GEN-END:variables
 }
