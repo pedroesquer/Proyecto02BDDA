@@ -1,5 +1,6 @@
 package itson.sistemarestaurantepresentacion;
 
+import com.google.protobuf.Field;
 import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.UnidadMedida;
 import itson.sistemarestaurantedominio.dtos.ActualizarStockIngredienteDTO;
@@ -7,6 +8,7 @@ import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
+import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
@@ -18,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
  * Sooto
  */
-public class ActualizarStock extends javax.swing.JFrame {
+public class ActualizarStock extends javax.swing.JFrame implements IngredienteSeleccionadoObserver {
 
     /**
      * Creates new form Productos
@@ -280,9 +282,9 @@ public class ActualizarStock extends javax.swing.JFrame {
             LOG.severe("No puedes ingresar letras en el stock");
             JOptionPane.showMessageDialog(this, "Asegurate que el stock sean solo números", "Informacion", JOptionPane.INFORMATION_MESSAGE);
 
-        } 
+        }
         this.dispose();
-        Control.getInstancia().abrirIngredientes();
+        Control.getInstancia().abrirActualizarIngredientes();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     /**
@@ -307,4 +309,9 @@ public class ActualizarStock extends javax.swing.JFrame {
     private javax.swing.JScrollPane pnlTablaProductos;
     private javax.swing.JTable tablaIngredientes;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void ingredienteSeleccionado(NuevoIngredienteDTO ingrediente) {
+        actualizarIngredientesSeleccionados(ingrediente);
+    }
 }

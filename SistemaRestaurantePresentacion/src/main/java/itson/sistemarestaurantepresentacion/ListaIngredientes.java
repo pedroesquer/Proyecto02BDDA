@@ -243,6 +243,7 @@ public class ListaIngredientes extends javax.swing.JFrame implements Ingrediente
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        this.dispose();
         Control.getInstancia().abrirListaIngredientes();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 

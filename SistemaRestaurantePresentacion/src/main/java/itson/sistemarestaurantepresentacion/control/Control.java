@@ -125,14 +125,6 @@ public class Control {
         formListaIngredientes.setVisible(true);
     }
 
-    /**
-     * Método que abre la pantalla de la lista de ingredientes filtrada.
-     */
-    public void abrirListaIngredientesFiltrada(NuevoIngredienteDTO ingredienteSeleccionado) {
-        ListaIngredientes formListaIngredientes = new ListaIngredientes(ingredientesBO);
-        formListaIngredientes.actualizarIngredientesSeleccionados(ingredienteSeleccionado);
-        formListaIngredientes.setVisible(true);
-    }
 
     /**
      * Método que abre la pantalla del actualizador de stock.
@@ -186,6 +178,14 @@ public class Control {
     public void abrirClientesFrecuentes() {
         ClientesFrecuentes clientesFrecuentes = new ClientesFrecuentes();
         clientesFrecuentes.setVisible(true);
+    }
+    
+     /**
+     * Metodo que abre la pantalla de clientes frecuentes.
+     */
+    public void abrirActualizarIngredientes() {
+        ActualizarIngredientes formActualizarIngredientes = new ActualizarIngredientes(ingredientesBO);
+        formActualizarIngredientes.setVisible(true);
     }
 
 }

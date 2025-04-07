@@ -27,7 +27,7 @@ public class SistemaRestaurantePresentacion {
 //        AgregarIngredientes agregarIngredientes = new AgregarIngredientes(ingredientesBO);
 //        agregarIngredientes.setVisible(true);
 //        agregarIngredientes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        AgregarProducto formAgregarProducto = new AgregarProducto(productosBO);
+//        AgregarIngredientesProducto formAgregarProducto = new AgregarIngredientesProducto(productosBO);
 //        formAgregarProducto.setVisible(true);
 
         //ListaProductos listaProductos = new ListaProductos(productosBO);

@@ -290,7 +290,6 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
                 String stockString = tablaIngredientes.getValueAt(i, 3).toString();
                 Integer stock = Integer.valueOf(stockString);
 
-                // Crear el DTO para pasar al callback
                 NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(id, nombre, stock, unidadMedida);
                 notificarObservers(nuevoIngrediente);
                 break;
