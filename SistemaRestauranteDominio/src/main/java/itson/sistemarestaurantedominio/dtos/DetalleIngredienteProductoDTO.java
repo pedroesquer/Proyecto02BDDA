@@ -9,17 +9,17 @@ import itson.sistemarestaurantedominio.UnidadMedida;
  */
 public class DetalleIngredienteProductoDTO {
     
-    private Float cantidad;
+    private Integer cantidad;
     private UnidadMedida unidadMedida;
     private String nombre;
 
-    public DetalleIngredienteProductoDTO(Float cantidad, UnidadMedida unidadMedida, String nombre) {
+        public DetalleIngredienteProductoDTO(Integer cantidad, UnidadMedida unidadMedida, String nombre) {
         this.cantidad = cantidad;
         this.unidadMedida = unidadMedida;
         this.nombre = nombre;
     }
 
-    public Float getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
@@ -32,7 +32,7 @@ public class DetalleIngredienteProductoDTO {
     }
     
 
-    public void setCantidad(Float cantidad) {
+    public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
 

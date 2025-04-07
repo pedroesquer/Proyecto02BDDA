@@ -98,6 +98,11 @@ public class ListaProductos extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Método que resetea la tabla a su estado original mostrando los productos como estan registrados.
+     * @param tabla
+     * @param modeloTabla 
+     */
     public void LimpiarTabla(JTable tabla, DefaultTableModel modeloTabla) {
         if (modeloTabla.getRowCount() > 0) {
             for (int i = 0; i < tabla.getRowCount(); i++) {
@@ -196,6 +201,7 @@ public class ListaProductos extends javax.swing.JFrame {
         botonActualizarProducto.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         botonActualizarProducto.setText("Actualizar producto");
         botonActualizarProducto.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonActualizarProducto.setOpaque(true);
         botonActualizarProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonActualizarProductoActionPerformed(evt);
@@ -206,6 +212,7 @@ public class ListaProductos extends javax.swing.JFrame {
         botonDetallesProducto.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         botonDetallesProducto.setText("Detalles producto");
         botonDetallesProducto.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonDetallesProducto.setOpaque(true);
         botonDetallesProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonDetallesProductoActionPerformed(evt);
