@@ -6,10 +6,6 @@
     <version>1.0</version>
     <packaging>pom</packaging>
     <modules>
-        <module>../../Pedro/Cuarto Semestre ITSON/Bases de Datos Avanzadas/SistemaRestauranteProyecto2/SistemaRestauranteDominio</module>
-        <module>../../Pedro/Cuarto Semestre ITSON/Bases de Datos Avanzadas/SistemaRestauranteProyecto2/SistemaRestauranteNegocio</module>
-        <module>../../Pedro/Cuarto Semestre ITSON/Bases de Datos Avanzadas/SistemaRestauranteProyecto2/SistemaRestaurantePersistencia</module>
-        <module>../../Pedro/Cuarto Semestre ITSON/Bases de Datos Avanzadas/SistemaRestauranteProyecto2/SistemaRestaurantePresentacion</module>
         <module>../SistemaRestauranteDominio</module>
         <module>../SistemaRestauranteNegocio</module>
         <module>../SistemaRestaurantePersistencia</module>
