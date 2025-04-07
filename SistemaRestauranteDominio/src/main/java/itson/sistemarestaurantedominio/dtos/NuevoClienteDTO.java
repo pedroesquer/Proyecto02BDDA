@@ -22,15 +22,20 @@ public class NuevoClienteDTO {
     private int numeroVisitas;
     private double totalGastado;
     
-    public NuevoClienteDTO(){}
+    public NuevoClienteDTO(String nombre, String correo, String numeroTelefono, double puntosFidelidad) {
+        this.nombre = nombre;
+        this.correo = correo;
+        this.numeroTelefono = numeroTelefono;
+        this.puntosFidelidad = puntosFidelidad;
+    }
     
-    public NuevoClienteDTO( String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String numeroTelefono, Date fechaRegistro){
-        this.nombre=nombre;
-        this.apellidoPaterno=apellidoPaterno;
-        this.apellidoMaterno=apellidoMaterno;
-        this.correo=correo;
-        this.numeroTelefono=numeroTelefono;
-        this.fechaRegistro=fechaRegistro;
+    public NuevoClienteDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String numeroTelefono, Date fechaRegistro) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.correo = correo;
+        this.numeroTelefono = numeroTelefono;
+        this.fechaRegistro = fechaRegistro;
     }
 
     public Long getId() {
