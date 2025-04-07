@@ -234,6 +234,8 @@ public class AgregarProducto extends javax.swing.JFrame {
         Producto producto = this.agregarProducto();
         if(producto != null) {
             JOptionPane.showMessageDialog(this, "Exito al regisrar el producto", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            Control.getInstancia().abrirMenuAdministrador();
+            this.dispose();
         }
     }//GEN-LAST:event_btnAgregarSinIngredientesActionPerformed
 

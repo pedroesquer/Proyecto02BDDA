@@ -262,14 +262,17 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame implements I
     }//GEN-LAST:event_botonBuscarIngredienteActionPerformed
 
     private void botonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegistrarActionPerformed
-        this.registrarRelaciones();
+        if(this.registrarRelaciones()){
+            Control.getInstancia().abrirMenuAdministrador();
+            this.dispose();
+        }
     }//GEN-LAST:event_botonRegistrarActionPerformed
 
     /**
      * Método que se encarga de reccorer la tabla de ingredienes para asociarla
      * al producto y crear sus relaciones.
      */
-    private void registrarRelaciones() {
+    private boolean registrarRelaciones() {
         if (ingredientesProducto.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No puedes registrar con ingredientes vacios");
         } else {
@@ -316,9 +319,11 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame implements I
                     }
                 }
                 JOptionPane.showMessageDialog(this, "Relaciones registradas con éxito.");
+                return true;
             }
             
         }
+        return false;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonBuscarIngrediente;
