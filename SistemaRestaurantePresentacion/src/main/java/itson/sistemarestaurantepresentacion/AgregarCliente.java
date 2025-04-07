@@ -9,35 +9,34 @@ import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
-import java.awt.Frame;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author victoria
  */
-public class AgregarCliente extends JFrame {
+public class AgregarCliente extends javax.swing.JFrame {
     
     private IClientesBO clientesBO;
     private static final Logger LOG = Logger.getLogger(AgregarCliente.class.getName());
     
     /**
-     * Creates new form AgregarCliente
-     * @param parent
+     * pantalla para agregar nuevos clientes
      */
+    
     public AgregarCliente(IClientesBO clientesBO) {
         initComponents();
-        this.setTitle("Agregar Cliente");
+        this.setTitle("Agregar cliente");
         this.setResizable(false);
-        this.setSize(725, 500);
+        this.setSize(760,500);
         this.setLocationRelativeTo(null);
         this.clientesBO = clientesBO;
+        this.TextFieldCorreo.setText("Opcional...");
     }
     
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -229,41 +228,45 @@ public class AgregarCliente extends JFrame {
     }//GEN-LAST:event_textFieldTelefonoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-//        // TODO add your handling code here:
-//        if (this.agregarCliente()) {
-//            this.dispose();
-//            Control.getInstancia().abrirMenuAdministrador();
-//        }
+        if (this.agregarCliente()) {
+            this.dispose();
+            Control.getInstancia().abrirMenuAdministrador();
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
         this.dispose();
         Control.getInstancia().abrirClientesFrecuentes();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-//    private boolean agregarCliente() {
-//        try {
-//            String nombre = this.textFieldNombre.getText();
-//            String telefono = this.textFieldTelefono.getText();
-//            String correo = this.TextFieldCorreo.getText();
-//
-//            
-//            //Solucionar  problemas con los constructores 
-//            NuevoClienteDTO nuevoCliente = new NuevoClienteDTO(Long.MIN_VALUE, nombre, telefono, telefono, correo, telefono, fechaRegistro, ICONIFIED, SOMEBITS, ALLBITS);
-//            this.clientesBO.registrar(nuevoCliente);
-//            JOptionPane.showMessageDialog(this, "Éxito al registrar el cliente", "Información", JOptionPane.INFORMATION_MESSAGE);
-//            return true;
-//        } catch (NegocioException e) {
-//            LOG.severe("No fue posible registrar el cliente: " + e.getMessage());
-//            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
-//        } catch (PersistenceException e) {
-//            LOG.severe("Ya existe un cliente con el mismo numero de telefono: " + e.getMessage());
-//            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
-//        }
-//        return false;
-//    }
-    
+    /**
+     * agrega un nuevo cliente al sistema, registra un cliente
+     * con los datos que proporciona el usuario.
+     */
+    private boolean agregarCliente(){
+        try {
+            String nombre = this.textFieldNombre.getText();
+            String telefono = this.textFieldTelefono.getText();
+            String correo = this.TextFieldCorreo.getText();
+
+            // Si el correo es 'opcional' o esta vacio se deja como vacio
+            if (correo.equalsIgnoreCase("Opcional...") || correo.isEmpty()) {
+                correo = "";
+            }
+
+            NuevoClienteDTO nuevoCliente = new NuevoClienteDTO(nombre, correo, telefono, 0);
+            this.clientesBO.registrar(nuevoCliente);
+            JOptionPane.showMessageDialog(this, "Exito al registrar el cliente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        } catch (NegocioException e) {
+            LOG.severe("No fue posible registrar el cliente: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        } catch (PersistenceException e) {
+            LOG.severe("Ya existe un cliente con el mismo numero de telefono: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        }
+        return false;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LblAgregarCliente;
