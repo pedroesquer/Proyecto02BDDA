@@ -33,6 +33,12 @@ public class ListaProductos extends javax.swing.JFrame {
         this.cargarTabla("");
     }
 
+    /**
+     * Método que llena la tabla según el fultro de busqueda que se haya mandado.
+     * @param filtroBusqueda Las palabaras las cuales buscara en base de datos coincidencias que contengan
+     * el filtro de busqueda entregado.
+     * 
+     */
     private void cargarTabla(String filtroBusqueda) {
         tablaProductos.setDefaultRenderer(Object.class, new Render());
 

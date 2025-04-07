@@ -10,9 +10,9 @@ package itson.sistemarestaurantedominio.dtos;
  */
 public class ActualizarIngredienteProductoDTO {
     Long id;
-    private Float cantidad;
+    private Integer cantidad;
 
-    public ActualizarIngredienteProductoDTO(Long id, Float cantidad) {
+    public ActualizarIngredienteProductoDTO(Long id, Integer cantidad) {
         this.id = id;
         this.cantidad = cantidad;
     }
@@ -22,11 +22,11 @@ public class ActualizarIngredienteProductoDTO {
     }
 
 
-    public Float getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Float cantidad) {
+    public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
     

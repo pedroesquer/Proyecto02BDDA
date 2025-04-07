@@ -4,26 +4,60 @@
  */
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantedominio.dtos.NuevaRelacionIngredienteProductoDTO;
+import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
+import itson.sistemarestaurantenegocio.IIngredientesProductosBO;
+import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import itson.sistemarestaurantepresentacion.control.Control;
+import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author juanpheras
  */
-public class AgregarIngredientesProducto extends javax.swing.JFrame {
+public class AgregarIngredientesProducto extends javax.swing.JFrame implements IngredienteSeleccionadoObserver {
 
-    Long idProductoActualizar;
     /**
-     * Creates new form AgregarIngredientesProducto
-     * @param idProductoActualizar id del producto al cual se le relacionaran los ingredientes.
+     * Id del producto al cual se le van a relacionar los ingredientes.
      */
-    public AgregarIngredientesProducto(Long idProductoActualizar) {
+    Long idProductoActualizar;
+
+    IIngredientesProductosBO ingredientesProductosBO;
+
+    /**
+     * Lista de los ingredientes que se van añadiendo para poder relacionarlos
+     * posteriormente.
+     */
+    List<NuevoIngredienteDTO> ingredientesProducto = new ArrayList();
+
+    /**
+     * El modelo de la tabla.
+     */
+    DefaultTableModel modeloTabla;
+
+    /**
+     *
+     * Creates new form AgregarIngredientesProducto
+     *
+     * @param idProductoActualizar id del producto al cual se le relacionaran
+     * los ingredientes.
+     */
+    public AgregarIngredientesProducto(Long idProductoActualizar, IIngredientesProductosBO ingredientesProductosBO) {
         initComponents();
         this.setTitle("Seleccionar ingredientes");
         this.setResizable(false);
-        this.setSize(760,500);
+        this.setSize(760, 500);
         this.setLocationRelativeTo(null);
+        this.ingredientesProductosBO = ingredientesProductosBO;
         this.idProductoActualizar = idProductoActualizar;
+        modeloTabla = (DefaultTableModel) this.tablaIngredientes.getModel();
+        modeloTabla.setRowCount(0);
+
     }
 
     /**
@@ -43,8 +77,8 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame {
         botonLimpiarTabla = new javax.swing.JButton();
         botonBuscarIngrediente = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        botonBuscarIngrediente1 = new javax.swing.JButton();
+        tablaIngredientes = new javax.swing.JTable();
+        botonRegistrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,7 +100,7 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(149, 149, 149)
                 .addComponent(jLabel1)
-                .addContainerGap(238, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                     .addContainerGap(650, Short.MAX_VALUE)
@@ -93,29 +127,27 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 253, 211));
 
-        botonLimpiarTabla.setBackground(new java.awt.Color(188, 60, 60));
         botonLimpiarTabla.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        botonLimpiarTabla.setForeground(new java.awt.Color(255, 255, 255));
         botonLimpiarTabla.setText("Limpiar tabla");
-        botonLimpiarTabla.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonLimpiarTabla.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        botonLimpiarTabla.setOpaque(true);
         botonLimpiarTabla.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonLimpiarTablaActionPerformed(evt);
             }
         });
 
-        botonBuscarIngrediente.setBackground(new java.awt.Color(85, 85, 85));
         botonBuscarIngrediente.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        botonBuscarIngrediente.setForeground(new java.awt.Color(255, 255, 255));
         botonBuscarIngrediente.setText("Buscar ingrediente\n");
-        botonBuscarIngrediente.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonBuscarIngrediente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        botonBuscarIngrediente.setOpaque(true);
         botonBuscarIngrediente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonBuscarIngredienteActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaIngredientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -143,53 +175,56 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
+        jScrollPane1.setViewportView(tablaIngredientes);
+        if (tablaIngredientes.getColumnModel().getColumnCount() > 0) {
+            tablaIngredientes.getColumnModel().getColumn(0).setResizable(false);
+            tablaIngredientes.getColumnModel().getColumn(1).setResizable(false);
+            tablaIngredientes.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        botonBuscarIngrediente1.setBackground(new java.awt.Color(85, 85, 85));
-        botonBuscarIngrediente1.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        botonBuscarIngrediente1.setForeground(new java.awt.Color(255, 255, 255));
-        botonBuscarIngrediente1.setText("Registrar producto");
-        botonBuscarIngrediente1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonRegistrar.setBackground(new java.awt.Color(85, 85, 85));
+        botonRegistrar.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        botonRegistrar.setForeground(new java.awt.Color(255, 255, 255));
+        botonRegistrar.setText("Registrar producto");
+        botonRegistrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        botonRegistrar.setOpaque(true);
+        botonRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRegistrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(botonBuscarIngrediente1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(botonBuscarIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(323, 323, 323)
-                        .addComponent(botonLimpiarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(326, 326, 326)
+                                .addComponent(botonRegistrar))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(botonLimpiarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane1))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(botonBuscarIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonLimpiarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(44, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botonBuscarIngrediente1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27))))
+                .addGap(37, 37, 37)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonBuscarIngrediente)
+                    .addComponent(botonLimpiarTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(botonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -197,44 +232,133 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 395, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addGap(0, 105, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que limpia la tabla y reinicia la lista de ingredientes.
+     *
+     * @param evt
+     */
     private void botonLimpiarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarTablaActionPerformed
-        // TODO add your handling code here:
+        ingredientesProducto.clear();  // Limpia la lista de ingredientes
+
+        modeloTabla.setRowCount(0);  // Elimina todas las filas de la tabla
     }//GEN-LAST:event_botonLimpiarTablaActionPerformed
 
     private void botonBuscarIngredienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarIngredienteActionPerformed
         // TODO add your handling code here:
-        //Control.getInstancia().abrirBuscadorIngredientes(origen); Falta que se corrija el constructor de buscadorIngredientes
+        Control.getInstancia().abrirBuscadorIngredientes(this);
     }//GEN-LAST:event_botonBuscarIngredienteActionPerformed
 
-    
+    private void botonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegistrarActionPerformed
+        this.registrarRelaciones();
+    }//GEN-LAST:event_botonRegistrarActionPerformed
 
+    /**
+     * Método que se encarga de reccorer la tabla de ingredienes para asociarla
+     * al producto y crear sus relaciones.
+     */
+    private void registrarRelaciones() {
+        if (ingredientesProducto.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No puedes registrar con ingredientes vacios");
+        } else {
+            //Lista para agregar las relaciones
+            List<NuevaRelacionIngredienteProductoDTO> relaciones = new ArrayList<>();
+
+            boolean huboError = false;
+
+            for (int i = 0; i < ingredientesProducto.size(); i++) {
+                //Obtenemos el ingrediente de la posicion i
+                NuevoIngredienteDTO ingrediente = ingredientesProducto.get(i);
+
+                NuevaRelacionIngredienteProductoDTO relacion = new NuevaRelacionIngredienteProductoDTO();
+                relacion.setIdIngrediente(ingrediente.getId());
+                relacion.setIdProducto(idProductoActualizar);
+
+                //Obtenemos la cantidad 
+                String cantidadStr = tablaIngredientes.getValueAt(i, 0).toString();
+
+                try {
+                    Integer cantidad = Integer.parseInt(cantidadStr);
+                    relacion.setCantidad(cantidad);
+                    relaciones.add(relacion);
+                    if (cantidad == 0) {
+                        huboError = true;
+                        break;
+                    }
+
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "No puedes añadir letras o decimales en cantidad.");
+                    huboError = true;
+                    break;
+                }
+
+            }
+
+            //Si no hubo algun error se procede a registrar todas las relaciones
+            if (!huboError) {
+                for (NuevaRelacionIngredienteProductoDTO relacion : relaciones) {
+                    try {
+                        ingredientesProductosBO.registrarRelacion(relacion);
+                    } catch (NegocioException | PersistenciaException e) {
+                        JOptionPane.showMessageDialog(this, "Error al registrar relación: " + e.getMessage());
+                    }
+                }
+                JOptionPane.showMessageDialog(this, "Relaciones registradas con éxito.");
+            }
+            
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonBuscarIngrediente;
-    private javax.swing.JButton botonBuscarIngrediente1;
     private javax.swing.JButton botonLimpiarTabla;
+    private javax.swing.JButton botonRegistrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tablaIngredientes;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Método que se invoca automáticamente cuando se selecciona un ingrediente
+     * desde la pantalla del buscadorIngredientes. El método agrega el
+     * ingrediente a la tabla.
+     *
+     * @param ingrediente El ingrediente seleccionadao y notificado por el
+     * buscador.
+     */
+    @Override
+    public void ingredienteSeleccionado(NuevoIngredienteDTO ingrediente) {
+        ingredientesProducto.add(ingrediente);
+        actualizarTablaConIngrediente(ingrediente);
+    }
+
+    /**
+     * Método que cuando se seleccina un ingrediente del buscador lo agrega a la
+     * tabla.
+     *
+     * @param ingrediente el ingrediente el cual se añadira a la tabla
+     */
+    private void actualizarTablaConIngrediente(NuevoIngredienteDTO ingrediente) {
+        Object[] fila = {
+            0,
+            ingrediente.getNombre(),
+            ingrediente.getUnidadMedida()
+        };
+        modeloTabla.addRow(fila);
+    }
 }

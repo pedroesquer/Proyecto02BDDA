@@ -8,7 +8,7 @@ public class NuevaRelacionIngredienteProductoDTO {
     
     private long idProducto;
     private long idIngrediente;
-    private Float cantidad;
+    private Integer cantidad;
 
     public NuevaRelacionIngredienteProductoDTO() {}
 
@@ -28,11 +28,11 @@ public class NuevaRelacionIngredienteProductoDTO {
         this.idIngrediente = idIngrediente;
     }
 
-    public Float getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Float cantidad) {
+    public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
     

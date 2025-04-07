@@ -1,10 +1,14 @@
 
 package itson.sistemarestaurantenegocio.implementaciones;
 
+import itson.sistemarestaurantedominio.IngredienteProducto;
 import itson.sistemarestaurantedominio.dtos.DetalleIngredienteProductoDTO;
+import itson.sistemarestaurantedominio.dtos.NuevaRelacionIngredienteProductoDTO;
+import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepersistencia.IIngredientesProductosDAO;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import java.util.List;
 
 /**
@@ -28,8 +32,16 @@ public class IngredientesProductosBO implements IIngredientesProductosBO {
         }
         return this.ingredientesProductosDAO.consultarIngredientesProducto(idProducto);
     }
+
+    @Override
+    public IngredienteProducto registrarRelacion(NuevaRelacionIngredienteProductoDTO relacionIngredienteProductoDTO) throws NegocioException, PersistenciaException {
+        if(relacionIngredienteProductoDTO.getCantidad() <= 0){
+            throw new NegocioException("No puedes dejar cantidades en 0");
+        }
+        return this.ingredientesProductosDAO.registrar(relacionIngredienteProductoDTO);
+    }
+
     
     
-    
-    
+     
 }

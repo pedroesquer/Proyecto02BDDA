@@ -59,7 +59,7 @@ public class IngredientesProductoDAOTest {
         
         nuevaRelacion.setIdProducto(4);
         nuevaRelacion.setIdIngrediente(1);
-        nuevaRelacion.setCantidad(70f);
+        nuevaRelacion.setCantidad(70);
         
         IngredienteProducto ingredienteProductoGuardado = ingredientesProductosDAO.registrar(nuevaRelacion);
         
@@ -76,7 +76,7 @@ public class IngredientesProductoDAOTest {
         
         nuevaRelacion.setIdProducto(230);
         nuevaRelacion.setIdIngrediente(2);
-        nuevaRelacion.setCantidad(150f);
+        nuevaRelacion.setCantidad(150);
         
         //Ahora verificamos que la excepción se lanze
         PersistenciaException ex = assertThrows(PersistenciaException.class,
@@ -96,7 +96,7 @@ public class IngredientesProductoDAOTest {
         
         nuevaRelacion.setIdProducto(1);
         nuevaRelacion.setIdIngrediente(203); //Ponemos un id que no tengamos
-        nuevaRelacion.setCantidad(150f);
+        nuevaRelacion.setCantidad(150);
         
         //Ahora verificamos que la excepción se lanze
         PersistenciaException ex = assertThrows(PersistenciaException.class,
@@ -112,7 +112,7 @@ public class IngredientesProductoDAOTest {
     @Test
     public void testActualizarCantidadOk() throws PersistenciaException{
         IngredientesProductoDAO ingredientesProductosDAO = new IngredientesProductoDAO();
-        ActualizarIngredienteProductoDTO actualizarCantidad = new ActualizarIngredienteProductoDTO(1l, 200f);
+        ActualizarIngredienteProductoDTO actualizarCantidad = new ActualizarIngredienteProductoDTO(1l, 200);
 
         IngredienteProducto ingredienteProducto = ingredientesProductosDAO.actualizar(actualizarCantidad);
         

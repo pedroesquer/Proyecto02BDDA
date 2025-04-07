@@ -28,7 +28,7 @@ public class IngredienteProducto implements Serializable {
     private Long id;
     
     @Column(name = "cantidad", nullable = false)
-    private Float cantidad;
+    private Integer cantidad;
         
     @ManyToOne()
     @JoinColumn(name = "id_ingrediente", nullable = false)
@@ -38,11 +38,11 @@ public class IngredienteProducto implements Serializable {
     @JoinColumn(name = "id_producto", nullable = false)
     private Producto producto;
 
-    public Float getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Float cantidad) {
+    public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
 

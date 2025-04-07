@@ -1,8 +1,12 @@
 
 package itson.sistemarestaurantenegocio;
 
+import itson.sistemarestaurantedominio.IngredienteProducto;
 import itson.sistemarestaurantedominio.dtos.DetalleIngredienteProductoDTO;
+import itson.sistemarestaurantedominio.dtos.NuevaRelacionIngredienteProductoDTO;
+import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import java.util.List;
 
 /**
@@ -12,5 +16,7 @@ import java.util.List;
 public interface IIngredientesProductosBO {
     
     public abstract List<DetalleIngredienteProductoDTO> consultarIngredientesProducto(Long idProducto) throws NegocioException;
+    
+    public abstract IngredienteProducto registrarRelacion(NuevaRelacionIngredienteProductoDTO relacionIngredienteProductoDTO) throws NegocioException, PersistenciaException;
     
 }

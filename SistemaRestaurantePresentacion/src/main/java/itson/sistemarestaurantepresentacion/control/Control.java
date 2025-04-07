@@ -60,7 +60,7 @@ public class Control {
      * @param id del producto al cual se le van a relacionar los ingredientes.
      */
     public void abrirAgregarIngredientesProducto(Long id) {
-        AgregarIngredientesProducto formAgregarIngredientesProducto = new AgregarIngredientesProducto(id);
+        AgregarIngredientesProducto formAgregarIngredientesProducto = new AgregarIngredientesProducto(id, ingredientesProductoBO);
         formAgregarIngredientesProducto.setVisible(true);
     }
 
@@ -109,6 +109,7 @@ public class Control {
 
     /**
      * Método que abre la pantalla del buscador de ingrediente.
+     * @param observer
      */
     public void abrirBuscadorIngredientes(IngredienteSeleccionadoObserver observer) {
         BuscadorIngredientes formBuscadorIngredientes = new BuscadorIngredientes(ingredientesBO);
