@@ -10,6 +10,7 @@ import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepersistencia.IClientesDAO;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,11 +46,15 @@ public class ClientesBO implements IClientesBO{
         if (nuevoCliente.getApellidoMaterno() != null && nuevoCliente.getApellidoMaterno().length() > LIMITE_CARACTERES_APELLIDO) {
             throw new NegocioException("El apellido materno es demasiado largo.");
         }
-        if (nuevoCliente.getCorreo() != null && nuevoCliente.getCorreo().length() > LIMITE_CARACTERES_CORREO) {
+        if (nuevoCliente.getCorreo() != null && !nuevoCliente.getCorreo().isEmpty() && 
+            nuevoCliente.getCorreo().length() > LIMITE_CARACTERES_CORREO) {
             throw new NegocioException("El correo es demasiado largo.");
         }
         if (nuevoCliente.getNumeroTelefono() != null && nuevoCliente.getNumeroTelefono().length() != LIMITE_CARACTERES_TELEFONO) {
             throw new NegocioException("El numero de telefono debe tener 10 digitos.");
+        }
+        if (!nuevoCliente.getNumeroTelefono().matches("\\d{10}")) {
+            throw new NegocioException("El número de teléfono debe contener solo dígitos numéricos.");
         }
         if (nuevoCliente.getFechaRegistro() == null) {
             throw new NegocioException("La fecha de registro es obligatoria.");
@@ -57,7 +62,10 @@ public class ClientesBO implements IClientesBO{
         if (nuevoCliente.getPuntosFidelidad() < 0) {
             throw new NegocioException("Los puntos de fidelidad no pueden ser negativos.");
         }
-        return this.clientesDAO.registrar(nuevoCliente);
+        if (nuevoCliente.getFechaRegistro() == null) {
+                nuevoCliente.setFechaRegistro(new Date());
+            }
+        return clientesDAO.registrar(nuevoCliente);
     }
     
     @Override
@@ -68,5 +76,6 @@ public class ClientesBO implements IClientesBO{
        return this.clientesDAO.consultar(filtroBusqueda);
         
     }
+    
  
 }
