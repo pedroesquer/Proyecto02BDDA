@@ -13,6 +13,7 @@ import itson.sistemarestaurantepresentacion.AgregarIngredientes;
 import itson.sistemarestaurantepresentacion.AgregarIngredientesProducto;
 import itson.sistemarestaurantepresentacion.AgregarProducto;
 import itson.sistemarestaurantepresentacion.BuscadorIngredientes;
+import itson.sistemarestaurantepresentacion.ClientesFrecuentes;
 import itson.sistemarestaurantepresentacion.DetallesProducto;
 import itson.sistemarestaurantepresentacion.Ingredientes;
 import itson.sistemarestaurantepresentacion.ListaIngredientes;
@@ -192,6 +193,14 @@ public class Control {
     public void abrirDetallesProducto(Producto productoDetallar) {
         DetallesProducto formDetallesProducto = new DetallesProducto(productoDetallar, ingredientesProductoBO);
         formDetallesProducto.setVisible(true);
+    }
+    
+    /**
+     * Metodo que abre la pantalla de clientes frecuentes.
+     */
+    public void abrirClientesFrecuentes() {
+    ClientesFrecuentes clientesFrecuentes = new ClientesFrecuentes();
+    clientesFrecuentes.setVisible(true);
     }
 
 }
