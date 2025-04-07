@@ -42,7 +42,8 @@ public class ClientesDAO implements IClientesDAO {
         entityManager.persist(cliente);
         entityManager.getTransaction().commit();
         return cliente;
-    }
+    } 
+    
     /**
      * Elimina un cliente por su id
      * @param idCliente id del cliente que se va a eliminar
@@ -111,12 +112,9 @@ public class ClientesDAO implements IClientesDAO {
      */
     public Cliente actualizar(Cliente cliente){
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        entityManager.getTransaction().begin();
         Cliente clienteActualizado = entityManager.merge(cliente);
         return clienteActualizado; 
     }
 
-    @Override
-    public Cliente consultarClienteporCorreo(String correo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }
