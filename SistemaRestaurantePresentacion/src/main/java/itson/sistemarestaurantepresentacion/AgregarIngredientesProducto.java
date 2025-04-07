@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 
 /**
  *
@@ -261,8 +262,18 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame implements I
         Control.getInstancia().abrirBuscadorIngredientes(this);
     }//GEN-LAST:event_botonBuscarIngredienteActionPerformed
 
+    /**
+     * Método que llama al metodo registrarRelaciones
+     *
+     * @param evt
+     */
     private void botonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegistrarActionPerformed
-        if(this.registrarRelaciones()){
+        if (tablaIngredientes.isEditing()) { //Con esto nos aseguramos que no se quede en el valor pasado
+            // Detén la edición y aplica los cambios
+            TableCellEditor editor = tablaIngredientes.getCellEditor();
+            editor.stopCellEditing();
+        }
+        if (this.registrarRelaciones()) {
             Control.getInstancia().abrirMenuAdministrador();
             this.dispose();
         }
@@ -321,7 +332,7 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame implements I
                 JOptionPane.showMessageDialog(this, "Relaciones registradas con éxito.");
                 return true;
             }
-            
+
         }
         return false;
     }

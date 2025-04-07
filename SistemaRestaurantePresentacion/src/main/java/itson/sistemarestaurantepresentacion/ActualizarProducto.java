@@ -4,24 +4,47 @@
  */
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantedominio.dtos.DetalleIngredienteProductoDTO;
+import itson.sistemarestaurantenegocio.IIngredientesProductosBO;
+import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepresentacion.control.Control;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author juanpheras
  */
 public class ActualizarProducto extends javax.swing.JFrame {
 
-    Long idProductoActualizar;
+    private Producto productoActualizar;
+    private IIngredientesProductosBO ingredientesProductoBO;
+    
     /**
      * Creates new form ActualizarProducto
-     * @param idProductoActualizar
+     * @param productoActualizar el Producto que se actualizará    
+     * @param ingredientesProductoBO  ingredientesProductoBO para poder tener los métodos.     
      */
-    public ActualizarProducto(Long idProductoActualizar) {
+    public ActualizarProducto(Producto productoActualizar, IIngredientesProductosBO ingredientesProductoBO ){
         initComponents();
         this.setTitle("ActualizarProductos");
         this.setResizable(false);
         this.setSize(770,510);
         this.setLocationRelativeTo(null);
-        this.idProductoActualizar = idProductoActualizar;
+        this.productoActualizar = productoActualizar;
+        this.ingredientesProductoBO = ingredientesProductoBO;
+        try {
+            llenarDetallesProducto();
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar el producto");
+            Control.getInstancia().abrirMenuAdministrador();
+            this.dispose();
+            Logger.getLogger(ActualizarProducto.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -121,6 +144,7 @@ public class ActualizarProducto extends javax.swing.JFrame {
         botonAñadirIngrediente.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         botonAñadirIngrediente.setOpaque(true);
 
+        NombreProductoLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         NombreProductoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         NombreProductoLabel.setText("NombreProducto");
 
@@ -130,14 +154,13 @@ public class ActualizarProducto extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(NombreProductoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
+                        .addComponent(NombreProductoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 532, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(botonAñadirIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(botonActualizarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -147,13 +170,13 @@ public class ActualizarProducto extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
                         .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(NombreProductoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(NombreProductoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonActualizarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -174,7 +197,26 @@ public class ActualizarProducto extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    private void llenarDetallesProducto() throws NegocioException{
+        this.NombreProductoLabel.setText(productoActualizar.getNombre());
+        List<DetalleIngredienteProductoDTO> ingredientesDTO = this.ingredientesProductoBO.consultarIngredientesProducto(
+                productoActualizar.getId());
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaProductos.getModel();
+        modeloTabla.setRowCount(0);
+        
+        for (DetalleIngredienteProductoDTO ingredienteProductoDTO : ingredientesDTO) {
+            Object[] fila = {
+                productoActualizar.getId(),
+                ingredienteProductoDTO.getNombre(),
+                ingredienteProductoDTO.getUnidadMedida(),
+                ingredienteProductoDTO.getCantidad(),
+                ingredienteProductoDTO.getCantidad()
+            };
+            modeloTabla.addRow(fila);
+        }
+          
+    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

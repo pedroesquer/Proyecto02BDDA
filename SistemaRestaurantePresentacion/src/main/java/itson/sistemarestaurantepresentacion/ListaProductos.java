@@ -278,9 +278,10 @@ public class ListaProductos extends javax.swing.JFrame {
     }
 
     private void botonActualizarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarProductoActionPerformed
-        Long idProducto = this.seleccionarIdProducto();
-        if (!(idProducto == null)) {
-            Control.getInstancia().abrirActualizarProducto(idProducto);            
+        Producto producto = this.productosBO.consultarProductoIndividual(this.seleccionarIdProducto());
+
+        if (!(producto == null)) {
+            Control.getInstancia().abrirActualizarProducto(producto);            
             this.dispose();
         } 
     }//GEN-LAST:event_botonActualizarProductoActionPerformed

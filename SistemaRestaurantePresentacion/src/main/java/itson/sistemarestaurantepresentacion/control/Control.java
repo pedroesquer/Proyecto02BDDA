@@ -93,8 +93,8 @@ public class Control {
      *
      * @param id del producto a actualizar.
      */
-    public void abrirActualizarProducto(Long id) {
-        ActualizarProducto formActualizarProducto = new ActualizarProducto(id);
+    public void abrirActualizarProducto(Producto producto) {
+        ActualizarProducto formActualizarProducto = new ActualizarProducto(producto,ingredientesProductoBO);
         formActualizarProducto.setVisible(true);
 
     }
