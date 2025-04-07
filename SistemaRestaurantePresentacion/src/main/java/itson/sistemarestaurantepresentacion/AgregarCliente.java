@@ -5,38 +5,38 @@
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Cliente;
+import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
+import itson.sistemarestaurantenegocio.IClientesBO;
+import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepresentacion.control.Control;
 import java.awt.Frame;
-import javax.swing.JDialog;
+import java.util.logging.Logger;
+import javax.persistence.PersistenceException;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author victoria
  */
-public class AgregarCliente extends JDialog {
+public class AgregarCliente extends JFrame {
     
-    private Cliente clienteCreado; //almacena cliente creado
-    private boolean guardado; //indica si se guardo o se cancelo
+    private IClientesBO clientesBO;
+    private static final Logger LOG = Logger.getLogger(AgregarCliente.class.getName());
     
     /**
      * Creates new form AgregarCliente
      * @param parent
      */
-    public AgregarCliente(Frame parent) {
-        super(parent, "Agregar Cliente", true);
+    public AgregarCliente(IClientesBO clientesBO) {
         initComponents();
-        setLocationRelativeTo(parent);
-        guardado = false;
-        clienteCreado = null;
+        this.setTitle("Agregar Cliente");
+        this.setResizable(false);
+        this.setSize(725, 500);
+        this.setLocationRelativeTo(null);
+        this.clientesBO = clientesBO;
     }
     
-    public Cliente getClienteCreado(){
-        return clienteCreado;
-    }
-    
-    public boolean isGuardado(){
-        return guardado;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -230,34 +230,50 @@ public class AgregarCliente extends JDialog {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        // Logica para guardar el cliente
-        String nombre = textFieldNombre.getText();
-        String telefono = textFieldTelefono.getText();
-        String correo = TextFieldCorreo.getText();
-        
-
-        if (nombre.isEmpty() || telefono.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nombre y Telefono son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        if (!telefono.matches("\\d{10}")) {
-            JOptionPane.showMessageDialog(this, "El numero de telefono debe tener 10 digitos.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        if (this.agregarCliente()) {
+            this.dispose();
+            Control.getInstancia().abrirMenuAdministrador();
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        limpiarCampos();
-        guardado = false;
-        dispose();
+        this.dispose();
+        Control.getInstancia().abrirClientesFrecuentes();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    
-    private void limpiarCampos() {
-        textFieldNombre.setText("");
-        textFieldTelefono.setText("");
-        TextFieldCorreo.setText("");
+    private boolean agregarCliente() {
+        try {
+            String nombre = this.textFieldNombre.getText();
+            String telefono = this.textFieldTelefono.getText();
+            String correo = this.TextFieldCorreo.getText();
+
+            // Validar que nombre y teléfono no estén vacíos
+            if (nombre.isEmpty() || telefono.isEmpty()) {
+                throw new NegocioException("Nombre y Numero de Telefono son obligatorios.");
+            }
+
+            // Validar formato del teléfono (solo números, 10 dígitos)
+            if (!telefono.matches("\\d{10}")) {
+                throw new NegocioException("El numero de telefono debe tener 10 digitos numericos.");
+            }
+
+            if (correo.equalsIgnoreCase("Opcional...") || correo.isEmpty()) {
+                correo = "";
+            }
+
+            NuevoClienteDTO nuevoCliente = new NuevoClienteDTO(nombre, correo, telefono, 0);
+            this.clientesBO.registrar(nuevoCliente);
+            JOptionPane.showMessageDialog(this, "Éxito al registrar el cliente", "Información", JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        } catch (NegocioException e) {
+            LOG.severe("No fue posible registrar el cliente: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        } catch (PersistenceException e) {
+            LOG.severe("Ya existe un cliente con el mismo numero de telefono: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        }
+        return false;
     }
     
 
