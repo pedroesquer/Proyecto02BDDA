@@ -248,21 +248,9 @@ public class AgregarCliente extends JFrame {
             String telefono = this.textFieldTelefono.getText();
             String correo = this.TextFieldCorreo.getText();
 
-            // Validar que nombre y teléfono no estén vacíos
-            if (nombre.isEmpty() || telefono.isEmpty()) {
-                throw new NegocioException("Nombre y Numero de Telefono son obligatorios.");
-            }
-
-            // Validar formato del teléfono (solo números, 10 dígitos)
-            if (!telefono.matches("\\d{10}")) {
-                throw new NegocioException("El numero de telefono debe tener 10 digitos numericos.");
-            }
-
-            if (correo.equalsIgnoreCase("Opcional...") || correo.isEmpty()) {
-                correo = "";
-            }
-
-            NuevoClienteDTO nuevoCliente = new NuevoClienteDTO(nombre, correo, telefono, 0);
+            
+            //Solucionar  problemas con los constructores 
+            NuevoClienteDTO nuevoCliente = new NuevoClienteDTO(Long.MIN_VALUE, nombre, telefono, telefono, correo, telefono, fechaRegistro, ICONIFIED, SOMEBITS, ALLBITS);
             this.clientesBO.registrar(nuevoCliente);
             JOptionPane.showMessageDialog(this, "Éxito al registrar el cliente", "Información", JOptionPane.INFORMATION_MESSAGE);
             return true;

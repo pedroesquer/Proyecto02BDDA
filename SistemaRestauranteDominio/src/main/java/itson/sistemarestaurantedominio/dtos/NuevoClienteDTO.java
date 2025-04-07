@@ -24,17 +24,13 @@ public class NuevoClienteDTO {
     
     public NuevoClienteDTO(){}
     
-    public NuevoClienteDTO(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String numeroTelefono, Date fechaRegistro, double puntosFidelidad, int numeroVisitas, double totalGastado ){
-        this.id=id;
+    public NuevoClienteDTO( String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String numeroTelefono, Date fechaRegistro){
         this.nombre=nombre;
         this.apellidoPaterno=apellidoPaterno;
         this.apellidoMaterno=apellidoMaterno;
         this.correo=correo;
         this.numeroTelefono=numeroTelefono;
         this.fechaRegistro=fechaRegistro;
-        this.puntosFidelidad=puntosFidelidad;
-        this.numeroVisitas=numeroVisitas;
-        this.totalGastado=totalGastado;
     }
 
     public Long getId() {

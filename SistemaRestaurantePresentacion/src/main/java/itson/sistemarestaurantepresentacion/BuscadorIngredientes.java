@@ -102,12 +102,9 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
     }
 
     public void LimpiarTabla(JTable tabla, DefaultTableModel modeloTabla) {
-        if (modeloTabla.getRowCount() > 0) {
-            for (int i = 0; i < tabla.getRowCount(); i++) {
-                modeloTabla.removeRow(i);
-                i -= 1;
-            }
-        }
+        this.txtBuscar.setText("");
+        this.cargarTabla();
+        
     }
 
     private void llenarTablaIngredientes() {

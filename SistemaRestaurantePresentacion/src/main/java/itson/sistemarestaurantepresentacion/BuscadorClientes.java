@@ -63,7 +63,7 @@ public class BuscadorClientes extends javax.swing.JFrame {
 
         Object[] datos = new Object[columnas.length];
         try {
-            String filtroBusqueda = this.jTextField1.getText();
+            String filtroBusqueda = this.buscarLbl.getText();
             List<Cliente> clientes = this.clientesBO.consultar(filtroBusqueda);
             for (Cliente cliente : clientes) {
                 datos[0] = cliente.getNombre();
@@ -101,17 +101,13 @@ public class BuscadorClientes extends javax.swing.JFrame {
     }
 
     public void LimpiarTabla(JTable tabla, DefaultTableModel modeloTabla) {
-        if (modeloTabla.getRowCount() > 0) {
-            for (int i = 0; i < tabla.getRowCount(); i++) {
-                modeloTabla.removeRow(i);
-                i -= 1;
-            }
-        }
+        this.buscarLbl.setText("");
+        this.cargarTabla();
     }
 
     private void llenarTablaClientes() {
         try {
-            String filtroBusqueda = this.jTextField1.getText();
+            String filtroBusqueda = this.buscarLbl.getText();
             List<Cliente> clientes = this.clientesBO.consultar(filtroBusqueda);
             //Este objeto permite interactuar con los elementos de la tabla
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaClientes.getModel();
@@ -143,7 +139,7 @@ public class BuscadorClientes extends javax.swing.JFrame {
     private void initComponents() {
 
         lblBuscar = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        buscarLbl = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -154,9 +150,9 @@ public class BuscadorClientes extends javax.swing.JFrame {
 
         lblBuscar.setText("Buscar");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        buscarLbl.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                buscarLblActionPerformed(evt);
             }
         });
 
@@ -202,7 +198,7 @@ public class BuscadorClientes extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(lblBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(buscarLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnBuscar)
                 .addGap(10, 10, 10)
@@ -223,7 +219,7 @@ public class BuscadorClientes extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblBuscar)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buscarLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar)
                     .addComponent(btnLimpiar))
                 .addGap(18, 18, 18)
@@ -236,9 +232,9 @@ public class BuscadorClientes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void buscarLblActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarLblActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_buscarLblActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
@@ -247,7 +243,7 @@ public class BuscadorClientes extends javax.swing.JFrame {
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
-        this.jTextField1.setText("");
+        this.buscarLbl.setText("");
         this.llenarTablaClientes();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
@@ -282,8 +278,8 @@ public class BuscadorClientes extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnSeleccionarCliente;
+    private javax.swing.JTextField buscarLbl;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JTable tablaClientes;
     // End of variables declaration//GEN-END:variables
