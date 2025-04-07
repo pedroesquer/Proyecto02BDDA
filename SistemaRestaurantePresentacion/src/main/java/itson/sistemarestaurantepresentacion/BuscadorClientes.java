@@ -259,11 +259,11 @@ public class BuscadorClientes extends javax.swing.JFrame {
                 int puntosFidelidad = Integer.parseInt(tablaClientes.getValueAt(i, 3).toString());
 
                 // Crear el cliente
-                Cliente cliente = new Cliente(nombre, correo, numeroTelefono, puntosFidelidad);
+               // Cliente cliente = new Cliente(nombre, correo, numeroTelefono, puntosFidelidad);
 
                 // Llamar al callback
                 if (onClienteSeleccionado != null) {
-                    onClienteSeleccionado.accept(cliente);
+                   // onClienteSeleccionado.accept(cliente);
                 }
 
                 break;

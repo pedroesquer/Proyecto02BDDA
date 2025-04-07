@@ -6,6 +6,7 @@ import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
+import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -21,9 +22,8 @@ import javax.swing.table.DefaultTableModel;
  * Soto
  */
 public class BuscadorIngredientes extends javax.swing.JFrame {
-    
 
-    private Consumer<NuevoIngredienteDTO> onIngredienteSeleccionado; 
+    private List<IngredienteSeleccionadoObserver> observers = new ArrayList<>();
     private NuevoIngredienteDTO nuevoIngredienteDTO;
     private IIngredientesBO ingredientesBO;
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
@@ -31,14 +31,13 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
     /**
      * Constructor del frame BuscadorProductos.
      */
-    public BuscadorIngredientes(IIngredientesBO ingredientesBO, Consumer<NuevoIngredienteDTO> onIngredienteSeleccionado) {
+    public BuscadorIngredientes(IIngredientesBO ingredientesBO) {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setTitle("Buscador Ingredientes");
         this.ingredientesBO = ingredientesBO;
         this.cargarTabla();
-        this.onIngredienteSeleccionado = onIngredienteSeleccionado; 
 
     }
 
@@ -78,18 +77,17 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
 
             tablaIngredientes.setModel(mModel);
 
-            // Implementar un listener para cambiar el estado del checkbox
             tablaIngredientes.getModel().addTableModelListener(e -> {
                 if (e.getType() == TableModelEvent.UPDATE) {
                     int row = e.getFirstRow();
                     int column = e.getColumn();
-                    if (column == 4) {  // Si la columna seleccionada es la de los checkboxes (índice 4)
+                    if (column == 4) {  
                         boolean selected = (boolean) mModel.getValueAt(row, column);
-                        // Si el checkbox de esa fila se seleccionó, desmarcar los demás
+                        
                         if (selected) {
                             for (int i = 0; i < mModel.getRowCount(); i++) {
                                 if (i != row) {
-                                    mModel.setValueAt(false, i, 4);  // Desmarcar las otras filas
+                                    mModel.setValueAt(false, i, 4);  
                                 }
                             }
                         }
@@ -102,9 +100,35 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
     }
 
     public void LimpiarTabla(JTable tabla, DefaultTableModel modeloTabla) {
-        this.txtBuscar.setText("");
-        this.cargarTabla();
-        
+        if (modeloTabla.getRowCount() > 0) {
+            for (int i = 0; i < tabla.getRowCount(); i++) {
+                modeloTabla.removeRow(i);
+                i -= 1;
+            }
+        }
+
+    }
+
+    /**
+     * Registra un nuevo observador para ser notificado cuando un jugador sea
+     * seleccionado.
+     *
+     * @param obs la clase que implementa JugadorSeleccionadoObserver
+     */
+    public void agregarObserver(IngredienteSeleccionadoObserver obs) {
+        observers.add(obs);
+    }
+
+    /**
+     * Notifica a todos los observadores registrados que un jugador ha sido
+     * seleccionado.
+     *
+     * @param jugador el jugador seleccionado
+     */
+    private void notificarObservers(NuevoIngredienteDTO ingrediente) {
+        for (IngredienteSeleccionadoObserver o : observers) {
+            o.ingredienteSeleccionado(ingrediente);
+        }
     }
 
     private void llenarTablaIngredientes() {
@@ -245,8 +269,10 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        this.txtBuscar.setText("");
-        this.llenarTablaIngredientes();
+        this.txtBuscar.setText("");  // Limpiar el campo de búsqueda
+        DefaultTableModel model = (DefaultTableModel) tablaIngredientes.getModel();
+        model.setRowCount(0);  // Limpiar las filas de la tabla
+        this.cargarTabla();  // Volver a cargar la tabla con los datos originales
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void botonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSeleccionarActionPerformed
@@ -266,12 +292,7 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
 
                 // Crear el DTO para pasar al callback
                 NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(id, nombre, stock, unidadMedida);
-
-                // Llamar al callback
-                if (onIngredienteSeleccionado != null) {
-                    onIngredienteSeleccionado.accept(nuevoIngrediente); // Ejecuta la acción que definió el llamador
-                }
-
+                notificarObservers(nuevoIngrediente);
                 break;
             }
         }

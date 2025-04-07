@@ -20,6 +20,7 @@ import itson.sistemarestaurantepresentacion.ListaIngredientes;
 import itson.sistemarestaurantepresentacion.ListaProductos;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
 import itson.sistemarestaurantepresentacion.Productos;
+import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -109,26 +110,9 @@ public class Control {
     /**
      * Método que abre la pantalla del buscador de ingrediente.
      */
-    public void abrirBuscadorIngredientesActualizar() {
-        Consumer<NuevoIngredienteDTO> onIngredienteSeleccionado = ingrediente -> {
-            Control.getInstancia().abrirActualizarStock(ingrediente);
-
-        };
-
-        BuscadorIngredientes formBuscadorIngredientes = new BuscadorIngredientes(ingredientesBO, onIngredienteSeleccionado);
-        formBuscadorIngredientes.setVisible(true);
-    }
-    
-    /**
-     * Método que abre la pantalla del buscador de ingrediente.
-     */
-    public void abrirBuscadorIngredientesLista() {
-        Consumer<NuevoIngredienteDTO> onIngredienteSeleccionado = ingrediente -> {
-            Control.getInstancia().abrirListaIngredientesFiltrada(ingrediente);
-
-        };
-
-        BuscadorIngredientes formBuscadorIngredientes = new BuscadorIngredientes(ingredientesBO, onIngredienteSeleccionado);
+    public void abrirBuscadorIngredientes(IngredienteSeleccionadoObserver observer) {
+        BuscadorIngredientes formBuscadorIngredientes = new BuscadorIngredientes(ingredientesBO);
+        formBuscadorIngredientes.agregarObserver(observer);
         formBuscadorIngredientes.setVisible(true);
     }
 
@@ -194,13 +178,13 @@ public class Control {
         DetallesProducto formDetallesProducto = new DetallesProducto(productoDetallar, ingredientesProductoBO);
         formDetallesProducto.setVisible(true);
     }
-    
+
     /**
      * Metodo que abre la pantalla de clientes frecuentes.
      */
     public void abrirClientesFrecuentes() {
-    ClientesFrecuentes clientesFrecuentes = new ClientesFrecuentes();
-    clientesFrecuentes.setVisible(true);
+        ClientesFrecuentes clientesFrecuentes = new ClientesFrecuentes();
+        clientesFrecuentes.setVisible(true);
     }
 
 }

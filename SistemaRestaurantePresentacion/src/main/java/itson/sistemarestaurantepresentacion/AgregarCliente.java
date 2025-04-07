@@ -229,11 +229,11 @@ public class AgregarCliente extends JFrame {
     }//GEN-LAST:event_textFieldTelefonoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-        if (this.agregarCliente()) {
-            this.dispose();
-            Control.getInstancia().abrirMenuAdministrador();
-        }
+//        // TODO add your handling code here:
+//        if (this.agregarCliente()) {
+//            this.dispose();
+//            Control.getInstancia().abrirMenuAdministrador();
+//        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -242,27 +242,27 @@ public class AgregarCliente extends JFrame {
         Control.getInstancia().abrirClientesFrecuentes();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private boolean agregarCliente() {
-        try {
-            String nombre = this.textFieldNombre.getText();
-            String telefono = this.textFieldTelefono.getText();
-            String correo = this.TextFieldCorreo.getText();
-
-            
-            //Solucionar  problemas con los constructores 
-            NuevoClienteDTO nuevoCliente = new NuevoClienteDTO(Long.MIN_VALUE, nombre, telefono, telefono, correo, telefono, fechaRegistro, ICONIFIED, SOMEBITS, ALLBITS);
-            this.clientesBO.registrar(nuevoCliente);
-            JOptionPane.showMessageDialog(this, "Éxito al registrar el cliente", "Información", JOptionPane.INFORMATION_MESSAGE);
-            return true;
-        } catch (NegocioException e) {
-            LOG.severe("No fue posible registrar el cliente: " + e.getMessage());
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
-        } catch (PersistenceException e) {
-            LOG.severe("Ya existe un cliente con el mismo numero de telefono: " + e.getMessage());
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
-        }
-        return false;
-    }
+//    private boolean agregarCliente() {
+//        try {
+//            String nombre = this.textFieldNombre.getText();
+//            String telefono = this.textFieldTelefono.getText();
+//            String correo = this.TextFieldCorreo.getText();
+//
+//            
+//            //Solucionar  problemas con los constructores 
+//            NuevoClienteDTO nuevoCliente = new NuevoClienteDTO(Long.MIN_VALUE, nombre, telefono, telefono, correo, telefono, fechaRegistro, ICONIFIED, SOMEBITS, ALLBITS);
+//            this.clientesBO.registrar(nuevoCliente);
+//            JOptionPane.showMessageDialog(this, "Éxito al registrar el cliente", "Información", JOptionPane.INFORMATION_MESSAGE);
+//            return true;
+//        } catch (NegocioException e) {
+//            LOG.severe("No fue posible registrar el cliente: " + e.getMessage());
+//            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+//        } catch (PersistenceException e) {
+//            LOG.severe("Ya existe un cliente con el mismo numero de telefono: " + e.getMessage());
+//            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+//        }
+//        return false;
+//    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

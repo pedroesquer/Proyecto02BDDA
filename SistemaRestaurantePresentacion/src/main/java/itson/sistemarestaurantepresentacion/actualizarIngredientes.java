@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Sooto
  */
-public class ActualizarIngredientes extends javax.swing.JFrame {
+public class ActualizarIngredientes extends javax.swing.JFrame  {
 
     /**
      * Creates new form Productos
@@ -202,7 +202,7 @@ public class ActualizarIngredientes extends javax.swing.JFrame {
 
     private void iconAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconAgregarMouseClicked
         this.dispose();
-        Control.getInstancia().abrirBuscadorIngredientesActualizar();
+        //Control.getInstancia().abrirBuscadorIngredientesLista(observer);
     }//GEN-LAST:event_iconAgregarMouseClicked
 
     /**

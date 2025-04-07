@@ -5,6 +5,7 @@ import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
+import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -15,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
  * Sooto
  */
-public class ListaIngredientes extends javax.swing.JFrame {
+public class ListaIngredientes extends javax.swing.JFrame implements IngredienteSeleccionadoObserver {
 
     /**
      * Creates new form Productos
@@ -238,12 +239,10 @@ public class ListaIngredientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        this.dispose();
-        Control.getInstancia().abrirBuscadorIngredientesLista();
+        Control.getInstancia().abrirBuscadorIngredientes(this);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        this.dispose();
         Control.getInstancia().abrirListaIngredientes();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
@@ -263,4 +262,9 @@ public class ListaIngredientes extends javax.swing.JFrame {
     private javax.swing.JScrollPane pnlTablaProductos;
     private javax.swing.JTable tablaIngredientes;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void ingredienteSeleccionado(NuevoIngredienteDTO ingrediente) {
+        actualizarIngredientesSeleccionados(ingrediente);
+    }
 }
