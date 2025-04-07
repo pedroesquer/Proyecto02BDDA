@@ -4,19 +4,38 @@
  */
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantedominio.Cliente;
+import java.awt.Frame;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author victoria
  */
-public class AgregarCliente extends javax.swing.JFrame {
-
+public class AgregarCliente extends JDialog {
+    
+    private Cliente clienteCreado; //almacena cliente creado
+    private boolean guardado; //indica si se guardo o se cancelo
+    
     /**
      * Creates new form AgregarCliente
+     * @param parent
      */
-    public AgregarCliente() {
+    public AgregarCliente(Frame parent) {
+        super(parent, "Agregar Cliente", true);
         initComponents();
+        setLocationRelativeTo(parent);
+        guardado = false;
+        clienteCreado = null;
+    }
+    
+    public Cliente getClienteCreado(){
+        return clienteCreado;
+    }
+    
+    public boolean isGuardado(){
+        return guardado;
     }
 
     /**
@@ -215,19 +234,23 @@ public class AgregarCliente extends javax.swing.JFrame {
         String nombre = textFieldNombre.getText();
         String telefono = textFieldTelefono.getText();
         String correo = TextFieldCorreo.getText();
+        
 
         if (nombre.isEmpty() || telefono.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Nombre y Telefono son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            // Logica de guardar el cliente 
-            JOptionPane.showMessageDialog(this, "Cliente guardado exitosamente.");
-            limpiarCampos();
+        }
+        
+        if (!telefono.matches("\\d{10}")) {
+            JOptionPane.showMessageDialog(this, "El numero de telefono debe tener 10 digitos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
         limpiarCampos();
+        guardado = false;
+        dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     
@@ -237,40 +260,6 @@ public class AgregarCliente extends javax.swing.JFrame {
         TextFieldCorreo.setText("");
     }
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AgregarCliente().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LblAgregarCliente;
