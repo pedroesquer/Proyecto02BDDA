@@ -207,6 +207,7 @@ public class Productos extends javax.swing.JFrame {
 
     private void botonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonVolverActionPerformed
         Control.getInstancia().abrirMenuAdministrador();
+        this.dispose();
     }//GEN-LAST:event_botonVolverActionPerformed
 
   

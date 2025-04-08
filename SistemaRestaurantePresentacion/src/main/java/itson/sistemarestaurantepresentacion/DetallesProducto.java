@@ -219,10 +219,12 @@ public class DetallesProducto extends javax.swing.JFrame {
 
     private void volverBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverBotonActionPerformed
         Control.getInstancia().abrirListaProductos();
+        this.dispose();
     }//GEN-LAST:event_volverBotonActionPerformed
 
     private void menuIngredienteBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuIngredienteBotonActionPerformed
         Control.getInstancia().abrirMenuAdministrador();
+        this.dispose();
     }//GEN-LAST:event_menuIngredienteBotonActionPerformed
 
     

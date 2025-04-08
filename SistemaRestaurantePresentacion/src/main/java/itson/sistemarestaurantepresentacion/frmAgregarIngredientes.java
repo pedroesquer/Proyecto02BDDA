@@ -22,7 +22,7 @@ import javax.swing.table.TableCellEditor;
  *
  * @author juanpheras
  */
-public class frmAgregarIngredientes extends javax.swing.JFrame implements IngredienteSeleccionadoObserver{
+public class FrmAgregarIngredientes extends javax.swing.JFrame implements IngredienteSeleccionadoObserver{
 
     
     DefaultTableModel modeloTabla;
@@ -40,7 +40,7 @@ public class frmAgregarIngredientes extends javax.swing.JFrame implements Ingred
      * Creates new form frmAgregarClientes
      * @param producto
      */
-    public frmAgregarIngredientes(Producto producto, IIngredientesProductosBO ingredientesProductosBO) {
+    public FrmAgregarIngredientes(Producto producto, IIngredientesProductosBO ingredientesProductosBO) {
         initComponents();
         this.producto = producto;
         this.nombreLbl.setText(producto.getNombre());

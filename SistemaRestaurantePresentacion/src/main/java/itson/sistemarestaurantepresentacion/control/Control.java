@@ -22,7 +22,7 @@ import itson.sistemarestaurantepresentacion.ListaIngredientes;
 import itson.sistemarestaurantepresentacion.ListaProductos;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
 import itson.sistemarestaurantepresentacion.Productos;
-import itson.sistemarestaurantepresentacion.frmAgregarIngredientes;
+import itson.sistemarestaurantepresentacion.FrmAgregarIngredientes;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
 import javax.swing.JFrame;
 
@@ -192,7 +192,7 @@ public class Control {
     }
     
     public JFrame abrirFrameAgregarIngredientes(Producto producto){
-        frmAgregarIngredientes formAgregarIngredientes = new frmAgregarIngredientes(producto,ingredientesProductoBO);
+        FrmAgregarIngredientes formAgregarIngredientes = new FrmAgregarIngredientes(producto,ingredientesProductoBO);
         formAgregarIngredientes.setVisible(true);
         return formAgregarIngredientes;
     }
