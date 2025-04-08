@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -32,6 +34,7 @@ public class ListaIngredientes extends javax.swing.JFrame implements Ingrediente
         this.setLocationRelativeTo(null);
         this.ingredientesBO = ingredientesBO;
         this.llenarTablaIngredientes();
+        this.ocultarColumnaID();
     }
 
     /**
@@ -58,6 +61,11 @@ public class ListaIngredientes extends javax.swing.JFrame implements Ingrediente
         }
     }
 
+     private void ocultarColumnaID() {
+        TableColumnModel columnModel = tablaIngredientes.getColumnModel();
+        TableColumn columnaID = columnModel.getColumn(0);
+        columnModel.removeColumn(columnaID); 
+    }
     /**
      * Actualiza la tabla con los datos de un ingrediente seleccionado.
      *

@@ -1,6 +1,7 @@
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Ingrediente;
+import static itson.sistemarestaurantedominio.Producto_.ingredientes;
 import itson.sistemarestaurantedominio.UnidadMedida;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
@@ -15,6 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -23,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class BuscadorIngredientes extends javax.swing.JFrame {
 
+    private List<Ingrediente> ingredientesList = new ArrayList<>();  // Lista para almacenar los ingredientes cargados
     private List<IngredienteSeleccionadoObserver> observers = new ArrayList<>();
     private NuevoIngredienteDTO nuevoIngredienteDTO;
     private IIngredientesBO ingredientesBO;
@@ -38,7 +42,14 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
         this.setTitle("Buscador Ingredientes");
         this.ingredientesBO = ingredientesBO;
         this.cargarTabla();
+        this.ocultarColumnaID();
 
+    }
+
+    private void ocultarColumnaID() {
+        TableColumnModel columnModel = tablaIngredientes.getColumnModel();
+        TableColumn columnaID = columnModel.getColumn(0);
+        columnModel.removeColumn(columnaID);
     }
 
     private void cargarTabla() {
@@ -63,8 +74,8 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
         Object[] datos = new Object[columnas.length];
         try {
             String filtroBusqueda = this.txtBuscar.getText();
-            List<Ingrediente> ingredientes = this.ingredientesBO.consultar(filtroBusqueda);
-            for (Ingrediente ingrediente : ingredientes) {
+            ingredientesList = this.ingredientesBO.consultar(filtroBusqueda);  // Guardamos la lista de ingredientes
+            for (Ingrediente ingrediente : ingredientesList) {
 
                 datos[0] = String.valueOf(ingrediente.getId());
                 datos[1] = ingrediente.getNombre();
@@ -81,13 +92,13 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
                 if (e.getType() == TableModelEvent.UPDATE) {
                     int row = e.getFirstRow();
                     int column = e.getColumn();
-                    if (column == 4) {  
+                    if (column == 4) {
                         boolean selected = (boolean) mModel.getValueAt(row, column);
-                        
+
                         if (selected) {
                             for (int i = 0; i < mModel.getRowCount(); i++) {
                                 if (i != row) {
-                                    mModel.setValueAt(false, i, 4);  
+                                    mModel.setValueAt(false, i, 4);
                                 }
                             }
                         }
@@ -277,25 +288,29 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
 
     private void botonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSeleccionarActionPerformed
         for (int i = 0; i < tablaIngredientes.getRowCount(); i++) {
-            Boolean isSelected = (Boolean) tablaIngredientes.getValueAt(i, 4);
+            Boolean isSelected = (Boolean) tablaIngredientes.getValueAt(i, 3);  // Columna de "Seleccion"
 
             if (Boolean.TRUE.equals(isSelected)) {
-                Object idObj = tablaIngredientes.getValueAt(i, 0);
-                Long id = (idObj instanceof Long) ? (Long) idObj : Long.valueOf(idObj.toString());
-
-                String nombre = tablaIngredientes.getValueAt(i, 1).toString();
-                String unidadMedidaString = tablaIngredientes.getValueAt(i, 2).toString();
+                // Ahora obtenemos los datos de la fila seleccionada
+                Ingrediente ingredienteSeleccionado = ingredientesList.get(i);
+                Long id = ingredienteSeleccionado.getId();  // Obtén el ID
+                String nombre = tablaIngredientes.getValueAt(i, 0).toString();  // Nombre del ingrediente
+                String unidadMedidaString = tablaIngredientes.getValueAt(i, 1).toString();  // Unidad de medida
                 UnidadMedida unidadMedida = UnidadMedida.valueOf(unidadMedidaString);
 
-                String stockString = tablaIngredientes.getValueAt(i, 3).toString();
+                String stockString = tablaIngredientes.getValueAt(i, 2).toString();  // Stock
                 Integer stock = Integer.valueOf(stockString);
 
+                // Supongamos que tienes el "ID" guardado en alguna parte o lo puedes buscar
+                // Aquí lo obtienes desde la lista de ingredientes original que fue cargada
+
+                // Ahora puedes crear el DTO y notificar a los observadores
                 NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(id, nombre, stock, unidadMedida);
                 notificarObservers(nuevoIngrediente);
                 break;
             }
         }
-        this.dispose();
+        this.dispose();  // Cerrar la ventana
 
 
     }//GEN-LAST:event_botonSeleccionarActionPerformed

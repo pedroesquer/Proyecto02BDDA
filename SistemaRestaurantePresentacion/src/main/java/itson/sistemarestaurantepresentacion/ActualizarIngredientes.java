@@ -10,32 +10,42 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
- * @author Pedroo Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Sooto
+ * @author Pedroo Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
+ * Sooto
  */
-public class ActualizarIngredientes extends javax.swing.JFrame implements IngredienteSeleccionadoObserver{
+public class ActualizarIngredientes extends javax.swing.JFrame implements IngredienteSeleccionadoObserver {
 
     /**
      * Creates new form Productos
      */
-    
     private IIngredientesBO ingredientesBO;
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
+
     public ActualizarIngredientes(IIngredientesBO ingredientesBO) {
         initComponents();
+        this.ocultarColumnaID();
         this.setTitle("Ingredientes");
         this.setResizable(false);
-        this.setSize(760,500);
+        this.setSize(760, 500);
         this.setLocationRelativeTo(null);
         this.ingredientesBO = ingredientesBO;
         this.llenarTablaIngredientes();
     }
 
-    private void llenarTablaIngredientes(){
-        try{
-            
+    private void ocultarColumnaID() {
+        TableColumnModel columnModel = tablaIngredientes.getColumnModel();
+        TableColumn columnaID = columnModel.getColumn(0);
+        columnModel.removeColumn(columnaID);
+    }
+
+    private void llenarTablaIngredientes() {
+        try {
+
             List<Ingrediente> ingredientes = this.ingredientesBO.consultar("");
             //Este objeto permite interactuar con los elementos de la tabla
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaIngredientes.getModel();
@@ -49,11 +59,12 @@ public class ActualizarIngredientes extends javax.swing.JFrame implements Ingred
                 };
                 modeloTabla.addRow(fila);
             }
-        } catch(NegocioException ex){
+        } catch (NegocioException ex) {
             LOG.severe("No se pudo llenar la tabla");
             JOptionPane.showInputDialog(this, ex.getMessage());
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -158,18 +169,16 @@ public class ActualizarIngredientes extends javax.swing.JFrame implements Ingred
             panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelSuperior, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelGeneralLayout.createSequentialGroup()
-                .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(iconAgregar)
-                        .addGap(36, 36, 36))
-                    .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addGap(58, 58, 58)))
+                .addGap(44, 44, 44)
+                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(iconAgregar)
+                .addGap(87, 87, 87)
                 .addComponent(iconBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(panelGeneralLayout.createSequentialGroup()
+                .addGap(329, 329, 329)
+                .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelGeneralLayout.createSequentialGroup()
@@ -181,18 +190,19 @@ public class ActualizarIngredientes extends javax.swing.JFrame implements Ingred
             panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelGeneralLayout.createSequentialGroup()
                 .addComponent(panelSuperior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE)
                 .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
+                        .addComponent(btnVolver)
+                        .addGap(41, 41, 41))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
                         .addComponent(iconBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
                         .addComponent(iconAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnVolver)
-                            .addComponent(jLabel1))
-                        .addGap(41, 41, 41))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)
+                        .addGap(7, 7, 7))))
             .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelGeneralLayout.createSequentialGroup()
                     .addGap(128, 128, 128)
@@ -224,8 +234,6 @@ public class ActualizarIngredientes extends javax.swing.JFrame implements Ingred
         Control.getInstancia().abrirIngredientes();
     }//GEN-LAST:event_btnVolverActionPerformed
 
-   
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVolver;

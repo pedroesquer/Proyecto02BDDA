@@ -1,8 +1,6 @@
 package itson.sistemarestaurantepresentacion;
 
-import com.google.protobuf.Field;
 import itson.sistemarestaurantedominio.Ingrediente;
-import itson.sistemarestaurantedominio.UnidadMedida;
 import itson.sistemarestaurantedominio.dtos.ActualizarStockIngredienteDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
@@ -11,7 +9,6 @@ import itson.sistemarestaurantepresentacion.control.Control;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -284,7 +281,7 @@ public class ActualizarStock extends javax.swing.JFrame implements IngredienteSe
 
         }
         this.dispose();
-        Control.getInstancia().abrirActualizarIngredientes();
+        Control.getInstancia().abrirIngredientes();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     /**
