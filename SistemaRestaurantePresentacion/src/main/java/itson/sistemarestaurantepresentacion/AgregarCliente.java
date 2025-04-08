@@ -4,13 +4,15 @@
  */
 package itson.sistemarestaurantepresentacion;
 
-import itson.sistemarestaurantedominio.Cliente;
 import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
 import itson.sistemarestaurantepresentacion.control.Control;
-import java.util.logging.Level;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
@@ -244,30 +246,96 @@ public class AgregarCliente extends javax.swing.JFrame {
      * agrega un nuevo cliente al sistema, registra un cliente
      * con los datos que proporciona el usuario.
      */
-    private boolean agregarCliente(){
-        try {
-            String nombre = this.textFieldNombre.getText();
-            String telefono = this.textFieldTelefono.getText();
-            String correo = this.TextFieldCorreo.getText();
+   // private boolean agregarCliente(){
+    //    try {
+ //           String nombre = this.textFieldNombre.getText();
+ //           String telefono = this.textFieldTelefono.getText();
+  //          String correo = this.TextFieldCorreo.getText();
 
             // Si el correo es 'opcional' o esta vacio se deja como vacio
-            if (correo.equalsIgnoreCase("Opcional...") || correo.isEmpty()) {
-                correo = "";
-            }
+ //           if (correo.equalsIgnoreCase("Opcional...") || correo.isEmpty()) {
+  //              correo = "";
+  //          }
 
-            NuevoClienteDTO nuevoCliente = new NuevoClienteDTO(nombre, correo, telefono, 0);
-            this.clientesBO.registrar(nuevoCliente);
-            JOptionPane.showMessageDialog(this, "Exito al registrar el cliente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
-            return true;
-        } catch (NegocioException e) {
-            LOG.severe("No fue posible registrar el cliente: " + e.getMessage());
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
-        } catch (PersistenceException e) {
-            LOG.severe("Ya existe un cliente con el mismo numero de telefono: " + e.getMessage());
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+  //          NuevoClienteDTO nuevoCliente = new NuevoClienteDTO(nombre, correo, telefono, 0);
+   //         this.clientesBO.registrar(nuevoCliente);
+  //          JOptionPane.showMessageDialog(this, "Exito al registrar el cliente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+   //         return true;
+   //     } catch (NegocioException e) {
+   //         LOG.severe("No fue posible registrar el cliente: " + e.getMessage());
+    //        JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+    //    } catch (PersistenceException e) {
+     //       LOG.severe("Ya existe un cliente con el mismo numero de telefono: " + e.getMessage());
+     //       JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+     //   }
+     //  return false;
+   // }
+    
+    private boolean agregarCliente() {
+    try {
+        // Obtener los datos de los campos
+        String nombreCompleto = this.textFieldNombre.getText();
+        String telefono = this.textFieldTelefono.getText();
+        String correo = this.TextFieldCorreo.getText();
+
+        // Si el correo es "Opcional..." o está vacío, lo dejamos como vacío
+        if (correo.equalsIgnoreCase("Opcional...") || correo.isEmpty()) {
+            correo = "";
         }
-        return false;
+
+        // Dividir el nombre completo en nombre, apellido paterno y apellido materno
+        String[] partesNombre = nombreCompleto.trim().split("\\s+");
+        String nombre;
+        String apellidoPaterno;
+        String apellidoMaterno = null;
+
+        System.out.println("Nombre completo: " + nombreCompleto);
+        System.out.println("Partes del nombre: " + Arrays.toString(partesNombre));
+
+        if (partesNombre.length < 2) {
+            throw new NegocioException("Debe proporcionar al menos el nombre y el apellido paterno.");
+        } else if (partesNombre.length == 2) {
+            nombre = partesNombre[0];
+            apellidoPaterno = partesNombre[1];
+        } else {
+            nombre = partesNombre[0];
+            apellidoPaterno = partesNombre[1];
+            apellidoMaterno = partesNombre[2];
+        }
+
+        System.out.println("Nombre completo: " + nombreCompleto);
+        System.out.println("Partes del nombre: " + java.util.Arrays.toString(partesNombre));
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Apellido Paterno: " + apellidoPaterno);
+        System.out.println("Apellido Materno: " + apellidoMaterno);
+        
+        LocalDate localDate = LocalDate.now();
+        Date fecha = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        
+        
+        // Crear el DTO con el constructor que incluye nombre, apellidos, correo, telefono y fecha
+        NuevoClienteDTO nuevoCliente = new NuevoClienteDTO(
+            nombre,
+            apellidoPaterno,
+            apellidoMaterno,
+            correo,
+            telefono,
+            fecha
+        );
+
+        // Registrar el cliente
+        this.clientesBO.registrar(nuevoCliente);
+        JOptionPane.showMessageDialog(this, "Exito al registrar el cliente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        return true;
+    } catch (NegocioException e) {
+        LOG.severe("No fue posible registrar el cliente: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+    } catch (PersistenceException e) {
+        LOG.severe("Ya existe un cliente con el mismo número de telefono: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
     }
+    return false;
+}
     
     /**
      * @param args the command line arguments
