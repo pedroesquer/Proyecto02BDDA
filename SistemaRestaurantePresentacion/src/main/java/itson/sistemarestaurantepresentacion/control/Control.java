@@ -2,6 +2,7 @@ package itson.sistemarestaurantepresentacion.control;
 
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
+import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.IIngredientesProductosBO;
 import itson.sistemarestaurantenegocio.IProductosBO;
@@ -9,6 +10,7 @@ import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
 import itson.sistemarestaurantepresentacion.ActualizarIngredientes;
 import itson.sistemarestaurantepresentacion.ActualizarProducto;
 import itson.sistemarestaurantepresentacion.ActualizarStock;
+import itson.sistemarestaurantepresentacion.AgregarCliente;
 import itson.sistemarestaurantepresentacion.AgregarIngredientes;
 import itson.sistemarestaurantepresentacion.AgregarIngredientesProducto;
 import itson.sistemarestaurantepresentacion.AgregarProducto;
@@ -34,6 +36,7 @@ public class Control {
     IIngredientesBO ingredientesBO = FabricaObjetosNegocio.crearIngredientesBO();
     IProductosBO productosBO = FabricaObjetosNegocio.crearProductosBO();
     IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();
+    IClientesBO clientesBO = FabricaObjetosNegocio.crearClientesBO();
 
     /**
      * Constructor privado para evitar la creación externa de instancias.
@@ -176,8 +179,7 @@ public class Control {
      * Metodo que abre la pantalla de clientes frecuentes.
      */
     public void abrirClientesFrecuentes() {
-        ClientesFrecuentes clientesFrecuentes = new ClientesFrecuentes();
-        clientesFrecuentes.setVisible(true);
+        new ClientesFrecuentes().setVisible(true);
     }
     
      /**
@@ -186,6 +188,10 @@ public class Control {
     public void abrirActualizarIngredientes() {
         ActualizarIngredientes formActualizarIngredientes = new ActualizarIngredientes(ingredientesBO);
         formActualizarIngredientes.setVisible(true);
+    }
+
+    public void abrirAgregarCliente() {
+        new AgregarCliente(clientesBO).setVisible(true);
     }
 
 }
