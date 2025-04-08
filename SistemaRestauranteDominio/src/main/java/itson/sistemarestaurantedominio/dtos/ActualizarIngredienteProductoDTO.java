@@ -29,6 +29,11 @@ public class ActualizarIngredienteProductoDTO {
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     
     
 }

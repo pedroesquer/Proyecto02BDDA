@@ -22,6 +22,12 @@ import javax.persistence.TypedQuery;
  */
 public class IngredientesProductoDAO implements IIngredientesProductosDAO  {
 
+    /**
+     * Método registrar que en caso de que exista la relación, solo actualiza la cantidad.
+     * @param relacionIngredienteProductoDTO la relacion ingredienteProducto
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public IngredienteProducto registrar(NuevaRelacionIngredienteProductoDTO relacionIngredienteProductoDTO) throws PersistenciaException {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
@@ -45,16 +51,45 @@ public class IngredientesProductoDAO implements IIngredientesProductosDAO  {
             throw new PersistenciaException("El ingrediente no existe");
 
         }
-        relacion.setIngrediente(ingrediente);
-        
-        relacion.setCantidad(relacionIngredienteProductoDTO.getCantidad());
-        
-        entityManager.persist(relacion);
-        entityManager.getTransaction().commit();
-        
-        return relacion;
-    }
+        // Buscar si ya existe una relación entre este producto y este ingrediente
+    IngredienteProducto relacionExistente = entityManager.createQuery(
+            "SELECT ip FROM IngredienteProducto ip WHERE ip.producto = :producto AND ip.ingrediente = :ingrediente", 
+            IngredienteProducto.class)
+            .setParameter("producto", producto)
+            .setParameter("ingrediente", ingrediente)
+            .getResultStream()
+            .findFirst()
+            .orElse(null);
 
+    // Si existe la relación, sumamos la cantidad
+    if (relacionExistente != null) {
+        relacionExistente.setCantidad(relacionExistente.getCantidad() + relacionIngredienteProductoDTO.getCantidad());
+        entityManager.merge(relacionExistente);  // Actualiza el registro
+        entityManager.getTransaction().commit();
+        return relacionExistente;
+    } else {
+        // Si no existe la relación, creamos una nueva
+        IngredienteProducto nuevaRelacion = new IngredienteProducto();
+        nuevaRelacion.setProducto(producto);
+        nuevaRelacion.setIngrediente(ingrediente);
+        nuevaRelacion.setCantidad(relacionIngredienteProductoDTO.getCantidad());
+        entityManager.persist(nuevaRelacion);  // Inserta un nuevo registro
+        entityManager.getTransaction().commit();
+        return nuevaRelacion;
+    }
+    
+    
+    
+      // Devolver la relación actualizada o nueva
+}
+    
+
+    /**
+     * Método que actualiza la cantidad de la relación ingredienteProducto.
+     * @param actualizarIngredienteProducto
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public IngredienteProducto actualizar(ActualizarIngredienteProductoDTO actualizarIngredienteProducto) throws PersistenciaException {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
@@ -76,13 +111,18 @@ public class IngredientesProductoDAO implements IIngredientesProductosDAO  {
         
     }
 
+    /**
+     * Método que consulta los ingredientes de un producto.
+     * @param idProducto id del producto a consultar ingredientes.
+     * @return 
+     */
     @Override
     public List<DetalleIngredienteProductoDTO> consultarIngredientesProducto(Long idProducto) {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         
         String jpqlQuery = """
                 SELECT new itson.sistemarestaurantedominio.dtos.DetalleIngredienteProductoDTO(
-                           IP.cantidad, I.unidadMedida, I.nombre
+                           IP.id, IP.cantidad, I.unidadMedida, I.nombre
             )
             FROM IngredienteProducto IP
             JOIN IP.producto  P                         

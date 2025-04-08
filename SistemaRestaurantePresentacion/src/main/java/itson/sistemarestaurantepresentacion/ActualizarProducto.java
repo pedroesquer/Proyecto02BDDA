@@ -5,15 +5,23 @@
 package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantedominio.dtos.ActualizarIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.DetalleIngredienteProductoDTO;
+import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import itson.sistemarestaurantepresentacion.control.Control;
+import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
+import java.awt.event.WindowListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 
 /**
  *
@@ -23,17 +31,19 @@ public class ActualizarProducto extends javax.swing.JFrame {
 
     private Producto productoActualizar;
     private IIngredientesProductosBO ingredientesProductoBO;
-    
+
     /**
      * Creates new form ActualizarProducto
-     * @param productoActualizar el Producto que se actualizará    
-     * @param ingredientesProductoBO  ingredientesProductoBO para poder tener los métodos.     
+     *
+     * @param productoActualizar el Producto que se actualizará
+     * @param ingredientesProductoBO ingredientesProductoBO para poder tener los
+     * métodos.
      */
-    public ActualizarProducto(Producto productoActualizar, IIngredientesProductosBO ingredientesProductoBO ){
+    public ActualizarProducto(Producto productoActualizar, IIngredientesProductosBO ingredientesProductoBO) {
         initComponents();
         this.setTitle("ActualizarProductos");
         this.setResizable(false);
-        this.setSize(770,510);
+        this.setSize(770, 510);
         this.setLocationRelativeTo(null);
         this.productoActualizar = productoActualizar;
         this.ingredientesProductoBO = ingredientesProductoBO;
@@ -117,6 +127,11 @@ public class ActualizarProducto extends javax.swing.JFrame {
         botonActualizarProducto.setText("Aceptar cambios");
         botonActualizarProducto.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         botonActualizarProducto.setOpaque(true);
+        botonActualizarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonActualizarProductoActionPerformed(evt);
+            }
+        });
 
         tablaProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -143,6 +158,11 @@ public class ActualizarProducto extends javax.swing.JFrame {
         botonAñadirIngrediente.setText("Añadir ingrediente");
         botonAñadirIngrediente.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         botonAñadirIngrediente.setOpaque(true);
+        botonAñadirIngrediente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAñadirIngredienteActionPerformed(evt);
+            }
+        });
 
         NombreProductoLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         NombreProductoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -153,35 +173,38 @@ public class ActualizarProducto extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(NombreProductoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 532, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(botonAñadirIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(NombreProductoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(544, 544, 544)))
+                        .addGap(6, 6, 6))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(botonAñadirIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 532, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botonActualizarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(botonActualizarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(NombreProductoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botonActualizarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonAñadirIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(NombreProductoLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botonActualizarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addComponent(botonAñadirIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -197,14 +220,61 @@ public class ActualizarProducto extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    private void llenarDetallesProducto() throws NegocioException{
+
+    /**
+     * Cuando se cierra la ventana se actualiza con los nuevos ingredientes
+     *
+     * @param evt
+     */
+    private void botonAñadirIngredienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAñadirIngredienteActionPerformed
+        JFrame formsAgregarIngredientes = Control.getInstancia().abrirFrameAgregarIngredientes(productoActualizar);
+        formsAgregarIngredientes.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                // Cuando el frame se cierre, ejecutar llenarDetallesProducto()
+                try {
+                    llenarDetallesProducto();
+                } catch (NegocioException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+            }
+        });
+        try {
+            llenarDetallesProducto();
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }//GEN-LAST:event_botonAñadirIngredienteActionPerformed
+
+    private void botonActualizarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarProductoActionPerformed
+        // TODO add your handling code here:
+        if (tablaProductos.isEditing()) { //Con esto nos aseguramos que no se quede en el valor pasado
+            // Detén la edición y aplica los cambios
+            TableCellEditor editor = tablaProductos.getCellEditor();
+            editor.stopCellEditing();
+        }
+        try {
+            if (this.actualizarCambios()) {
+                Control.getInstancia().abrirMenuAdministrador();
+                this.dispose();
+            }
+        } catch (NegocioException ex) {
+            Logger.getLogger(ActualizarProducto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_botonActualizarProductoActionPerformed
+
+    /**
+     * Llenamos la tabla de detalles producto.
+     *
+     * @throws NegocioException
+     */
+    private void llenarDetallesProducto() throws NegocioException {
         this.NombreProductoLabel.setText(productoActualizar.getNombre());
         List<DetalleIngredienteProductoDTO> ingredientesDTO = this.ingredientesProductoBO.consultarIngredientesProducto(
                 productoActualizar.getId());
         DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaProductos.getModel();
         modeloTabla.setRowCount(0);
-        
+
         for (DetalleIngredienteProductoDTO ingredienteProductoDTO : ingredientesDTO) {
             Object[] fila = {
                 productoActualizar.getId(),
@@ -215,10 +285,61 @@ public class ActualizarProducto extends javax.swing.JFrame {
             };
             modeloTabla.addRow(fila);
         }
-          
     }
-    
 
+    private boolean actualizarCambios() throws NegocioException {
+        List<DetalleIngredienteProductoDTO> ingredientesDTO = this.ingredientesProductoBO.consultarIngredientesProducto(
+                productoActualizar.getId());
+
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaProductos.getModel();
+        
+         boolean huboError = false; //Variable booleana para verificar si hubo algun error anter de actualizar los cambios
+
+        List<ActualizarIngredienteProductoDTO> productosActualizar = new ArrayList();
+        //Recorremos la tabla para actualizar las señales
+        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+            // Obtenemos el valor de la "Nueva Cantidad" de la tabla (columna 4)
+            Object nuevaCantidadObj = modeloTabla.getValueAt(i, 4);
+
+            // Asegurarnos de que el valor no sea nulo y convertirlo a tipo adecuado
+            if (nuevaCantidadObj != null) {
+                try {
+                    Integer nuevaCantidad = Integer.parseInt(nuevaCantidadObj.toString());
+                    // Obtener el DTO correspondiente al ingrediente en la fila i
+                    DetalleIngredienteProductoDTO ingredienteDTO = ingredientesDTO.get(i);
+
+                    // Crear un DTO para actualizar, con la nueva cantidad
+                    ActualizarIngredienteProductoDTO actualizarIngredienteDTO = new ActualizarIngredienteProductoDTO(
+                            ingredienteDTO.getId(), 
+                            nuevaCantidad);
+                    if(nuevaCantidad == 0){
+                        huboError = true;
+                        break;
+                    }
+                    productosActualizar.add(actualizarIngredienteDTO);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "No puedes añadir letras.");
+                    huboError = true;
+                    break;
+                }
+
+            }
+        }
+        //Si no hubo algun error se procede a registrar todas las relaciones
+            if (!huboError) {
+                for (ActualizarIngredienteProductoDTO relacion : productosActualizar) {
+                    try {
+                        ingredientesProductoBO.actualizar(relacion);
+                    } catch (NegocioException | PersistenciaException e) {
+                        JOptionPane.showMessageDialog(this, "Error al registrar relación: " + e.getMessage());
+                    }
+                }
+                JOptionPane.showMessageDialog(this, "Relaciones registradas con éxito.");
+                return true;
+            }
+            JOptionPane.showMessageDialog(this, "No se pudo actualizat checa tu codigo bro");
+            return false;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel NombreProductoLabel;
     private javax.swing.JButton botonActualizarProducto;
@@ -231,4 +352,5 @@ public class ActualizarProducto extends javax.swing.JFrame {
     private javax.swing.JScrollPane pnlTablaProductos;
     private javax.swing.JTable tablaProductos;
     // End of variables declaration//GEN-END:variables
+
 }

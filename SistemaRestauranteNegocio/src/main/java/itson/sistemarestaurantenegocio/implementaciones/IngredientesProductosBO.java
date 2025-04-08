@@ -2,6 +2,7 @@
 package itson.sistemarestaurantenegocio.implementaciones;
 
 import itson.sistemarestaurantedominio.IngredienteProducto;
+import itson.sistemarestaurantedominio.dtos.ActualizarIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.DetalleIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevaRelacionIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
@@ -40,6 +41,16 @@ public class IngredientesProductosBO implements IIngredientesProductosBO {
         }
         return this.ingredientesProductosDAO.registrar(relacionIngredienteProductoDTO);
     }
+
+    @Override
+    public IngredienteProducto actualizar(ActualizarIngredienteProductoDTO actualizarIngredienteProducto) throws NegocioException, PersistenciaException {
+        if(actualizarIngredienteProducto.getCantidad() <= 0){
+            throw new NegocioException("No se puede actualizar la cantidad porque es 0");
+        }
+        return this.ingredientesProductosDAO.actualizar(actualizarIngredienteProducto);
+    }
+    
+    
 
     
     

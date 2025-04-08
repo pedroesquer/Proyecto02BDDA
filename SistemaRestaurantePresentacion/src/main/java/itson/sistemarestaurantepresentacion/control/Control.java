@@ -22,9 +22,10 @@ import itson.sistemarestaurantepresentacion.ListaIngredientes;
 import itson.sistemarestaurantepresentacion.ListaProductos;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
 import itson.sistemarestaurantepresentacion.Productos;
+import itson.sistemarestaurantepresentacion.frmAgregarIngredientes;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
-import java.util.List;
-import java.util.function.Consumer;
+import javax.swing.JFrame;
+
 
 /**
  *
@@ -36,7 +37,7 @@ public class Control {
     IIngredientesBO ingredientesBO = FabricaObjetosNegocio.crearIngredientesBO();
     IProductosBO productosBO = FabricaObjetosNegocio.crearProductosBO();
     IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();
-    IClientesBO clientesBO = FabricaObjetosNegocio.crearClientesBO();
+//    IClientesBO clientesBO = FabricaObjetosNegocio.crearClientesBO();
 
     /**
      * Constructor privado para evitar la creación externa de instancias.
@@ -189,9 +190,15 @@ public class Control {
         ActualizarIngredientes formActualizarIngredientes = new ActualizarIngredientes(ingredientesBO);
         formActualizarIngredientes.setVisible(true);
     }
-
-    public void abrirAgregarCliente() {
-        new AgregarCliente(clientesBO).setVisible(true);
+    
+    public JFrame abrirFrameAgregarIngredientes(Producto producto){
+        frmAgregarIngredientes formAgregarIngredientes = new frmAgregarIngredientes(producto,ingredientesProductoBO);
+        formAgregarIngredientes.setVisible(true);
+        return formAgregarIngredientes;
     }
+
+//    public void abrirAgregarCliente() {
+//        new AgregarCliente(clientesBO).setVisible(true);
+//    }
 
 }

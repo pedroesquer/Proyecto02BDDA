@@ -9,11 +9,13 @@ import itson.sistemarestaurantedominio.UnidadMedida;
  */
 public class DetalleIngredienteProductoDTO {
     
+    private Long id;
     private Integer cantidad;
     private UnidadMedida unidadMedida;
     private String nombre;
 
-        public DetalleIngredienteProductoDTO(Integer cantidad, UnidadMedida unidadMedida, String nombre) {
+    public DetalleIngredienteProductoDTO(Long id, Integer cantidad, UnidadMedida unidadMedida, String nombre) {
+        this.id = id; 
         this.cantidad = cantidad;
         this.unidadMedida = unidadMedida;
         this.nombre = nombre;
@@ -29,6 +31,14 @@ public class DetalleIngredienteProductoDTO {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
     
 
