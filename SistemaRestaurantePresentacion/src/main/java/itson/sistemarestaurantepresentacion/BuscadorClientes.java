@@ -7,11 +7,9 @@ package itson.sistemarestaurantepresentacion;
 import itson.sistemarestaurantedominio.Cliente;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
-import java.awt.Frame;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
@@ -59,14 +57,18 @@ public class BuscadorClientes extends javax.swing.JFrame {
             }
         };
 
-        LimpiarTabla(tablaClientes, mModel);
+        this.buscarLbl.setText("");
 
         Object[] datos = new Object[columnas.length];
         try {
             String filtroBusqueda = this.buscarLbl.getText();
             List<Cliente> clientes = this.clientesBO.consultar(filtroBusqueda);
             for (Cliente cliente : clientes) {
-                datos[0] = cliente.getNombre();
+                String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
+                if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
+                    nombreCompleto += " " + cliente.getApellidoMaterno();
+                }
+                datos[0] = nombreCompleto;
                 datos[1] = cliente.getCorreo();
                 datos[2] = cliente.getNumeroTelefono();
                 datos[3] = cliente.getPuntosFidelidad();
@@ -76,6 +78,7 @@ public class BuscadorClientes extends javax.swing.JFrame {
             }
 
             tablaClientes.setModel(mModel);
+
 
             // Implementar un listener para cambiar el estado del checkbox
             tablaClientes.getModel().addTableModelListener(e -> {
@@ -96,14 +99,15 @@ public class BuscadorClientes extends javax.swing.JFrame {
                 }
             });
         } catch (NegocioException ex) {
-            JOptionPane.showInputDialog(this, ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     public void LimpiarTabla(JTable tabla, DefaultTableModel modeloTabla) {
         this.buscarLbl.setText("");
-        this.cargarTabla();
+        modeloTabla.setRowCount(0);
     }
+
 
     private void llenarTablaClientes() {
         try {
@@ -113,6 +117,10 @@ public class BuscadorClientes extends javax.swing.JFrame {
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaClientes.getModel();
             modeloTabla.setRowCount(0);
             for (Cliente cliente : clientes) {
+                String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
+                if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
+                    nombreCompleto += " " + cliente.getApellidoMaterno();
+                }
                 Object[] fila = {
                     cliente.getNombre(),
                     cliente.getCorreo(),
@@ -123,12 +131,10 @@ public class BuscadorClientes extends javax.swing.JFrame {
             }
         } catch (NegocioException ex) {
             LOG.severe("No se pudo llenar la tabla");
-            JOptionPane.showInputDialog(this, ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
         
-        
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -253,17 +259,33 @@ public class BuscadorClientes extends javax.swing.JFrame {
             Boolean isSelected = (Boolean) tablaClientes.getValueAt(i, 4);
 
             if (Boolean.TRUE.equals(isSelected)) {
-                String nombre = tablaClientes.getValueAt(i, 0).toString();
+                String nombreCompleto = tablaClientes.getValueAt(i, 0).toString();
                 String correo = tablaClientes.getValueAt(i, 1).toString();
                 String numeroTelefono = tablaClientes.getValueAt(i, 2).toString();
                 int puntosFidelidad = Integer.parseInt(tablaClientes.getValueAt(i, 3).toString());
+                
+                String[] partesNombre = nombreCompleto.trim().split("\\s+");
+                String nombre;
+                String apellidoPaterno;
+                String apellidoMaterno = null;
 
-                // Crear el cliente
-               // Cliente cliente = new Cliente(nombre, correo, numeroTelefono, puntosFidelidad);
+                if (partesNombre.length < 2) {
+                    JOptionPane.showMessageDialog(this, "El nombre debe estar completo.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                } else if (partesNombre.length == 2) {
+                    nombre = partesNombre[0];
+                    apellidoPaterno = partesNombre[1];
+                } else {
+                    nombre = partesNombre[0];
+                    apellidoPaterno = partesNombre[1];
+                    apellidoMaterno = partesNombre[2];
+                }
 
-                // Llamar al callback
+                Cliente cliente = new Cliente(nombre, apellidoPaterno, apellidoMaterno, correo, numeroTelefono, null);
+                cliente.setPuntosFidelidad(puntosFidelidad);
+
                 if (onClienteSeleccionado != null) {
-                   // onClienteSeleccionado.accept(cliente);
+                    onClienteSeleccionado.accept(cliente);
                 }
 
                 break;
