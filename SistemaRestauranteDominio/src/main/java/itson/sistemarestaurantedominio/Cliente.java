@@ -46,7 +46,7 @@ public class Cliente implements Serializable {
     private String numeroTelefono;
 
     @Column(name = "fecha_registro", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;
 
     @Column(name = "puntos_fidelidad", nullable = false)
