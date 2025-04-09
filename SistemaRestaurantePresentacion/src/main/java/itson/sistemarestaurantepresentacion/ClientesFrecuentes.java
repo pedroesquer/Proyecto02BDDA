@@ -4,7 +4,14 @@
  */
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantedominio.Cliente;
+import itson.sistemarestaurantenegocio.IClientesBO;
+import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepresentacion.control.Control;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -14,11 +21,15 @@ import javax.swing.table.TableRowSorter;
  */
 public class ClientesFrecuentes extends javax.swing.JFrame {
 
+    
+    IClientesBO clientesBO;
     /**
      * Creates new form ClientesFrecuentes
      */
-    public ClientesFrecuentes() {
+    public ClientesFrecuentes(IClientesBO clientesBO) {
         initComponents();
+        this.clientesBO = clientesBO;
+        cargarTabla();
     }
 
     /**
@@ -35,8 +46,8 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnBuscar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
-        tablaClientes = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        ScrollPane = new javax.swing.JScrollPane();
+        tablaClientes = new javax.swing.JTable();
         btnAgregarCliente = new javax.swing.JButton();
         LblAgregarCliente = new javax.swing.JLabel();
 
@@ -70,15 +81,18 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 253, 211));
 
-        btnBuscar.setBackground(new java.awt.Color(0, 0, 0));
+        btnBuscar.setBackground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setForeground(new java.awt.Color(0, 0, 0));
         btnBuscar.setText("Buscar");
+        btnBuscar.setOpaque(true);
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
             }
         });
 
-        btnLimpiar.setBackground(new java.awt.Color(0, 0, 0));
+        btnLimpiar.setBackground(new java.awt.Color(255, 255, 255));
+        btnLimpiar.setForeground(new java.awt.Color(0, 0, 0));
         btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -86,12 +100,12 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
             }
         });
 
+        ScrollPane.setBackground(new java.awt.Color(255, 255, 255));
+        ScrollPane.setForeground(new java.awt.Color(0, 0, 0));
+
         tablaClientes.setBackground(new java.awt.Color(255, 255, 255));
         tablaClientes.setForeground(new java.awt.Color(0, 0, 0));
-
-        jTable1.setBackground(new java.awt.Color(255, 255, 255));
-        jTable1.setForeground(new java.awt.Color(0, 0, 0));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -102,7 +116,7 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
                 "Nombre", "Correo", "Numero Telefono", "Puntos Fidelidad"
             }
         ));
-        tablaClientes.setViewportView(jTable1);
+        ScrollPane.setViewportView(tablaClientes);
 
         btnAgregarCliente.setBackground(new java.awt.Color(0, 204, 102));
         btnAgregarCliente.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -132,7 +146,7 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(111, 111, 111)
-                        .addComponent(tablaClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(315, 315, 315)
                         .addComponent(btnAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -149,7 +163,7 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
                     .addComponent(btnBuscar)
                     .addComponent(btnLimpiar))
                 .addGap(18, 18, 18)
-                .addComponent(tablaClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -164,23 +178,17 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
 
     
     private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
-        // TODO add your handling code here:
-        String nombre = "Nuevo Cliente";
-        String correo = "nuevo@cliente.com";
-        String telefono = "1234567890";
-        String puntosFidelidad = "100";
-
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.addRow(new Object[]{nombre, correo, telefono, puntosFidelidad});
+        Control.getInstancia().abrirAgregarCliente();
+        this.dispose();
     }//GEN-LAST:event_btnAgregarClienteActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         String searchQuery = btnBuscar.getText().toLowerCase();
 
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tablaClientes.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-        jTable1.setRowSorter(sorter);
+        tablaClientes.setRowSorter(sorter);
 
         if (searchQuery.trim().isEmpty()) {
             sorter.setRowFilter(null); // Mostrar todas las filas
@@ -192,54 +200,86 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
         // Limpiar tabla
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tablaClientes.getModel();
         model.setRowCount(0);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    
+    private void cargarTabla() {
+        tablaClientes.setDefaultRenderer(Object.class, new Render());
+
+        String[] columnas = new String[]{"Nombre", "Correo", "Numero Telefono", "Puntos Fidelidad", "Seleccion"};
+        boolean[] editable = {false, false, false, false, true};
+        Class[] types = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class};
+
+        DefaultTableModel mModel = new DefaultTableModel(columnas, 0) {
+            @Override
+            public Class getColumnClass(int i) {
+                return types[i];
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return editable[column];
+            }
+        };
+
+        mModel.setRowCount(0);
+        Object[] datos = new Object[columnas.length];
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+            String filtroBusqueda = "";
+            List<Cliente> clientes = this.clientesBO.consultar(filtroBusqueda);
+            for (Cliente cliente : clientes) {
+                String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
+                if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
+                    nombreCompleto += " " + cliente.getApellidoMaterno();
                 }
+                datos[0] = nombreCompleto;
+                datos[1] = cliente.getCorreo();
+                datos[2] = cliente.getNumeroTelefono();
+                datos[3] = cliente.getPuntosFidelidad();
+                datos[4] = false;
+
+                mModel.addRow(datos);
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ClientesFrecuentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ClientesFrecuentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ClientesFrecuentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ClientesFrecuentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+            tablaClientes.setModel(mModel);
+            
+        
+
+
+            // Implementar un listener para cambiar el estado del checkbox
+            tablaClientes.getModel().addTableModelListener(e -> {
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    int row = e.getFirstRow();
+                    int column = e.getColumn();
+                    if (column == 4) {  // Si la columna seleccionada es la de los checkboxes (índice 4)
+                        boolean selected = (boolean) mModel.getValueAt(row, column);
+                        // Si el checkbox de esa fila se seleccionó, desmarcar los demás
+                        if (selected) {
+                            for (int i = 0; i < mModel.getRowCount(); i++) {
+                                if (i != row) {
+                                    mModel.setValueAt(false, i, 4);  // Desmarcar las otras filas
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ClientesFrecuentes().setVisible(true);
-            }
-        });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LblAgregarCliente;
     private javax.swing.JLabel LblClientesFrecuentes;
+    private javax.swing.JScrollPane ScrollPane;
     private javax.swing.JButton btnAgregarCliente;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JScrollPane tablaClientes;
+    private javax.swing.JTable tablaClientes;
     // End of variables declaration//GEN-END:variables
 }
