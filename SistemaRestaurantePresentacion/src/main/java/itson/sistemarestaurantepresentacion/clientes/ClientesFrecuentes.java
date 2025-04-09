@@ -7,6 +7,7 @@ package itson.sistemarestaurantepresentacion.clientes;
 import itson.sistemarestaurantedominio.Cliente;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantenegocio.utilidades.EncriptadorAES;
 import itson.sistemarestaurantepresentacion.Render;
 import itson.sistemarestaurantepresentacion.control.Control;
 import java.util.List;
@@ -234,9 +235,19 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
                 if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
                     nombreCompleto += " " + cliente.getApellidoMaterno();
                 }
+
+                // Desencriptar el número de teléfono
+                String numeroTelefonoDesencriptado;
+                try {
+                    numeroTelefonoDesencriptado = EncriptadorAES.desencriptar(cliente.getNumeroTelefono());
+                } catch (Exception ex) {
+                    numeroTelefonoDesencriptado = "Error al desencriptar";
+                    System.err.println("Error al desencriptar el número de teléfono: " + ex.getMessage());
+                }
+
                 datos[0] = nombreCompleto;
                 datos[1] = cliente.getCorreo();
-                datos[2] = cliente.getNumeroTelefono();
+                datos[2] = numeroTelefonoDesencriptado; // Mostrar el número desencriptado
                 datos[3] = cliente.getPuntosFidelidad();
                 datos[4] = false;
 
@@ -245,9 +256,6 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
 
             tablaClientes.setModel(mModel);
             
-        
-
-
             // Implementar un listener para cambiar el estado del checkbox
             tablaClientes.getModel().addTableModelListener(e -> {
                 if (e.getType() == TableModelEvent.UPDATE) {
@@ -266,10 +274,12 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
                     }
                 }
             });
-        } catch (NegocioException ex) {
+           } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LblAgregarCliente;
