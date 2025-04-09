@@ -38,7 +38,8 @@ public class Control {
     private static Control instance;
     IIngredientesBO ingredientesBO = FabricaObjetosNegocio.crearIngredientesBO();
     IProductosBO productosBO = FabricaObjetosNegocio.crearProductosBO();
-    IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();    IClientesBO clientesBO = FabricaObjetosNegocio.crearClientesBO();
+    IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();   
+    IClientesBO clientesBO = FabricaObjetosNegocio.crearClientesBO();
 
     /**
      * Constructor privado para evitar la creación externa de instancias.
