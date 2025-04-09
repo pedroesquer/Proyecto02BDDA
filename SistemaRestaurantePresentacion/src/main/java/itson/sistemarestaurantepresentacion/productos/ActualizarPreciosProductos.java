@@ -4,11 +4,15 @@
  */
 package itson.sistemarestaurantepresentacion.productos;
 
+import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
+import itson.sistemarestaurantepresentacion.control.Control;
+import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
+
 /**
  *
  * @author juanpheras
  */
-public class ActualizarPreciosProductos extends javax.swing.JFrame {
+public class ActualizarPreciosProductos extends javax.swing.JFrame implements ProductoSeleccionadoObserver {
 
     /**
      * Creates new form ActualizarPreciosProductos
@@ -34,7 +38,6 @@ public class ActualizarPreciosProductos extends javax.swing.JFrame {
         pnlTablaProductos = new javax.swing.JScrollPane();
         tablaProductos = new javax.swing.JTable();
         botonActualizarProducto = new javax.swing.JButton();
-        botonDetallesProducto = new javax.swing.JButton();
         botonBuscarProductos = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -120,20 +123,7 @@ public class ActualizarPreciosProductos extends javax.swing.JFrame {
                 botonActualizarProductoActionPerformed(evt);
             }
         });
-        jPanel1.add(botonActualizarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 420, 188, 51));
-
-        botonDetallesProducto.setBackground(new java.awt.Color(204, 255, 255));
-        botonDetallesProducto.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        botonDetallesProducto.setText("Detalles producto");
-        botonDetallesProducto.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        botonDetallesProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        botonDetallesProducto.setOpaque(true);
-        botonDetallesProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonDetallesProductoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(botonDetallesProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(419, 424, 238, 51));
+        jPanel1.add(botonActualizarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 430, 188, 51));
 
         botonBuscarProductos.setBackground(new java.awt.Color(255, 255, 255));
         botonBuscarProductos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
@@ -181,63 +171,17 @@ public class ActualizarPreciosProductos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonActualizarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarProductoActionPerformed
-        Producto producto = this.productosBO.consultarProductoIndividual(this.seleccionarIdProducto());
-
-        if (!(producto == null)) {
-            Control.getInstancia().abrirActualizarProducto(producto);
-            this.dispose();
-        }
+      
     }//GEN-LAST:event_botonActualizarProductoActionPerformed
-
-    private void botonDetallesProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDetallesProductoActionPerformed
-        Producto producto = this.productosBO.consultarProductoIndividual(this.seleccionarIdProducto());
-        Control.getInstancia().abrirDetallesProducto(producto);
-        this.dispose();
-    }//GEN-LAST:event_botonDetallesProductoActionPerformed
 
     private void botonBuscarProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonBuscarProductosMouseClicked
         Control.getInstancia().abrirBuscadorProductos(this);
     }//GEN-LAST:event_botonBuscarProductosMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ActualizarPreciosProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ActualizarPreciosProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ActualizarPreciosProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ActualizarPreciosProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ActualizarPreciosProductos().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonActualizarProducto;
     private javax.swing.JPanel botonBuscarProductos;
-    private javax.swing.JButton botonDetallesProducto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -247,4 +191,9 @@ public class ActualizarPreciosProductos extends javax.swing.JFrame {
     private javax.swing.JScrollPane pnlTablaProductos;
     private javax.swing.JTable tablaProductos;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void productoSeleccionado(NuevoProductoDTO producto) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
