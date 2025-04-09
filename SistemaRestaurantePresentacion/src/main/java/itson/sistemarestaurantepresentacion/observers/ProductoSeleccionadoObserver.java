@@ -1,6 +1,7 @@
 package itson.sistemarestaurantepresentacion.observers;
 
 import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 
 /**
  *
@@ -8,5 +9,5 @@ import itson.sistemarestaurantedominio.Producto;
  */
 public interface ProductoSeleccionadoObserver {
     
-    void productoSeleccionado(Producto producto);
+    void productoSeleccionado(NuevoProductoDTO producto);
 }

@@ -6,9 +6,15 @@ package itson.sistemarestaurantepresentacion;
 
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.TipoProducto;
+import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
+import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
+import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -24,9 +30,11 @@ public class BuscadorProductos extends javax.swing.JFrame {
 
     private IProductosBO productosBO;
     private static final Logger LOG = Logger.getLogger(BuscadorProductos.class.getName());
+    private List<ProductoSeleccionadoObserver> observers = new ArrayList<>();
 
     /**
      * Constructor del frame BuscadorProductos.
+     *
      * @param productosBO
      */
     public BuscadorProductos(IProductosBO productosBO) {
@@ -36,66 +44,107 @@ public class BuscadorProductos extends javax.swing.JFrame {
         this.setTitle("Buscador Productos");
         this.productosBO = productosBO;
 //        this.llenarTablaProductos();
+        tablaProductos.removeColumn(tablaProductos.getColumnModel().getColumn(0));
         this.cargarTabla();
 
     }
 
     private void cargarTabla() {
-        tablaProductos.setDefaultRenderer(Object.class, new Render());
+        DefaultTableModel modeloTabla = (DefaultTableModel) tablaProductos.getModel();
+        modeloTabla.setRowCount(0);
 
-        String[] columnas = new String[]{"ID", "Nombre", "Precio", "Tipo", "Seleccion"};
-        boolean[] editable = {false, false, false, false, true};
-        Class[] types = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class};
-
-        DefaultTableModel mModel = new DefaultTableModel(columnas, 0) {
-            public Class getColumnClass(int i) {
-                return types[i];
-            }
-
-            public boolean isCellEditable(int row, int column) {
-                return editable[column];
-            }
-        };
-
-        LimpiarTabla(tablaProductos, mModel);
-
-        Object[] datos = new Object[columnas.length];
+        String filtro = this.txtBuscar.getText();
         try {
-            String filtroBusqueda = this.txtBuscar.getText();
-            List<Producto> productos = this.productosBO.consultar(filtroBusqueda);
+            List<Producto> productos = this.productosBO.consultar(filtro);
+
             for (Producto producto : productos) {
-                
-                datos[0] = String.valueOf(producto.getId());
-                datos[1] = producto.getNombre();
-                datos[2] = String.valueOf(producto.getPrecio());
-                datos[3] = String.valueOf(producto.getTipo());
-                datos[4] = false;
-                
-                mModel.addRow(datos);
+                modeloTabla.addRow(new Object[]{
+                    producto.getId(),
+                    producto.getNombre(),
+                    producto.getPrecio(),
+                    producto.getTipo()
+                });
             }
-            
-            tablaProductos.setModel(mModel);
-            
-            // Implementar un listener para cambiar el estado del checkbox
-        tablaProductos.getModel().addTableModelListener(e -> {
-            if (e.getType() == TableModelEvent.UPDATE) {
-                int row = e.getFirstRow();
-                int column = e.getColumn();
-                if (column == 4) {  // Si la columna seleccionada es la de los checkboxes (índice 4)
-                    boolean selected = (boolean) mModel.getValueAt(row, column);
-                    // Si el checkbox de esa fila se seleccionó, desmarcar los demás
-                    if (selected) {
-                        for (int i = 0; i < mModel.getRowCount(); i++) {
-                            if (i != row) {
-                                mModel.setValueAt(false, i, 4);  // Desmarcar las otras filas
-                            }
-                        }
-                    }
-                }
-            }
-        });
+//        tablaProductos.setDefaultRenderer(Object.class, new Render());
+//
+//        String[] columnas = new String[]{"ID", "Nombre", "Precio", "Tipo", "Seleccion"};
+//        boolean[] editable = {false, false, false, false, true};
+//        Class[] types = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class};
+//
+//        DefaultTableModel mModel = new DefaultTableModel(columnas, 0) {
+//            public Class getColumnClass(int i) {
+//                return types[i];
+//            }
+//
+//            public boolean isCellEditable(int row, int column) {
+//                return editable[column];
+//            }
+//        };
+//
+//        LimpiarTabla(tablaProductos, mModel);
+//
+//        Object[] datos = new Object[columnas.length];
+//        try {
+//            String filtroBusqueda = this.txtBuscar.getText();
+//            List<Producto> productos = this.productosBO.consultar(filtroBusqueda);
+//            for (Producto producto : productos) {
+//                
+//                datos[0] = String.valueOf(producto.getId()); //Columna 0 oculta
+//                datos[1] = producto.getNombre();
+//                datos[2] = String.valueOf(producto.getPrecio());
+//                datos[3] = String.valueOf(producto.getTipo());
+//                datos[4] = false;
+//                
+//                mModel.addRow(datos);
+//            }
+//            
+//            tablaProductos.setModel(mModel);
+//            
+//            // Implementar un listener para cambiar el estado del checkbox
+//        tablaProductos.getModel().addTableModelListener(e -> {
+//            if (e.getType() == TableModelEvent.UPDATE) {
+//                int row = e.getFirstRow();
+//                int column = e.getColumn();
+//                if (column == 4) {  // Si la columna seleccionada es la de los checkboxes (índice 4)
+//                    boolean selected = (boolean) mModel.getValueAt(row, column);
+//                    // Si el checkbox de esa fila se seleccionó, desmarcar los demás
+//                    if (selected) {
+//                        for (int i = 0; i < mModel.getRowCount(); i++) {
+//                            if (i != row) {
+//                                mModel.setValueAt(false, i, 4);  // Desmarcar las otras filas
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//        } catch (NegocioException ex) {
+//            JOptionPane.showInputDialog(this, ex.getMessage());            
+//        }
         } catch (NegocioException ex) {
-            JOptionPane.showInputDialog(this, ex.getMessage());            
+            JOptionPane.showInputDialog(this, ex.getMessage());
+        }
+    }
+
+    /**
+     * Registra un nuevo observador para ser notificado cuando un jugador sea
+     * seleccionado.
+     *
+     * @param obs la clase que implementa JugadorSeleccionadoObserver
+     */
+    public void agregarObserver(ProductoSeleccionadoObserver obs) {
+        observers.add(obs);
+    }
+
+    /**
+     * Notifica a todos los observadores registrados que un jugador ha sido
+     * seleccionado.
+     *
+     * @param producto el jugador seleccionado
+     */
+    private void notificarObservers(NuevoProductoDTO producto) {
+        for (ProductoSeleccionadoObserver o : observers) {
+            o.productoSeleccionado(producto);
         }
     }
 
@@ -146,6 +195,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
         tablaProductos = new javax.swing.JTable();
         btnLimpiar = new javax.swing.JButton();
         botonSeleccionar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -175,6 +225,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
             }
         });
         tablaProductos.setColumnSelectionAllowed(true);
+        tablaProductos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         pnlTablaProductos.setViewportView(tablaProductos);
         tablaProductos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
@@ -189,6 +240,13 @@ public class BuscadorProductos extends javax.swing.JFrame {
         botonSeleccionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonSeleccionarActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("ID");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -210,7 +268,9 @@ public class BuscadorProductos extends javax.swing.JFrame {
                         .addComponent(btnLimpiar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(137, 137, 137)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(botonSeleccionar)))
                 .addContainerGap())
         );
@@ -228,7 +288,9 @@ public class BuscadorProductos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(botonSeleccionar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonSeleccionar)
+                    .addComponent(jButton1))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -238,41 +300,55 @@ public class BuscadorProductos extends javax.swing.JFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         //Aqui iria la lógica para encontrar las coincidencias
 //        this.llenarTablaProductos();
-          this.cargarTabla();
+        this.cargarTabla();
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         this.txtBuscar.setText("");
-            this.cargarTabla();
+        this.cargarTabla();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void botonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSeleccionarActionPerformed
-        for (int i = 0; i < tablaProductos.getRowCount(); i++) {
-            //Verificamos si el checkbox, que esta en la columna 4, esta marcada
-            Boolean isSelected = (Boolean) tablaProductos.getValueAt(i, 4);
-            
-            //Se verifica que en efecto este seleccionada la tabla o no, y luego si es postiva
-            if(isSelected != null && isSelected){
-                Long id = Long.valueOf((String)tablaProductos.getValueAt(i, 0));
-                String nombre = (String) tablaProductos.getValueAt(i, 1);
-                Float precio = Float.parseFloat((String) tablaProductos.getValueAt(i, 2));
-                String tipo = (String) tablaProductos.getValueAt(i, 3);
-                
-                JOptionPane.showMessageDialog(this, "ID  "+ id + " nombre " + nombre + " precio "+ precio + " tipo "
-                        + tipo);
-                break; //Aqui iria un return para matar el proceso y mandar el producto seleccionado
-            } 
-            
+        int filaSeleccionada = tablaProductos.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            Long id = obtenerIdProducto();
+            String nombre = (String) tablaProductos.getModel().getValueAt(filaSeleccionada, 1);
+            Float precio = Float.parseFloat(tablaProductos.getModel().getValueAt(filaSeleccionada, 2).toString());
+            TipoProducto tipo = (TipoProducto) tablaProductos.getModel().getValueAt(filaSeleccionada, 3);
+            //TipoProducto tipoProducto = TipoProducto.valueOf(tipo);
+
+            NuevoProductoDTO nuevoProducto = new NuevoProductoDTO(id, nombre, precio, tipo);
+            notificarObservers(nuevoProducto);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "No seleccionaste nada");
         }
-        JOptionPane.showMessageDialog(this, "No seleccionaste nada");
+
     }//GEN-LAST:event_botonSeleccionarActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Long id = obtenerIdProducto();
+        if (id != null) {
+            JOptionPane.showMessageDialog(this, "ID seleccionado " + id);
+        } else {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar una celda ");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private Long obtenerIdProducto() {
+        int filaSeleccionada = tablaProductos.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            return Long.valueOf(tablaProductos.getModel().getValueAt(filaSeleccionada, 0).toString());
+        }
+        return null;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonSeleccionar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JScrollPane pnlTablaProductos;
     private javax.swing.JTable tablaProductos;

@@ -59,16 +59,19 @@ public class MenuAdministrador extends javax.swing.JFrame {
         comandasLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         comandasLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comandasIcon.png"))); // NOI18N
         comandasLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        comandasLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         lblReportes.setBackground(new java.awt.Color(235, 230, 208));
         lblReportes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportesIcon.png"))); // NOI18N
         lblReportes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblReportes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         lblProductos.setBackground(new java.awt.Color(235, 230, 208));
         lblProductos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/platilloIcon.png"))); // NOI18N
         lblProductos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblProductos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblProductos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblProductosMouseClicked(evt);
@@ -79,6 +82,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         lblIngredientes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblIngredientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ingredientesIcon.png"))); // NOI18N
         lblIngredientes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblIngredientes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblIngredientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblIngredientesMouseClicked(evt);
@@ -89,6 +93,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
         lblClientes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/clientesIcon.png"))); // NOI18N
         lblClientes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblClientes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel2.setText("Comandas");

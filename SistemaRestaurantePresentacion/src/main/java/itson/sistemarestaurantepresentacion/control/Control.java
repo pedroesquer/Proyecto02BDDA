@@ -15,6 +15,7 @@ import itson.sistemarestaurantepresentacion.AgregarIngredientes;
 import itson.sistemarestaurantepresentacion.AgregarIngredientesProducto;
 import itson.sistemarestaurantepresentacion.AgregarProducto;
 import itson.sistemarestaurantepresentacion.BuscadorIngredientes;
+import itson.sistemarestaurantepresentacion.BuscadorProductos;
 import itson.sistemarestaurantepresentacion.ClientesFrecuentes;
 import itson.sistemarestaurantepresentacion.DetallesProducto;
 import itson.sistemarestaurantepresentacion.Ingredientes;
@@ -24,6 +25,7 @@ import itson.sistemarestaurantepresentacion.MenuAdministrador;
 import itson.sistemarestaurantepresentacion.Productos;
 import itson.sistemarestaurantepresentacion.FrmAgregarIngredientes;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
+import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
 import javax.swing.JFrame;
 
 
@@ -195,6 +197,12 @@ public class Control {
         FrmAgregarIngredientes formAgregarIngredientes = new FrmAgregarIngredientes(producto,ingredientesProductoBO);
         formAgregarIngredientes.setVisible(true);
         return formAgregarIngredientes;
+    }
+    
+    public void abrirBuscadorProductos(ProductoSeleccionadoObserver observer){
+        BuscadorProductos formBuscadorProductos = new BuscadorProductos(productosBO);
+        formBuscadorProductos.agregarObserver(observer);
+        formBuscadorProductos.setVisible(true);
     }
 
 //    public void abrirAgregarCliente() {
