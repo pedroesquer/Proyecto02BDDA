@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package itson.sistemarestaurantepresentacion;
+package itson.sistemarestaurantepresentacion.productos;
 
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.dtos.NuevaRelacionIngredienteProductoDTO;

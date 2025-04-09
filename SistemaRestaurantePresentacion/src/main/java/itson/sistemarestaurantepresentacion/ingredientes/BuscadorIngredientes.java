@@ -1,4 +1,4 @@
-package itson.sistemarestaurantepresentacion;
+package itson.sistemarestaurantepresentacion.ingredientes;
 
 import itson.sistemarestaurantedominio.Ingrediente;
 import static itson.sistemarestaurantedominio.Producto_.ingredientes;

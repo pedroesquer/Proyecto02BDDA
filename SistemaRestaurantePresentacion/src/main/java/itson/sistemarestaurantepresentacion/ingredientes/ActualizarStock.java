@@ -1,4 +1,4 @@
-package itson.sistemarestaurantepresentacion;
+package itson.sistemarestaurantepresentacion.ingredientes;
 
 import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.dtos.ActualizarStockIngredienteDTO;
@@ -244,8 +244,7 @@ public class ActualizarStock extends javax.swing.JFrame implements IngredienteSe
                             .addComponent(lblStockActualizar)
                             .addComponent(campoStock, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(46, 46, 46))
-                    .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addComponent(iconBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(iconBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnActualizar)
                 .addGap(19, 19, 19))

@@ -1,4 +1,4 @@
-package itson.sistemarestaurantepresentacion;
+package itson.sistemarestaurantepresentacion.ingredientes;
 
 import itson.sistemarestaurantepresentacion.productos.AgregarProducto;
 import itson.sistemarestaurantedominio.Ingrediente;
