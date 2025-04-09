@@ -1,5 +1,6 @@
 package itson.sistemarestaurantepresentacion;
 
+import itson.sistemarestaurantepresentacion.productos.AgregarProducto;
 import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.UnidadMedida;
 import static itson.sistemarestaurantedominio.UnidadMedida.GRAMOS;

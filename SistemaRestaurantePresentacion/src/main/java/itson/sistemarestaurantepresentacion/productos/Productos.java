@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package itson.sistemarestaurantepresentacion;
+package itson.sistemarestaurantepresentacion.productos;
 
 import itson.sistemarestaurantepresentacion.control.Control;
 
@@ -93,6 +93,7 @@ public class Productos extends javax.swing.JFrame {
         );
 
         actualizarProductosLbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/updateIcon.png"))); // NOI18N
+        actualizarProductosLbl.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         actualizarProductosLbl.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 actualizarProductosLblMouseClicked(evt);
@@ -100,9 +101,10 @@ public class Productos extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jLabel4.setText("Actualizar productos");
+        jLabel4.setText("Actualizar precios");
 
         nuevoProductoLbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/aniadir.png"))); // NOI18N
+        nuevoProductoLbl.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         nuevoProductoLbl.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 nuevoProductoLblMouseClicked(evt);
@@ -113,6 +115,7 @@ public class Productos extends javax.swing.JFrame {
         jLabel7.setText("Nuevo Producto");
 
         verProductosLbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/buscarIcon.png"))); // NOI18N
+        verProductosLbl.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         verProductosLbl.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 verProductosLblMouseClicked(evt);
@@ -145,13 +148,16 @@ public class Productos extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(botonVolver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(59, 59, 59)
-                .addComponent(jLabel4)
-                .addGap(27, 27, 27))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(botonVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(278, 278, 278))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(69, 69, 69)
+                        .addComponent(jLabel4)
+                        .addGap(47, 47, 47))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,10 +170,10 @@ public class Productos extends javax.swing.JFrame {
                     .addComponent(nuevoProductoLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel9)
-                        .addComponent(jLabel7)))
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel9))
+                    .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
                 .addComponent(botonVolver)
                 .addContainerGap())

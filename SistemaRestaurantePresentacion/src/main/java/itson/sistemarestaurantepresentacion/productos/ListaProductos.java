@@ -1,4 +1,4 @@
-package itson.sistemarestaurantepresentacion;
+package itson.sistemarestaurantepresentacion.productos;
 
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.TipoProducto;
@@ -63,63 +63,8 @@ public class ListaProductos extends javax.swing.JFrame implements ProductoSelecc
         } catch (NegocioException ex) {
             JOptionPane.showInputDialog(this, ex.getMessage());
         }
-
-//        tablaProductos.setDefaultRenderer(Object.class, new Render());
-//
-//        String[] columnas = new String[]{"ID", "Nombre", "Precio", "Tipo", "Seleccion"};
-//        boolean[] editable = {false, false, false, false, true};
-//        Class[] types = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class};
-//
-//        DefaultTableModel mModel = new DefaultTableModel(columnas, 0) {
-//            public Class getColumnClass(int i) {
-//                return types[i];
-//            }
-//
-//            public boolean isCellEditable(int row, int column) {
-//                return editable[column];
-//            }
-//        };
-//
-//        LimpiarTabla(tablaProductos, mModel);
-//
-//        Object[] datos = new Object[columnas.length];
-//        try {
-//
-//            List<Producto> productos = this.productosBO.consultar(filtroBusqueda);
-//            for (Producto producto : productos) {
-//
-//                datos[0] = String.valueOf(producto.getId());
-//                datos[1] = producto.getNombre();
-//                datos[2] = String.valueOf(producto.getPrecio());
-//                datos[3] = String.valueOf(producto.getTipo());
-//                datos[4] = false;
-//
-//                mModel.addRow(datos);
-//            }
-//
-//            tablaProductos.setModel(mModel);
-//
-//            // Implementar un listener para cambiar el estado del checkbox
-//            tablaProductos.getModel().addTableModelListener(e -> {
-//                if (e.getType() == TableModelEvent.UPDATE) {
-//                    int row = e.getFirstRow();
-//                    int column = e.getColumn();
-//                    if (column == 4) {  // Si la columna seleccionada es la de los checkboxes (índice 4)
-//                        boolean selected = (boolean) mModel.getValueAt(row, column);
-//                        // Si el checkbox de esa fila se seleccionó, desmarcar los demás
-//                        if (selected) {
-//                            for (int i = 0; i < mModel.getRowCount(); i++) {
-//                                if (i != row) {
-//                                    mModel.setValueAt(false, i, 4);  // Desmarcar las otras filas
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            });
-//        } catch (NegocioException ex) {
-//            JOptionPane.showInputDialog(this, ex.getMessage());
-//        }
+        
+        
     }
 
     /**
@@ -234,18 +179,20 @@ public class ListaProductos extends javax.swing.JFrame implements ProductoSelecc
         botonActualizarProducto.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         botonActualizarProducto.setText("Actualizar producto");
         botonActualizarProducto.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonActualizarProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonActualizarProducto.setOpaque(true);
         botonActualizarProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonActualizarProductoActionPerformed(evt);
             }
         });
-        jPanel1.add(botonActualizarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 424, 188, 51));
+        jPanel1.add(botonActualizarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 420, 188, 51));
 
         botonDetallesProducto.setBackground(new java.awt.Color(204, 255, 255));
         botonDetallesProducto.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         botonDetallesProducto.setText("Detalles producto");
         botonDetallesProducto.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botonDetallesProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonDetallesProducto.setOpaque(true);
         botonDetallesProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

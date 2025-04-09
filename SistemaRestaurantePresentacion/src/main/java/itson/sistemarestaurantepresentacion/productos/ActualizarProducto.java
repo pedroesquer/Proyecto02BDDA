@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package itson.sistemarestaurantepresentacion;
+package itson.sistemarestaurantepresentacion.productos;
 
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.dtos.ActualizarIngredienteProductoDTO;
@@ -47,6 +47,7 @@ public class ActualizarProducto extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.productoActualizar = productoActualizar;
         this.ingredientesProductoBO = ingredientesProductoBO;
+        tablaProductos.removeColumn(tablaProductos.getColumnModel().getColumn(0));
         try {
             llenarDetallesProducto();
         } catch (NegocioException ex) {
@@ -287,6 +288,11 @@ public class ActualizarProducto extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Método que una vez que se haya aceptado los cambios, se encarga de actualizar las relaciones
+     * @return Si fue posible o no actualizr
+     * @throws NegocioException 
+     */
     private boolean actualizarCambios() throws NegocioException {
         List<DetalleIngredienteProductoDTO> ingredientesDTO = this.ingredientesProductoBO.consultarIngredientesProducto(
                 productoActualizar.getId());
@@ -334,10 +340,10 @@ public class ActualizarProducto extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, "Error al registrar relación: " + e.getMessage());
                     }
                 }
-                JOptionPane.showMessageDialog(this, "Relaciones registradas con éxito.");
+                JOptionPane.showMessageDialog(this, "Ingredientes actualizados con éxito.");
                 return true;
             }
-            JOptionPane.showMessageDialog(this, "No se pudo actualizat checa tu codigo bro");
+            
             return false;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
