@@ -1,4 +1,3 @@
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -9,6 +8,7 @@ import itson.sistemarestaurantedominio.Cliente;
 import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantenegocio.utilidades.EncriptadorAES;
 import itson.sistemarestaurantepersistencia.IClientesDAO;
 import java.util.Date;
 import java.util.List;
@@ -65,6 +65,7 @@ public class ClientesBO implements IClientesBO{
         if (nuevoCliente.getFechaRegistro() == null) {
                 nuevoCliente.setFechaRegistro(new Date());
             }
+        nuevoCliente.setNumeroTelefono(EncriptadorAES.encriptar(nuevoCliente.getNumeroTelefono()));
         return clientesDAO.registrar(nuevoCliente);
     }
     
