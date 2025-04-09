@@ -7,7 +7,7 @@ package itson.sistemarestaurantepresentacion;
 import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
-import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
+import itson.sistemarestaurantenegocio.utilidades.EncriptadorAES;
 import itson.sistemarestaurantepresentacion.control.Control;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -279,7 +279,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         String correo = this.TextFieldCorreo.getText();
 
         // Si el correo es "Opcional..." o está vacío, lo dejamos como vacío
-        if (correo.equalsIgnoreCase("Opcional...") || correo.isEmpty()) {
+        if (correo.equalsIgnoreCase("Opcional...") || correo.isEmpty() || correo.trim().isEmpty() ) {
             correo = "";
         }
 
@@ -336,6 +336,7 @@ public class AgregarCliente extends javax.swing.JFrame {
     }
     return false;
 }
+
     
 //    /**
 //     * @param args the command line arguments
