@@ -5,16 +5,20 @@ import itson.sistemarestaurantedominio.IngredienteProducto;
 import itson.sistemarestaurantedominio.dtos.ActualizarIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.DetalleIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevaRelacionIngredienteProductoDTO;
+import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.IIngredientesProductosBO;
 import itson.sistemarestaurantenegocio.IProductosBO;
+import itson.sistemarestaurantenegocio.implementaciones.ClientesBO;
 import itson.sistemarestaurantenegocio.implementaciones.IngredientesBO;
 import itson.sistemarestaurantenegocio.implementaciones.IngredientesProductosBO;
 import itson.sistemarestaurantenegocio.implementaciones.ProductosBO;
+import itson.sistemarestaurantepersistencia.IClientesDAO;
 import itson.sistemarestaurantepersistencia.IIngredientesDAO;
 import itson.sistemarestaurantepersistencia.IIngredientesProductosDAO;
 import itson.sistemarestaurantepersistencia.IProductosDAO;
 import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
+import itson.sistemarestaurantepersistencia.implementaciones.ClientesDAO;
 import itson.sistemarestaurantepersistencia.implementaciones.IngredientesDAO;
 import itson.sistemarestaurantepersistencia.implementaciones.IngredientesProductoDAO;
 import itson.sistemarestaurantepersistencia.implementaciones.ProductosDAO;
@@ -41,6 +45,12 @@ public class FabricaObjetosNegocio {
         IIngredientesProductosDAO ingredientesProductosDAO = new IngredientesProductoDAO();
         IIngredientesProductosBO ingredientesProductoBO = new IngredientesProductosBO(ingredientesProductosDAO);
         return ingredientesProductoBO;
+    }
+    
+    public static IClientesBO crearClientesBO(){
+        IClientesDAO clientesDAO = new ClientesDAO();
+        IClientesBO clientesBO = new ClientesBO(clientesDAO);
+        return clientesBO;
     }
     
 }

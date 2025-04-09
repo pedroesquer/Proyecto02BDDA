@@ -26,7 +26,7 @@ import javax.swing.table.TableColumnModel;
  */
 public class BuscadorIngredientes extends javax.swing.JFrame {
 
-    private List<Ingrediente> ingredientesList = new ArrayList<>();  // Lista para almacenar los ingredientes cargados
+    private List<Ingrediente> ingredientes = new ArrayList<>();  // Lista para almacenar los ingredientes cargados
     private List<IngredienteSeleccionadoObserver> observers = new ArrayList<>();
     private NuevoIngredienteDTO nuevoIngredienteDTO;
     private IIngredientesBO ingredientesBO;
@@ -74,8 +74,8 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
         Object[] datos = new Object[columnas.length];
         try {
             String filtroBusqueda = this.txtBuscar.getText();
-            ingredientesList = this.ingredientesBO.consultar(filtroBusqueda);  // Guardamos la lista de ingredientes
-            for (Ingrediente ingrediente : ingredientesList) {
+            ingredientes = this.ingredientesBO.consultar(filtroBusqueda);  // Guardamos la lista de ingredientes
+            for (Ingrediente ingrediente : ingredientes) {
 
                 datos[0] = String.valueOf(ingrediente.getId());
                 datos[1] = ingrediente.getNombre();
@@ -292,7 +292,7 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
 
             if (Boolean.TRUE.equals(isSelected)) {
                 // Ahora obtenemos los datos de la fila seleccionada
-                Ingrediente ingredienteSeleccionado = ingredientesList.get(i);
+                Ingrediente ingredienteSeleccionado = ingredientes.get(i);
                 Long id = ingredienteSeleccionado.getId();  // Obtén el ID
                 String nombre = tablaIngredientes.getValueAt(i, 0).toString();  // Nombre del ingrediente
                 String unidadMedidaString = tablaIngredientes.getValueAt(i, 1).toString();  // Unidad de medida
