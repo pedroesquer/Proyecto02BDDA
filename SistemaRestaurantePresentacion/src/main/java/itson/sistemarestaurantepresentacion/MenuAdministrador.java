@@ -214,6 +214,10 @@ public class MenuAdministrador extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_lblProductosMouseClicked
 
+    private void lblClientesMouseClicked(java.awt.event.MouseEvent evt) {                                         
+        Control.getInstancia().abrirClientesFrecuentes();
+        this.setVisible(false);
+    } 
     
    
 
