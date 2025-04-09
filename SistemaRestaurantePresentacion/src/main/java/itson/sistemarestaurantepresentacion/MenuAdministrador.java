@@ -94,6 +94,11 @@ public class MenuAdministrador extends javax.swing.JFrame {
         lblClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/clientesIcon.png"))); // NOI18N
         lblClientes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblClientes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblClientesMouseClicked(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel2.setText("Comandas");
@@ -214,10 +219,13 @@ public class MenuAdministrador extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_lblProductosMouseClicked
 
-    private void lblClientesMouseClicked(java.awt.event.MouseEvent evt) {                                         
+    private void lblClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblClientesMouseClicked
+        // TODO add your handling code here:
         Control.getInstancia().abrirClientesFrecuentes();
         this.setVisible(false);
-    } 
+        
+    }//GEN-LAST:event_lblClientesMouseClicked
+
     
    
 
