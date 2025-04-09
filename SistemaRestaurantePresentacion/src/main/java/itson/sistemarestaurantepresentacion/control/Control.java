@@ -38,8 +38,7 @@ public class Control {
     private static Control instance;
     IIngredientesBO ingredientesBO = FabricaObjetosNegocio.crearIngredientesBO();
     IProductosBO productosBO = FabricaObjetosNegocio.crearProductosBO();
-    IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();
-//    IClientesBO clientesBO = FabricaObjetosNegocio.crearClientesBO();
+    IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();    IClientesBO clientesBO = FabricaObjetosNegocio.crearClientesBO();
 
     /**
      * Constructor privado para evitar la creación externa de instancias.
@@ -182,7 +181,8 @@ public class Control {
      * Metodo que abre la pantalla de clientes frecuentes.
      */
     public void abrirClientesFrecuentes() {
-        new ClientesFrecuentes().setVisible(true);
+        ClientesFrecuentes formClientesFrecuentes = new ClientesFrecuentes(clientesBO);
+        formClientesFrecuentes.setVisible(true);
     }
     
      /**
@@ -205,8 +205,9 @@ public class Control {
         formBuscadorProductos.setVisible(true);
     }
 
-//    public void abrirAgregarCliente() {
-//        new AgregarCliente(clientesBO).setVisible(true);
-//    }
+    public void abrirAgregarCliente() {
+        AgregarCliente formAgregarCliente = new AgregarCliente(clientesBO);
+        formAgregarCliente.setVisible(true);
+    }
 
 }
