@@ -11,6 +11,7 @@ import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObs
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -53,58 +54,21 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
     }
 
     private void cargarTabla() {
-        tablaIngredientes.setDefaultRenderer(Object.class, new Render());
+        DefaultTableModel modeloTabla = (DefaultTableModel) tablaIngredientes.getModel();
+        modeloTabla.setRowCount(0);
 
-        String[] columnas = new String[]{"ID", "Ingrediente", "Unidad", "Stock", "Seleccion"};
-        boolean[] editable = {false, false, false, false, true};
-        Class[] types = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class};
-
-        DefaultTableModel mModel = new DefaultTableModel(columnas, 0) {
-            public Class getColumnClass(int i) {
-                return types[i];
-            }
-
-            public boolean isCellEditable(int row, int column) {
-                return editable[column];
-            }
-        };
-
-        LimpiarTabla(tablaIngredientes, mModel);
-
-        Object[] datos = new Object[columnas.length];
+        String filtro = this.txtBuscar.getText();
         try {
-            String filtroBusqueda = this.txtBuscar.getText();
-            ingredientes = this.ingredientesBO.consultar(filtroBusqueda);  // Guardamos la lista de ingredientes
+            List<Ingrediente> ingredientes = this.ingredientesBO.consultar(filtro);
+
             for (Ingrediente ingrediente : ingredientes) {
-
-                datos[0] = String.valueOf(ingrediente.getId());
-                datos[1] = ingrediente.getNombre();
-                datos[2] = String.valueOf(ingrediente.getUnidadMedida());
-                datos[3] = String.valueOf(ingrediente.getStock());
-                datos[4] = false;
-
-                mModel.addRow(datos);
+                modeloTabla.addRow(new Object[]{
+                    ingrediente.getId(),
+                    ingrediente.getNombre(),
+                    ingrediente.getUnidadMedida(),
+                    ingrediente.getStock()
+                });
             }
-
-            tablaIngredientes.setModel(mModel);
-
-            tablaIngredientes.getModel().addTableModelListener(e -> {
-                if (e.getType() == TableModelEvent.UPDATE) {
-                    int row = e.getFirstRow();
-                    int column = e.getColumn();
-                    if (column == 4) {
-                        boolean selected = (boolean) mModel.getValueAt(row, column);
-
-                        if (selected) {
-                            for (int i = 0; i < mModel.getRowCount(); i++) {
-                                if (i != row) {
-                                    mModel.setValueAt(false, i, 4);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
         } catch (NegocioException ex) {
             JOptionPane.showInputDialog(this, ex.getMessage());
         }
@@ -140,6 +104,14 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
         for (IngredienteSeleccionadoObserver o : observers) {
             o.ingredienteSeleccionado(ingrediente);
         }
+    }
+
+    private Long obtenerIdIngrediente() {
+        int filaSeleccionada = tablaIngredientes.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            return Long.valueOf(tablaIngredientes.getModel().getValueAt(filaSeleccionada, 0).toString());
+        }
+        return null;
     }
 
     private void llenarTablaIngredientes() {
@@ -287,28 +259,20 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void botonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSeleccionarActionPerformed
-        for (int i = 0; i < tablaIngredientes.getRowCount(); i++) {
-            Boolean isSelected = (Boolean) tablaIngredientes.getValueAt(i, 3);  // Columna de "Seleccion"
+        int filaSeleccionada = tablaIngredientes.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            Long id = obtenerIdIngrediente();
+            String nombre = (String) tablaIngredientes.getModel().getValueAt(filaSeleccionada, 1);
+            UnidadMedida unidadMedida = (UnidadMedida) tablaIngredientes.getModel().getValueAt(filaSeleccionada, 2);
 
-            if (Boolean.TRUE.equals(isSelected)) {
-                // Ahora obtenemos los datos de la fila seleccionada
-                Ingrediente ingredienteSeleccionado = ingredientes.get(i);
-                Long id = ingredienteSeleccionado.getId();  // Obtén el ID
-                String nombre = tablaIngredientes.getValueAt(i, 0).toString();  // Nombre del ingrediente
-                String unidadMedidaString = tablaIngredientes.getValueAt(i, 1).toString();  // Unidad de medida
-                UnidadMedida unidadMedida = UnidadMedida.valueOf(unidadMedidaString);
+            Integer stock = Integer.parseInt(tablaIngredientes.getModel().getValueAt(filaSeleccionada, 3).toString());
+            //TipoProducto tipoProducto = TipoProducto.valueOf(tipo);
 
-                String stockString = tablaIngredientes.getValueAt(i, 2).toString();  // Stock
-                Integer stock = Integer.valueOf(stockString);
-
-                // Supongamos que tienes el "ID" guardado en alguna parte o lo puedes buscar
-                // Aquí lo obtienes desde la lista de ingredientes original que fue cargada
-
-                // Ahora puedes crear el DTO y notificar a los observadores
-                NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(id, nombre, stock, unidadMedida);
-                notificarObservers(nuevoIngrediente);
-                break;
-            }
+            NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(id, nombre, stock, unidadMedida);
+            notificarObservers(nuevoIngrediente);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "No seleccionaste nada");
         }
         this.dispose();  // Cerrar la ventana
 

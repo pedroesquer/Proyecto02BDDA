@@ -6,6 +6,7 @@ import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.IIngredientesProductosBO;
 import itson.sistemarestaurantenegocio.IProductosBO;
+import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
 import itson.sistemarestaurantepresentacion.ActualizarIngredientes;
 import itson.sistemarestaurantepresentacion.ActualizarProducto;
