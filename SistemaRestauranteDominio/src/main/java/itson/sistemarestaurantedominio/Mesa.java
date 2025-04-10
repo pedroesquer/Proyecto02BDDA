@@ -39,10 +39,9 @@ public class Mesa implements Serializable {
     public Mesa() {
     }
 
-    public Mesa(EstadoMesa estado, String numeroMesa, List<Comanda> comandas) {
+    public Mesa(EstadoMesa estado, String numeroMesa) {
         this.estado = estado;
         this.numeroMesa = numeroMesa;
-        this.comandas = comandas;
     }
 
     
