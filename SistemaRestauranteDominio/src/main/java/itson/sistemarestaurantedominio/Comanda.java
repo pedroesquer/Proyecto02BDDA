@@ -43,7 +43,7 @@ public class Comanda implements Serializable {
     @Column(name = "estado", nullable = false)
     private EstadoComanda estado;
 
-    @OneToMany(mappedBy = "comanda", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "comanda", cascade = {CascadeType.PERSIST, CascadeType.REMOVE} )
     private List<ProductoComanda> productos;
     
     @ManyToOne()
