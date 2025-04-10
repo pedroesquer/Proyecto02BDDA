@@ -65,62 +65,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
                     producto.getTipo()
                 });
             }
-//        tablaProductos.setDefaultRenderer(Object.class, new Render());
-//
-//        String[] columnas = new String[]{"ID", "Nombre", "Precio", "Tipo", "Seleccion"};
-//        boolean[] editable = {false, false, false, false, true};
-//        Class[] types = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class};
-//
-//        DefaultTableModel mModel = new DefaultTableModel(columnas, 0) {
-//            public Class getColumnClass(int i) {
-//                return types[i];
-//            }
-//
-//            public boolean isCellEditable(int row, int column) {
-//                return editable[column];
-//            }
-//        };
-//
-//        LimpiarTabla(tablaProductos, mModel);
-//
-//        Object[] datos = new Object[columnas.length];
-//        try {
-//            String filtroBusqueda = this.txtBuscar.getText();
-//            List<Producto> productos = this.productosBO.consultar(filtroBusqueda);
-//            for (Producto producto : productos) {
-//                
-//                datos[0] = String.valueOf(producto.getId()); //Columna 0 oculta
-//                datos[1] = producto.getNombre();
-//                datos[2] = String.valueOf(producto.getPrecio());
-//                datos[3] = String.valueOf(producto.getTipo());
-//                datos[4] = false;
-//                
-//                mModel.addRow(datos);
-//            }
-//            
-//            tablaProductos.setModel(mModel);
-//            
-//            // Implementar un listener para cambiar el estado del checkbox
-//        tablaProductos.getModel().addTableModelListener(e -> {
-//            if (e.getType() == TableModelEvent.UPDATE) {
-//                int row = e.getFirstRow();
-//                int column = e.getColumn();
-//                if (column == 4) {  // Si la columna seleccionada es la de los checkboxes (índice 4)
-//                    boolean selected = (boolean) mModel.getValueAt(row, column);
-//                    // Si el checkbox de esa fila se seleccionó, desmarcar los demás
-//                    if (selected) {
-//                        for (int i = 0; i < mModel.getRowCount(); i++) {
-//                            if (i != row) {
-//                                mModel.setValueAt(false, i, 4);  // Desmarcar las otras filas
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//        } catch (NegocioException ex) {
-//            JOptionPane.showInputDialog(this, ex.getMessage());            
-//        }
+
         } catch (NegocioException ex) {
             JOptionPane.showInputDialog(this, ex.getMessage());
         }

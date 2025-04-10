@@ -71,6 +71,7 @@ public class ProductosBO implements IProductosBO {
      * @param actualizarProducto
      * @return
      * @throws NegocioException 
+     * @throws itson.sistemarestaurantepersistencia.excepciones.PersistenciaException 
      */
     @Override
     public Producto actualizar(ActualizarProductoDTO actualizarProducto) throws NegocioException, PersistenciaException {

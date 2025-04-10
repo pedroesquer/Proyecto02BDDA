@@ -101,7 +101,7 @@ public class Productos extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jLabel4.setText("Actualizar precios");
+        jLabel4.setText("Actualizar productos");
 
         nuevoProductoLbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/aniadir.png"))); // NOI18N
         nuevoProductoLbl.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -148,7 +148,7 @@ public class Productos extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(botonVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -157,7 +157,7 @@ public class Productos extends javax.swing.JFrame {
                         .addComponent(jLabel9)
                         .addGap(69, 69, 69)
                         .addComponent(jLabel4)
-                        .addGap(47, 47, 47))))
+                        .addGap(19, 19, 19))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,7 +207,7 @@ public class Productos extends javax.swing.JFrame {
 
     private void actualizarProductosLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_actualizarProductosLblMouseClicked
         // TODO add your handling code here:
-        Control.getInstancia().abrirListaProductos();
+        Control.getInstancia().abrirActualizarPreciosProductos();
         this.dispose();
     }//GEN-LAST:event_actualizarProductosLblMouseClicked
 

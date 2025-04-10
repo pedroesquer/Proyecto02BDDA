@@ -329,7 +329,7 @@ public class AgregarIngredientesProducto extends javax.swing.JFrame implements I
                         JOptionPane.showMessageDialog(this, "Error al registrar relación: " + e.getMessage());
                     }
                 }
-                JOptionPane.showMessageDialog(this, "Relaciones registradas con éxito.");
+                JOptionPane.showMessageDialog(this, "Ingredientes y producto registrados con éxito.");
                 return true;
             }
 

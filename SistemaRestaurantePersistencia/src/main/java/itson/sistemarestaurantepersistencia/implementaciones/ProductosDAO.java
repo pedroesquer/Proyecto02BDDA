@@ -107,4 +107,5 @@ public class ProductosDAO implements IProductosDAO{
         return entityManager.find(Producto.class, idProducto);
     }
     
+    
 }

@@ -257,18 +257,21 @@ public class ListaProductos extends javax.swing.JFrame implements ProductoSelecc
     }
 
     private void botonActualizarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarProductoActionPerformed
-        Producto producto = this.productosBO.consultarProductoIndividual(this.seleccionarIdProducto());
-
-        if (!(producto == null)) {
+        Long id = this.seleccionarIdProducto();
+        if(id != null){
+            Producto producto = this.productosBO.consultarProductoIndividual(id);
             Control.getInstancia().abrirActualizarProducto(producto);
             this.dispose();
         }
     }//GEN-LAST:event_botonActualizarProductoActionPerformed
 
     private void botonDetallesProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDetallesProductoActionPerformed
-        Producto producto = this.productosBO.consultarProductoIndividual(this.seleccionarIdProducto());
-        Control.getInstancia().abrirDetallesProducto(producto);
-        this.dispose();
+        Long id = this.seleccionarIdProducto();
+        if(id != null){
+            Producto producto = this.productosBO.consultarProductoIndividual(id);
+            Control.getInstancia().abrirDetallesProducto(producto);
+            this.dispose();
+        }
     }//GEN-LAST:event_botonDetallesProductoActionPerformed
 
     private void botonBuscarProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonBuscarProductosMouseClicked
@@ -296,6 +299,10 @@ public class ListaProductos extends javax.swing.JFrame implements ProductoSelecc
 
     }
 
+    /**
+     * Método que cuando se cierra el observer actualizará la tabla al producto seleccionado
+     * @param producto el producto seleccionado del buscador
+     */
     private void actualizarProductoTabla(NuevoProductoDTO producto) {
         // Este objeto permite interactuar con los elementos de la tabla
         DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaProductos.getModel();

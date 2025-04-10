@@ -4,9 +4,23 @@
  */
 package itson.sistemarestaurantepresentacion.productos;
 
+import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantedominio.dtos.ActualizarIngredienteProductoDTO;
+import itson.sistemarestaurantedominio.dtos.ActualizarProductoDTO;
+import itson.sistemarestaurantedominio.dtos.DetalleIngredienteProductoDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
+import itson.sistemarestaurantenegocio.IProductosBO;
+import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import itson.sistemarestaurantepresentacion.control.Control;
 import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 
 /**
  *
@@ -14,11 +28,22 @@ import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserv
  */
 public class ActualizarPreciosProductos extends javax.swing.JFrame implements ProductoSeleccionadoObserver {
 
+    private IProductosBO productosBO;
+
     /**
      * Creates new form ActualizarPreciosProductos
+     *
+     * @param productosBO productosBO
      */
-    public ActualizarPreciosProductos() {
+    public ActualizarPreciosProductos(IProductosBO productosBO) {
         initComponents();
+        this.setTitle("Actualizar productos");
+        this.setResizable(false);
+        this.setSize(770, 510);
+        this.setLocationRelativeTo(null);
+        this.productosBO = productosBO;
+        tablaProductos.removeColumn(tablaProductos.getColumnModel().getColumn(0));
+
     }
 
     /**
@@ -40,6 +65,8 @@ public class ActualizarPreciosProductos extends javax.swing.JFrame implements Pr
         botonActualizarProducto = new javax.swing.JButton();
         botonBuscarProductos = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        botonMenu = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,16 +118,17 @@ public class ActualizarPreciosProductos extends javax.swing.JFrame implements Pr
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
+        tablaProductos.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         tablaProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Producto", "Precio", "Tipo"
+                "ID", "Nombre", "Precio"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -108,13 +136,17 @@ public class ActualizarPreciosProductos extends javax.swing.JFrame implements Pr
             }
         });
         tablaProductos.setColumnSelectionAllowed(true);
+        tablaProductos.setRowHeight(50);
         pnlTablaProductos.setViewportView(tablaProductos);
+        tablaProductos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        if (tablaProductos.getColumnModel().getColumnCount() > 0) {
+            tablaProductos.getColumnModel().getColumn(0).setResizable(false);
+        }
 
-        jPanel1.add(pnlTablaProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 162, 508, 244));
+        jPanel1.add(pnlTablaProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 720, 90));
 
-        botonActualizarProducto.setBackground(new java.awt.Color(51, 102, 255));
         botonActualizarProducto.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        botonActualizarProducto.setText("Actualizar producto");
+        botonActualizarProducto.setText("Actualizar Producto");
         botonActualizarProducto.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         botonActualizarProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonActualizarProducto.setOpaque(true);
@@ -123,7 +155,7 @@ public class ActualizarPreciosProductos extends javax.swing.JFrame implements Pr
                 botonActualizarProductoActionPerformed(evt);
             }
         });
-        jPanel1.add(botonActualizarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 430, 188, 51));
+        jPanel1.add(botonActualizarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 350, 170, 30));
 
         botonBuscarProductos.setBackground(new java.awt.Color(255, 255, 255));
         botonBuscarProductos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
@@ -156,6 +188,18 @@ public class ActualizarPreciosProductos extends javax.swing.JFrame implements Pr
 
         jPanel1.add(botonBuscarProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 150, 30));
 
+        botonMenu.setText("Menu principal");
+        botonMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonMenuActionPerformed(evt);
+            }
+        });
+        jPanel1.add(botonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 400, 120, 20));
+
+        jLabel5.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jLabel5.setText("Modifica la columna que quieras actualizar");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, 290, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -171,29 +215,100 @@ public class ActualizarPreciosProductos extends javax.swing.JFrame implements Pr
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonActualizarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarProductoActionPerformed
-      
+        if (tablaProductos.getRowCount() > 0) {
+            if (tablaProductos.isEditing()) { //Con esto nos aseguramos que no se quede en el valor pasado
+                TableCellEditor editor = tablaProductos.getCellEditor();
+                editor.stopCellEditing();
+            }
+            if (actualizarCambios()) {
+                Control.getInstancia().abrirMenuAdministrador();
+                JOptionPane.showMessageDialog(this, "Producto actualizado con exito");
+                this.dispose();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay productos en la tabla para actualizar.");
+        }
     }//GEN-LAST:event_botonActualizarProductoActionPerformed
 
     private void botonBuscarProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonBuscarProductosMouseClicked
         Control.getInstancia().abrirBuscadorProductos(this);
     }//GEN-LAST:event_botonBuscarProductosMouseClicked
 
+    private void botonMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMenuActionPerformed
+        Control.getInstancia().abrirMenuAdministrador();
+        this.dispose();
+    }//GEN-LAST:event_botonMenuActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonActualizarProducto;
     private javax.swing.JPanel botonBuscarProductos;
+    private javax.swing.JButton botonMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane pnlTablaProductos;
     private javax.swing.JTable tablaProductos;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * método de la interfaz ProductoSeleccionadoObserver, que cuando se
+     * selecciona el producto actualiza
+     *
+     * @param producto
+     */
     @Override
     public void productoSeleccionado(NuevoProductoDTO producto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        actualizarProductoTabla(producto);
+    }
+
+    /**
+     * Método que cuando se cierra el observer actualizará la tabla al producto
+     * seleccionado
+     *
+     * @param producto el producto seleccionado del buscador
+     */
+    private void actualizarProductoTabla(NuevoProductoDTO producto) {
+        // Este objeto permite interactuar con los elementos de la tabla
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaProductos.getModel();
+        modeloTabla.setRowCount(0); // Limpiamos la tabla antes de llenarla nuevamente
+
+        modeloTabla.addRow(new Object[]{
+            producto.getId(),
+            producto.getNombre(),
+            producto.getPrecio()
+        }
+        );
+
+    }
+
+    /**
+     * Método que una vez que se haya aceptado los cambios, se encarga de
+     * actualizar las relaciones
+     *
+     * @return Si fue posible o no actualizr
+     * @throws NegocioException
+     */
+    private boolean actualizarCambios() {
+
+        Long id = Long.valueOf(tablaProductos.getModel().getValueAt(0, 0).toString());
+        String nombre = tablaProductos.getModel().getValueAt(0, 1).toString();
+
+        Float precio = Float.parseFloat(tablaProductos.getModel().getValueAt(0, 2).toString());
+
+        ActualizarProductoDTO actualizarProducto = new ActualizarProductoDTO(id, nombre, precio);
+
+        try {
+            this.productosBO.actualizar(actualizarProducto);
+            return true;
+        } catch (NegocioException | PersistenciaException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+            return false;
+        }
+
     }
 }

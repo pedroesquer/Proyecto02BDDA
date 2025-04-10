@@ -27,6 +27,7 @@ import itson.sistemarestaurantepresentacion.productos.Productos;
 import itson.sistemarestaurantepresentacion.productos.FrmAgregarIngredientes;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
 import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
+import itson.sistemarestaurantepresentacion.productos.ActualizarPreciosProductos;
 import javax.swing.JFrame;
 
 
@@ -41,6 +42,7 @@ public class Control {
     IProductosBO productosBO = FabricaObjetosNegocio.crearProductosBO();
     IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();   
     IClientesBO clientesBO = FabricaObjetosNegocio.crearClientesBO();
+    MenuAdministrador formMenuAdministrador;
 
     /**
      * Constructor privado para evitar la creación externa de instancias.
@@ -83,7 +85,9 @@ public class Control {
      * Método que abre la pantalla del menú del administrador.
      */
     public void abrirMenuAdministrador() {
-        MenuAdministrador formMenuAdministrador = new MenuAdministrador();
+        if(formMenuAdministrador == null){
+            formMenuAdministrador = new MenuAdministrador();
+        }
         formMenuAdministrador.setVisible(true);
     }
 
@@ -210,6 +214,12 @@ public class Control {
     public void abrirAgregarCliente() {
         AgregarCliente formAgregarCliente = new AgregarCliente(clientesBO);
         formAgregarCliente.setVisible(true);
+    }
+    
+    public void abrirActualizarPreciosProductos(){
+        ActualizarPreciosProductos formActualizarProductos = new ActualizarPreciosProductos(productosBO);
+        formActualizarProductos.setVisible(true);
+                
     }
 
 }
