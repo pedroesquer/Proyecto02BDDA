@@ -105,7 +105,7 @@ public class ComandasDAOTest {
         productoComanda.setImporte(productoComanda.getPrecioUnitario() * productoComanda.getCantidad());
         productos.add(productoComanda);
 
-        Producto producto2 = entityManager.find(Producto.class, 4L);
+        Producto producto2 = entityManager.find(Producto.class, 1L);
         ProductoComanda productoComanda2 = new ProductoComanda();
         productoComanda2.setCantidad(3);
         productoComanda2.setProducto(producto2);
