@@ -58,6 +58,7 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
         tablaClientes = new javax.swing.JTable();
         btnAgregarCliente = new javax.swing.JButton();
         LblAgregarCliente = new javax.swing.JLabel();
+        btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -139,6 +140,14 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
         LblAgregarCliente.setForeground(new java.awt.Color(0, 0, 0));
         LblAgregarCliente.setText("Agregar Cliente");
 
+        btnVolver.setBackground(new java.awt.Color(0, 0, 0));
+        btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -159,7 +168,10 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
                         .addComponent(btnAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(288, 288, 288)
-                        .addComponent(LblAgregarCliente)))
+                        .addComponent(LblAgregarCliente))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(303, 303, 303)
+                        .addComponent(btnVolver)))
                 .addContainerGap(133, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -175,7 +187,9 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
                 .addComponent(btnAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LblAgregarCliente)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnVolver)
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -197,14 +211,16 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
         this.cargarTabla();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        volverAlMenuPrincipal();
+    }//GEN-LAST:event_btnVolverActionPerformed
+
     private void cargarTabla() {
-        tablaClientes.setDefaultRenderer(Object.class, new Render());
-
-        String[] columnas = new String[]{"Nombre", "Correo", "Numero Telefono", "Puntos Fidelidad", "Seleccion"};
+        String[] columnas = new String[]{"Nombre", "Correo", "Numero Telefono", "Puntos Fidelidad"};
         boolean[] editable = {false, false, false, false, true};
-        Class[] types = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class};
+        Class[] types = new Class[]{String.class, String.class, String.class, Integer.class, Boolean.class};
 
-        DefaultTableModel mModel = new DefaultTableModel(columnas, 0) {
+        DefaultTableModel modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public Class getColumnClass(int i) {
                 return types[i];
@@ -216,58 +232,30 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
             }
         };
 
-        mModel.setRowCount(0);
-        Object[] datos = new Object[columnas.length];
-        try {
-            String filtroBusqueda = "";
-            List<Cliente> clientes = this.clientesBO.consultar(filtroBusqueda);
-            for (Cliente cliente : clientes) {
-                String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
-                if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
-                    nombreCompleto += " " + cliente.getApellidoMaterno();
-                }
+        modeloTabla.setRowCount(0);
+        tablaClientes.setModel(modeloTabla);
 
-                // Desencriptar el número de teléfono
-                String numeroTelefonoDesencriptado;
-                try {
-                    numeroTelefonoDesencriptado = EncriptadorAES.desencriptar(cliente.getNumeroTelefono());
-                } catch (Exception ex) {
-                    numeroTelefonoDesencriptado = "Error al desencriptar";
-                    System.err.println("Error al desencriptar el número de teléfono: " + ex.getMessage());
-                }
-
-                datos[0] = nombreCompleto;
-                datos[1] = cliente.getCorreo();
-                datos[2] = numeroTelefonoDesencriptado; // Mostrar el número desencriptado
-                datos[3] = cliente.getPuntosFidelidad();
-                datos[4] = false;
-
-                mModel.addRow(datos);
-            }
-
-            tablaClientes.setModel(mModel);
-
-            // Implementar un listener para cambiar el estado del checkbox
-            tablaClientes.getModel().addTableModelListener(e -> {
-                if (e.getType() == TableModelEvent.UPDATE) {
-                    int row = e.getFirstRow();
-                    int column = e.getColumn();
-                    if (column == 4) {  // Si la columna seleccionada es la de los checkboxes (índice 4)
-                        boolean selected = (boolean) mModel.getValueAt(row, column);
-                        // Si el checkbox de esa fila se seleccionó, desmarcar los demás
-                        if (selected) {
-                            for (int i = 0; i < mModel.getRowCount(); i++) {
-                                if (i != row) {
-                                    mModel.setValueAt(false, i, 4);  // Desmarcar las otras filas
-                                }
+        tablaClientes.getModel().addTableModelListener(e -> {
+            if (e.getType() == TableModelEvent.UPDATE) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (column == 4) {
+                    boolean selected = (boolean) modeloTabla.getValueAt(row, column);
+                    if (selected) {
+                        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+                            if (i != row) {
+                                modeloTabla.setValueAt(false, i, 4);
                             }
                         }
                     }
                 }
-            });
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+            }
+        });
+    }
+    
+    private void volverAlMenuPrincipal() {
+        this.dispose();
+        Control.getInstancia().abrirMenuAdministrador();
     }
 
     private void agregarClienteATabla(Cliente cliente) {
@@ -321,6 +309,7 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregarCliente;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTable tablaClientes;
