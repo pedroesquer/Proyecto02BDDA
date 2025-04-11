@@ -3,16 +3,21 @@ package itson.sistemarestaurantepersistencia.implementaciones;
 import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantedominio.EstadoComanda;
 import itson.sistemarestaurantedominio.Ingrediente;
+import itson.sistemarestaurantedominio.IngredienteProducto;
 import itson.sistemarestaurantedominio.Mesa;
+import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.ProductoComanda;
 import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
 import itson.sistemarestaurantepersistencia.IComandasDAO;
+import itson.sistemarestaurantepersistencia.excepciones.CantidadInexistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
@@ -66,7 +71,6 @@ public class ComandasDAO implements IComandasDAO {
         LocalDate hoy = LocalDate.now();
         String fechaFormato = hoy.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-        // Calcular el inicio y el fin del día
         LocalDateTime inicioDelDia = hoy.atStartOfDay();
         LocalDateTime finDelDia = hoy.atTime(LocalTime.MAX);
 
@@ -85,6 +89,68 @@ public class ComandasDAO implements IComandasDAO {
         String folio = "OB" + fechaFormato + String.format("%03d", total.intValue() + 1);
 
         return folio;
+    }
+
+    /**
+     * Método que cambia el estado de una comanda a cerrada, pero primero verificando que se puedan hacer todos sus prodcutos
+     * con el stock de ingredientes requerido.
+     * @param idComanda Id de la comanda para actualizar y obtener los productos que se prepararán.
+     * @return La comanda con el estado Cerrada.
+     * @throws itson.sistemarestaurantepersistencia.excepciones.PersistenciaException
+     * @throws CantidadInexistenteException 
+     */
+    @Override
+    public Comanda cerrarComanda(Long idComanda) throws PersistenciaException ,CantidadInexistenteException {
+        EntityManager em = ManejadorConexiones.getEntityManager();
+        em.getTransaction().begin();
+        Comanda comanda = em.find(Comanda.class, idComanda);
+        
+        if(comanda == null){
+            throw new PersistenciaException("La comanda no existe");
+        }
+        
+        //Aqui tenemos que crear un mapa para que se vayan añadiendo o actualzando los ingrediente requerido para la comanda
+        Map<Ingrediente, Integer> ingredientesRequeridosProductos = new HashMap<>();
+        
+        for (ProductoComanda productoComanda : comanda.getProductos()) {
+            Producto producto = productoComanda.getProducto(); //Obtenemos el producto de la comanda 
+            for (IngredienteProducto ingredienteProducto : producto.getIngredientes()) {
+                Ingrediente ingrediente = ingredienteProducto.getIngrediente();
+                
+                //Se obtiene la cantidad de ingrediente requerida para el producto especifico de la iteración 
+                //Y lo multiplicamos por la cantidad de productos iguales que sean en esa comanda
+                Integer cantidadTotal = productoComanda.getCantidad() * ingredienteProducto.getCantidad(); 
+                
+                //Ahora actualizamos las relaciones sumando cantida o añadimos el ingredietne dependiendo si no esta.
+                ingredientesRequeridosProductos.merge(ingrediente, cantidadTotal, Integer::sum);
+            }
+        }
+        
+        //Una vez que ya tenemos la cantidad de ingredientes requeridos para la comanda, pasamos a verificar si hay stock para el ingrediente
+        for (Map.Entry<Ingrediente, Integer> entry : ingredientesRequeridosProductos.entrySet()) {
+            Ingrediente ingrediente = entry.getKey();
+            int requerido = entry.getValue();
+            
+            if(ingrediente.getStock() < requerido){
+                throw new CantidadInexistenteException("Stock insuficiente para " + ingrediente.getNombre());
+            }  
+        }
+        
+        //Ahora descontamos el stock de cada ingrediente
+            for (Map.Entry<Ingrediente, Integer> entry : ingredientesRequeridosProductos.entrySet()) {
+                Ingrediente ingrediente = entry.getKey();
+                int requerido = entry.getValue();
+                ingrediente.setStock(ingrediente.getStock() - requerido);
+                em.merge(ingrediente);
+            }
+        
+        //Si en todos los ingredientes cumplieron con lo del stock se cambia el estado de la comanda a CERRADA
+        comanda.setEstado(EstadoComanda.CERRADA);
+        em.merge(comanda);
+       
+        em.getTransaction().commit();
+   
+        return comanda;
     }
 
 }

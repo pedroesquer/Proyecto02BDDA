@@ -12,6 +12,7 @@ import itson.sistemarestaurantedominio.Mesa;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.ProductoComanda;
 import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
+import itson.sistemarestaurantepersistencia.excepciones.CantidadInexistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -120,6 +121,29 @@ public class ComandasDAOTest {
 
         Comanda comanda = comandasDAO.registrar(nuevaComanda);
         assertNotNull(comanda.getId());
+    }
+    
+    @Test
+    public void TestCerrarComandaConStockSuficienteOk() throws CantidadInexistenteException, PersistenciaException {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        ComandasDAO comandasDAO = new ComandasDAO();
+        
+        comandasDAO.cerrarComanda(3l);
+        
+        Comanda comanda = entityManager.find(Comanda.class, 3l);
+        
+        assertEquals(EstadoComanda.CERRADA, comanda.getEstado());
+    }
+    
+    
+    @Test
+    public void TestCerrarComandaConStockInsuficienteArrojaExcepcion() throws CantidadInexistenteException, PersistenciaException {
+        
+        ComandasDAO comandasDAO = new ComandasDAO();
+        
+        CantidadInexistenteException ex = assertThrows(CantidadInexistenteException.class, () -> comandasDAO.cerrarComanda(3l));
+        String mensajeEsperado = "Stock insuficiente para "+ "Arroz";
+        assertEquals(mensajeEsperado, ex.getMessage());
     }
 
 

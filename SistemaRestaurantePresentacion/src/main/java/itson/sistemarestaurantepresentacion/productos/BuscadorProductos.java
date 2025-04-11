@@ -49,6 +49,10 @@ public class BuscadorProductos extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Método que carga la tabla dependiendo del filtro de busqueda.
+     * 
+     */
     private void cargarTabla() {
         DefaultTableModel modeloTabla = (DefaultTableModel) tablaProductos.getModel();
         modeloTabla.setRowCount(0);
