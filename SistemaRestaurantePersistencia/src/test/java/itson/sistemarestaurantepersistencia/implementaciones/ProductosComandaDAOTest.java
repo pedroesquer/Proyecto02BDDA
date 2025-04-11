@@ -4,8 +4,12 @@
  */
 package itson.sistemarestaurantepersistencia.implementaciones;
 
+import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.ProductoComanda;
 import itson.sistemarestaurantedominio.dtos.ActualizarProductoComandaDTO;
+import itson.sistemarestaurantedominio.dtos.AgregarProductoComandaDTO;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,7 +41,29 @@ public class ProductosComandaDAOTest {
      * Test of registrar method, of class ProductosComandaDAO.
      */
     @Test
-    public void testRegistrar() {
+    public void testRegistrarNuevoProductoOk() throws PersistenciaException {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        entityManager.getTransaction().begin();
+        
+        ProductosComandaDAO productosComandaDAO = new ProductosComandaDAO();
+        AgregarProductoComandaDTO productoComandaDTO = new AgregarProductoComandaDTO();
+        
+        Producto producto = entityManager.find(Producto.class, 2l);
+        productoComandaDTO.setIdComanda(5L);
+        productoComandaDTO.setIdProducto(2L);
+        
+        productoComandaDTO.setCantidad(3);
+        productoComandaDTO.setComentario("Sin alga los 3");
+        productoComandaDTO.setPrecioUnitario(producto.getPrecio());
+        productoComandaDTO.setImporte(productoComandaDTO.getPrecioUnitario()*productoComandaDTO.getCantidad());
+        
+        ProductoComanda productoComanda = productosComandaDAO.registrar(productoComandaDTO);
+        
+        assertNotNull(productoComanda.getId());
+        
+        
+        
+        
     }
     
 }
