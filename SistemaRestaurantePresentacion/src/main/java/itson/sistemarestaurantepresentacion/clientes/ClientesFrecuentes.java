@@ -8,16 +8,13 @@ import itson.sistemarestaurantedominio.Cliente;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantenegocio.utilidades.EncriptadorAES;
-import itson.sistemarestaurantepresentacion.Render;
 import itson.sistemarestaurantepresentacion.control.Control;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.RowFilter;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -27,7 +24,6 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
 
     private IClientesBO clientesBO;
     List<Cliente> clientesSeleccionados = new ArrayList<>();
-
     private static final Logger LOG = Logger.getLogger(ClientesFrecuentes.class.getName());
 
     /**
@@ -35,9 +31,26 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
      */
     public ClientesFrecuentes(IClientesBO clientesBO) {
         initComponents();
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
+        this.setTitle("Clientes Frecuentes");
         this.clientesBO = clientesBO;
+        this.clientesSeleccionados = new ArrayList<>();
+        this.cargarTabla();
+        
+        try {
+            List<Cliente> clientesExistentes = clientesBO.consultar(""); // "" para obtener todos los clientes
+            if (clientesExistentes != null) {
+                for (Cliente cliente : clientesExistentes) {
+                    agregarClienteATabla(cliente);
+                    recargarTabla();
+            }
+        }
+    } catch (NegocioException ex) {
+        LOG.severe("Error al cargar los clientes existentes: " + ex.getMessage());
+        JOptionPane.showMessageDialog(this, "Error al cargar los clientes existentes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
-        cargarTabla();
     }
 
     /**
@@ -208,11 +221,21 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        this.cargarTabla();
+        try {
+        clientesSeleccionados.clear();
+        List<Cliente> clientesExistentes = clientesBO.consultar(""); 
+        if (clientesExistentes != null) {
+            clientesSeleccionados.addAll(clientesExistentes); 
+            recargarTabla(); 
+        }
+    } catch (NegocioException ex) {
+        LOG.severe("Error al recargar los clientes: " + ex.getMessage());
+        JOptionPane.showMessageDialog(this, "Error al recargar los clientes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        volverAlMenuPrincipal();
+        Control.getInstancia().volverAlMenuPrincipal(this);
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void cargarTabla() {
@@ -252,12 +275,32 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
             }
         });
     }
-    
-    private void volverAlMenuPrincipal() {
-        this.dispose();
-        Control.getInstancia().abrirMenuAdministrador();
-    }
 
+    private void recargarTabla() {
+        DefaultTableModel modeloTabla = (DefaultTableModel) tablaClientes.getModel();
+        modeloTabla.setRowCount(0); 
+        for (Cliente cliente : clientesSeleccionados) {
+            String nombreCompleto = cliente.getNombre() + " " + (cliente.getApellidoPaterno() != null ? cliente.getApellidoPaterno() : "");
+            if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
+                nombreCompleto += " " + cliente.getApellidoMaterno();
+            }
+            String numeroTelefonoDesencriptado;
+            try {
+                numeroTelefonoDesencriptado = EncriptadorAES.desencriptar(cliente.getNumeroTelefono());
+            } catch (Exception ex) {
+                numeroTelefonoDesencriptado = "Error al desencriptar";
+                System.err.println("Error al desencriptar el numero de telefono: " + ex.getMessage());
+            }
+            Object[] fila = {
+                nombreCompleto.trim(),
+                cliente.getCorreo(),
+                numeroTelefonoDesencriptado,
+                cliente.getPuntosFidelidad()
+            };
+            modeloTabla.addRow(fila);
+        }
+    }
+    
     private void agregarClienteATabla(Cliente cliente) {
         DefaultTableModel modeloTabla = (DefaultTableModel) tablaClientes.getModel();
         modeloTabla.setRowCount(0);
@@ -289,12 +332,13 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
 
     private void abrirBuscadorClientes() {
         try {
-            BuscadorClientes buscador = new BuscadorClientes(clientesBO, clienteSeleccionado -> {
+            Control.getInstancia().abrirBuscadorClientes(clientesBO, clienteSeleccionado -> {
                 if (clienteSeleccionado != null) {
                     agregarClienteATabla(clienteSeleccionado);
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se seleccionó ningún cliente.", "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
-            buscador.setVisible(true);
         } catch (Exception ex) {
             LOG.severe("Error al abrir el buscador de clientes: " + ex.getMessage());
             JOptionPane.showMessageDialog(this, "Error al abrir el buscador de clientes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
