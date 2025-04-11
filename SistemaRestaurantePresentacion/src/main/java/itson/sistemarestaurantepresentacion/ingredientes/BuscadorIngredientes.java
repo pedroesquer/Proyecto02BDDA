@@ -1,7 +1,6 @@
 package itson.sistemarestaurantepresentacion.ingredientes;
 
 import itson.sistemarestaurantedominio.Ingrediente;
-import static itson.sistemarestaurantedominio.Producto_.ingredientes;
 import itson.sistemarestaurantedominio.UnidadMedida;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
