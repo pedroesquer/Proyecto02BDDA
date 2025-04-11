@@ -174,25 +174,22 @@ public class AgregarCliente extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 231, Short.MAX_VALUE)
-                .addComponent(btnGuardar)
-                .addGap(101, 101, 101)
-                .addComponent(btnCancelar)
-                .addGap(237, 237, 237))
+                .addContainerGap(328, Short.MAX_VALUE)
+                .addComponent(btnVolver)
+                .addGap(321, 321, 321))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(212, 212, 212)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(212, 212, 212)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(LblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(textFieldNombre)
-                            .addComponent(LblTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(textFieldTelefono)
-                            .addComponent(LblCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TextFieldCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(322, 322, 322)
-                        .addComponent(btnVolver)))
+                        .addComponent(btnGuardar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCancelar))
+                    .addComponent(LblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textFieldNombre)
+                    .addComponent(LblTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textFieldTelefono)
+                    .addComponent(LblCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TextFieldCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -210,11 +207,11 @@ public class AgregarCliente extends javax.swing.JFrame {
                 .addComponent(LblCorreo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TextFieldCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(69, 69, 69)
+                .addGap(42, 42, 42)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelar)
-                    .addComponent(btnGuardar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                    .addComponent(btnGuardar)
+                    .addComponent(btnCancelar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                 .addComponent(btnVolver)
                 .addGap(19, 19, 19))
         );
@@ -252,6 +249,10 @@ public class AgregarCliente extends javax.swing.JFrame {
         volverAlMenuPrincipal();
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    private void volverAlMenuPrincipal() {
+    this.dispose();
+    Control.getInstancia().abrirMenuAdministrador();
+    }
     
     private boolean agregarCliente() {
     try {
@@ -260,39 +261,38 @@ public class AgregarCliente extends javax.swing.JFrame {
         String telefono = this.textFieldTelefono.getText();
         String correo = this.TextFieldCorreo.getText();
 
-        // Si el correo es "Opcional..." o está vacío, lo dejamos como vacío
         if (correo.equalsIgnoreCase("Opcional...") || correo.isEmpty() || correo.trim().isEmpty() ) {
             correo = "";
         }
 
-        // Dividir el nombre completo en nombre, apellido paterno y apellido materno
-        String[] partesNombre = nombreCompleto.trim().split("\\s+");
-        String nombre;
-        String apellidoPaterno;
-        String apellidoMaterno = null;
+        String texto = nombreCompleto.trim(); 
+        String[] partes = texto.split("\\s+"); 
 
-        System.out.println("Nombre completo: " + nombreCompleto);
-        System.out.println("Partes del nombre: " + Arrays.toString(partesNombre));
-
-        if (partesNombre.length < 2) {
-            throw new NegocioException("Debe proporcionar al menos el nombre y el apellido paterno.");
-        } else if (partesNombre.length == 2) {
-            nombre = partesNombre[0];
-            apellidoPaterno = partesNombre[1];
-        } else {
-            nombre = partesNombre[0];
-            apellidoPaterno = partesNombre[1];
-            apellidoMaterno = partesNombre[2];
+        if (partes.length < 3) {
+            throw new NegocioException("Debe proporcionar al menos el nombre y dos apellidos.");
         }
 
+        String apellidoMaterno = partes[partes.length - 1];
+        String apellidoPaterno = partes[partes.length - 2];
+
+        StringBuilder nombreBuilder = new StringBuilder();
+        for (int i = 0; i < partes.length - 2; i++) {
+            nombreBuilder.append(partes[i]);
+            if (i < partes.length - 3) {
+            nombreBuilder.append(" ");
+        }
+    }
+        
+        String nombre = nombreBuilder.toString();
+        LocalDate localDate = LocalDate.now();
+        Date fecha = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
         System.out.println("Nombre completo: " + nombreCompleto);
-        System.out.println("Partes del nombre: " + java.util.Arrays.toString(partesNombre));
+        System.out.println("Partes del nombre: " + java.util.Arrays.toString(partes));
         System.out.println("Nombre: " + nombre);
         System.out.println("Apellido Paterno: " + apellidoPaterno);
         System.out.println("Apellido Materno: " + apellidoMaterno);
         
-        LocalDate localDate = LocalDate.now();
-        Date fecha = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         
         // Encriptar el numero de telefono
             String numeroTelefonoEncriptado;
