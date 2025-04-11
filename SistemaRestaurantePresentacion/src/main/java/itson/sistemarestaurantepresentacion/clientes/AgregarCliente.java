@@ -8,7 +8,6 @@ import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantenegocio.utilidades.EncriptadorAES;
-import itson.sistemarestaurantepresentacion.control.Control;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -16,6 +15,7 @@ import java.util.Date;
 import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
+import itson.sistemarestaurantepresentacion.control.Control;
 
 /**
  *
@@ -246,14 +246,9 @@ public class AgregarCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        volverAlMenuPrincipal();
+        Control.getInstancia().volverAlMenuPrincipal(this);
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    private void volverAlMenuPrincipal() {
-    this.dispose();
-    Control.getInstancia().abrirMenuAdministrador();
-    }
-    
     private boolean agregarCliente() {
     try {
         // Obtener los datos de los campos
