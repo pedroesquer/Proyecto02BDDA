@@ -39,11 +39,12 @@ public class BuscadorClientes extends javax.swing.JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setTitle("Buscador Clientes");
-        this.clientes = new ArrayList<>();
         this.clientesBO = clientesBO;
+        this.clientes = new ArrayList<>();
         this.cargarTabla();
         this.onClienteSeleccionado = onClienteSeleccionado;
         this.ocultarColumnaIndice();
+        this.llenarTablaClientes();
     }
     
     private void ocultarColumnaIndice() {
