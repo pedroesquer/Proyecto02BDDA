@@ -1,5 +1,6 @@
 package itson.sistemarestaurantepresentacion.control;
 
+import itson.sistemarestaurantedominio.Cliente;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IClientesBO;
@@ -23,11 +24,13 @@ import itson.sistemarestaurantepresentacion.ingredientes.Ingredientes;
 import itson.sistemarestaurantepresentacion.ingredientes.ListaIngredientes;
 import itson.sistemarestaurantepresentacion.productos.ListaProductos;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
+import itson.sistemarestaurantepresentacion.clientes.BuscadorClientes;
 import itson.sistemarestaurantepresentacion.productos.Productos;
 import itson.sistemarestaurantepresentacion.productos.FrmAgregarIngredientes;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
 import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
 import itson.sistemarestaurantepresentacion.productos.ActualizarPreciosProductos;
+import java.util.function.Consumer;
 import javax.swing.JFrame;
 
 
@@ -221,5 +224,10 @@ public class Control {
         formActualizarProductos.setVisible(true);
                 
     }
+    public void abrirBuscadorClientes(IClientesBO clientesBO, Consumer<Cliente> onClienteSeleccionado) {
+        BuscadorClientes buscador = new BuscadorClientes(clientesBO, onClienteSeleccionado);
+        buscador.setVisible(true);
+    }
+    
 
 }
