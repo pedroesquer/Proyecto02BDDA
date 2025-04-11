@@ -37,54 +37,90 @@ public class ComandasDAOTest {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         ComandasDAO comandasDAO = new ComandasDAO();
         NuevaComandaDTO nuevaComanda = new NuevaComandaDTO();
-        
+
         List<ProductoComanda> productos = new ArrayList<>();
         Producto producto = entityManager.find(Producto.class, 2L);
         Mesa mesa = entityManager.find(Mesa.class, 1l);
-        
+
         ProductoComanda productoComanda = new ProductoComanda();
         productoComanda.setCantidad(2);
         productoComanda.setProducto(producto);
         productoComanda.setComentarios("Sin camaron");
         productoComanda.setPrecioUnitario(producto.getPrecio());
-        productoComanda.setImporte(productoComanda.getPrecioUnitario()*productoComanda.getCantidad());
+        productoComanda.setImporte(productoComanda.getPrecioUnitario() * productoComanda.getCantidad());
         productos.add(productoComanda);
-        
+
         nuevaComanda.setMesa(mesa);
         nuevaComanda.setMontoTotal(0D);
         nuevaComanda.setEstadoComanda(EstadoComanda.ABIERTA);
         nuevaComanda.setProductoComanda(productos);
-        
-        Comanda comanda = comandasDAO.registrar(nuevaComanda);  
+
+        Comanda comanda = comandasDAO.registrar(nuevaComanda);
         assertNotNull(comanda.getId());
-        
+
     }
-    
+
     @Test
     public void testRegistrarComandaSinComentarios() throws PersistenciaException {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         ComandasDAO comandasDAO = new ComandasDAO();
         NuevaComandaDTO nuevaComanda = new NuevaComandaDTO();
-        
+
         List<ProductoComanda> productos = new ArrayList<>();
         Producto producto = entityManager.find(Producto.class, 2L);
         Mesa mesa = entityManager.find(Mesa.class, 1l);
-        
+
         ProductoComanda productoComanda = new ProductoComanda();
         productoComanda.setCantidad(2);
         productoComanda.setProducto(producto);
         productoComanda.setPrecioUnitario(producto.getPrecio());
-        productoComanda.setImporte(productoComanda.getPrecioUnitario()*productoComanda.getCantidad());
+        productoComanda.setImporte(productoComanda.getPrecioUnitario() * productoComanda.getCantidad());
         productos.add(productoComanda);
-        
+
         nuevaComanda.setMesa(mesa);
         nuevaComanda.setMontoTotal(0D);
         nuevaComanda.setEstadoComanda(EstadoComanda.ABIERTA);
         nuevaComanda.setProductoComanda(productos);
-        
-        Comanda comanda = comandasDAO.registrar(nuevaComanda);  
+
+        Comanda comanda = comandasDAO.registrar(nuevaComanda);
         assertNotNull(comanda.getId());
-        
+
     }
+
+    @Test
+    public void testRegistrarComandaVariosProductos() throws PersistenciaException {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        ComandasDAO comandasDAO = new ComandasDAO();
+        NuevaComandaDTO nuevaComanda = new NuevaComandaDTO();
+
+        List<ProductoComanda> productos = new ArrayList<>();
+        Producto producto = entityManager.find(Producto.class, 2L);
+        Mesa mesa = entityManager.find(Mesa.class, 1l);
+
+        ProductoComanda productoComanda = new ProductoComanda();
+        productoComanda.setCantidad(2);
+        productoComanda.setProducto(producto);
+        productoComanda.setPrecioUnitario(producto.getPrecio());
+        productoComanda.setComentarios("Sin catsup");
+        productoComanda.setImporte(productoComanda.getPrecioUnitario() * productoComanda.getCantidad());
+        productos.add(productoComanda);
+
+        Producto producto2 = entityManager.find(Producto.class, 4L);
+        ProductoComanda productoComanda2 = new ProductoComanda();
+        productoComanda2.setCantidad(3);
+        productoComanda2.setProducto(producto2);
+        productoComanda2.setPrecioUnitario(producto2.getPrecio());
+        productoComanda2.setImporte(productoComanda2.getPrecioUnitario() * productoComanda2.getCantidad());
+        productos.add(productoComanda2);
+
+        nuevaComanda.setMesa(mesa);
+        nuevaComanda.setMontoTotal(0D);
+        nuevaComanda.setEstadoComanda(EstadoComanda.ABIERTA);
+        nuevaComanda.setProductoComanda(productos);
+
+        Comanda comanda = comandasDAO.registrar(nuevaComanda);
+        assertNotNull(comanda.getId());
+    }
+
 
 }
