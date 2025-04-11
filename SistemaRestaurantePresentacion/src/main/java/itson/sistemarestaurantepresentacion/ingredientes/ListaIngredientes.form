@@ -53,7 +53,7 @@
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  <Component id="pnlTablaProductos" min="-2" pref="491" max="-2" attributes="0"/>
+                  <Component id="pnlTablaIngrediente" min="-2" pref="491" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
@@ -73,7 +73,7 @@
                       <Component id="btnLimpiar" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                  <Component id="pnlTablaProductos" min="-2" pref="154" max="-2" attributes="0"/>
+                  <Component id="pnlTablaIngrediente" min="-2" pref="154" max="-2" attributes="0"/>
                   <EmptySpace pref="75" max="32767" attributes="0"/>
                   <Component id="btnVolver" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
@@ -150,7 +150,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JScrollPane" name="pnlTablaProductos">
+        <Container class="javax.swing.JScrollPane" name="pnlTablaIngrediente">
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>

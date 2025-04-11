@@ -79,11 +79,11 @@ public class ActualizarIngredientes extends javax.swing.JFrame implements Ingred
         lblTituloIngrediente = new javax.swing.JLabel();
         iconChefSoft = new javax.swing.JLabel();
         iconIngrediente = new javax.swing.JLabel();
-        pnlTablaProductos = new javax.swing.JScrollPane();
+        pnlTablaIngredientes = new javax.swing.JScrollPane();
         tablaIngredientes = new javax.swing.JTable();
         iconBuscar = new javax.swing.JLabel();
         iconAgregar = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lblAgregarStock = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -145,7 +145,7 @@ public class ActualizarIngredientes extends javax.swing.JFrame implements Ingred
             }
         });
         tablaIngredientes.setColumnSelectionAllowed(true);
-        pnlTablaProductos.setViewportView(tablaIngredientes);
+        pnlTablaIngredientes.setViewportView(tablaIngredientes);
 
         iconAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/aniadir.png"))); // NOI18N
         iconAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -154,7 +154,7 @@ public class ActualizarIngredientes extends javax.swing.JFrame implements Ingred
             }
         });
 
-        jLabel1.setText("Agregar stock");
+        lblAgregarStock.setText("Agregar stock");
 
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -178,12 +178,12 @@ public class ActualizarIngredientes extends javax.swing.JFrame implements Ingred
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(panelGeneralLayout.createSequentialGroup()
                 .addGap(329, 329, 329)
-                .addComponent(jLabel1)
+                .addComponent(lblAgregarStock)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelGeneralLayout.createSequentialGroup()
                     .addGap(152, 152, 152)
-                    .addComponent(pnlTablaProductos)
+                    .addComponent(pnlTablaIngredientes)
                     .addGap(152, 152, 152)))
         );
         panelGeneralLayout.setVerticalGroup(
@@ -201,12 +201,12 @@ public class ActualizarIngredientes extends javax.swing.JFrame implements Ingred
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
                         .addComponent(iconAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1)
+                        .addComponent(lblAgregarStock)
                         .addGap(7, 7, 7))))
             .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelGeneralLayout.createSequentialGroup()
                     .addGap(128, 128, 128)
-                    .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlTablaIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(221, Short.MAX_VALUE)))
         );
 
@@ -241,11 +241,11 @@ public class ActualizarIngredientes extends javax.swing.JFrame implements Ingred
     private javax.swing.JLabel iconBuscar;
     private javax.swing.JLabel iconChefSoft;
     private javax.swing.JLabel iconIngrediente;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblAgregarStock;
     private javax.swing.JLabel lblTituloIngrediente;
     private javax.swing.JPanel panelGeneral;
     private javax.swing.JPanel panelSuperior;
-    private javax.swing.JScrollPane pnlTablaProductos;
+    private javax.swing.JScrollPane pnlTablaIngredientes;
     private javax.swing.JTable tablaIngredientes;
     // End of variables declaration//GEN-END:variables
 

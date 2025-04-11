@@ -100,7 +100,7 @@ public class ActualizarStock extends javax.swing.JFrame implements IngredienteSe
         lblTituloIngrediente = new javax.swing.JLabel();
         iconChefSoft = new javax.swing.JLabel();
         iconIngrediente = new javax.swing.JLabel();
-        pnlTablaProductos = new javax.swing.JScrollPane();
+        pnlTablaIngredientes = new javax.swing.JScrollPane();
         tablaIngredientes = new javax.swing.JTable();
         iconBuscar = new javax.swing.JLabel();
         lblStockActual = new javax.swing.JLabel();
@@ -171,7 +171,7 @@ public class ActualizarStock extends javax.swing.JFrame implements IngredienteSe
             }
         });
         tablaIngredientes.setColumnSelectionAllowed(true);
-        pnlTablaProductos.setViewportView(tablaIngredientes);
+        pnlTablaIngredientes.setViewportView(tablaIngredientes);
 
         lblStockActual.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
         lblStockActual.setText("Stock actual:");
@@ -222,7 +222,7 @@ public class ActualizarStock extends javax.swing.JFrame implements IngredienteSe
                         .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelGeneralLayout.createSequentialGroup()
                         .addGap(127, 127, 127)
-                        .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(pnlTablaIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelGeneralLayout.setVerticalGroup(
@@ -230,7 +230,7 @@ public class ActualizarStock extends javax.swing.JFrame implements IngredienteSe
             .addGroup(panelGeneralLayout.createSequentialGroup()
                 .addComponent(panelSuperior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlTablaIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(lblStockActualMostrar)
                 .addGap(35, 35, 35)
@@ -302,7 +302,7 @@ public class ActualizarStock extends javax.swing.JFrame implements IngredienteSe
     private javax.swing.JLabel lblTituloIngrediente;
     private javax.swing.JPanel panelGeneral;
     private javax.swing.JPanel panelSuperior;
-    private javax.swing.JScrollPane pnlTablaProductos;
+    private javax.swing.JScrollPane pnlTablaIngredientes;
     private javax.swing.JTable tablaIngredientes;
     // End of variables declaration//GEN-END:variables
 

@@ -104,7 +104,7 @@ public class ListaIngredientes extends javax.swing.JFrame implements Ingrediente
         lblTituloIngrediente = new javax.swing.JLabel();
         iconChefSoft = new javax.swing.JLabel();
         iconIngrediente = new javax.swing.JLabel();
-        pnlTablaProductos = new javax.swing.JScrollPane();
+        pnlTablaIngrediente = new javax.swing.JScrollPane();
         tablaIngredientes = new javax.swing.JTable();
         btnBuscar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
@@ -169,7 +169,7 @@ public class ListaIngredientes extends javax.swing.JFrame implements Ingrediente
             }
         });
         tablaIngredientes.setColumnSelectionAllowed(true);
-        pnlTablaProductos.setViewportView(tablaIngredientes);
+        pnlTablaIngrediente.setViewportView(tablaIngredientes);
 
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -205,7 +205,7 @@ public class ListaIngredientes extends javax.swing.JFrame implements Ingrediente
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlTablaIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(132, 132, 132))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -221,7 +221,7 @@ public class ListaIngredientes extends javax.swing.JFrame implements Ingrediente
                     .addComponent(btnBuscar)
                     .addComponent(btnLimpiar))
                 .addGap(37, 37, 37)
-                .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlTablaIngrediente, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
                 .addComponent(btnVolver)
                 .addGap(65, 65, 65))
@@ -268,7 +268,7 @@ public class ListaIngredientes extends javax.swing.JFrame implements Ingrediente
     private javax.swing.JLabel lblTituloIngrediente;
     private javax.swing.JPanel panelGeneral;
     private javax.swing.JPanel panelSuperior;
-    private javax.swing.JScrollPane pnlTablaProductos;
+    private javax.swing.JScrollPane pnlTablaIngrediente;
     private javax.swing.JTable tablaIngredientes;
     // End of variables declaration//GEN-END:variables
 

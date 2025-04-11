@@ -47,14 +47,14 @@ public class AgregarIngredientes extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblIngredientes = new javax.swing.JLabel();
+        iconChefSoft = new javax.swing.JLabel();
+        iconoIngredientes = new javax.swing.JLabel();
         campoTxtNombre = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblNombre = new javax.swing.JLabel();
+        lblUnidadMedida = new javax.swing.JLabel();
         campoTxtStock = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        lblStockInicial = new javax.swing.JLabel();
         btnAgregarIngrediente = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         comboBoxUnidad = new javax.swing.JComboBox<>();
@@ -65,12 +65,12 @@ public class AgregarIngredientes extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(235, 230, 208));
 
-        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 64)); // NOI18N
-        jLabel1.setText("Ingredientes");
+        lblIngredientes.setFont(new java.awt.Font("Helvetica Neue", 0, 64)); // NOI18N
+        lblIngredientes.setText("Ingredientes");
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logoPequenioStroke.png"))); // NOI18N
+        iconChefSoft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logoPequenioStroke.png"))); // NOI18N
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ingredientesIcon.png"))); // NOI18N
+        iconoIngredientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ingredientesIcon.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -78,11 +78,11 @@ public class AgregarIngredientes extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addComponent(iconChefSoft)
                 .addGap(106, 106, 106)
-                .addComponent(jLabel1)
+                .addComponent(lblIngredientes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
-                .addComponent(jLabel3)
+                .addComponent(iconoIngredientes)
                 .addGap(30, 30, 30))
         );
         jPanel2Layout.setVerticalGroup(
@@ -90,26 +90,26 @@ public class AgregarIngredientes extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(iconChefSoft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(lblIngredientes)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(iconoIngredientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         campoTxtNombre.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
 
-        jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
-        jLabel4.setText("Nombre:");
+        lblNombre.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
+        lblNombre.setText("Nombre:");
 
-        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
-        jLabel5.setText("Unidad de medida:");
+        lblUnidadMedida.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
+        lblUnidadMedida.setText("Unidad de medida:");
 
         campoTxtStock.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
-        jLabel6.setText("Stock Inicial:");
+        lblStockInicial.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
+        lblStockInicial.setText("Stock Inicial:");
 
         btnAgregarIngrediente.setBackground(new java.awt.Color(85, 85, 85));
         btnAgregarIngrediente.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
@@ -151,15 +151,15 @@ public class AgregarIngredientes extends javax.swing.JFrame {
                         .addGap(71, 71, 71)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
+                                .addComponent(lblNombre)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(campoTxtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
+                                .addComponent(lblUnidadMedida)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(comboBoxUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
+                                .addComponent(lblStockInicial)
                                 .addGap(18, 18, 18)
                                 .addComponent(campoTxtStock, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -171,15 +171,15 @@ public class AgregarIngredientes extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(campoTxtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(lblNombre))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
+                    .addComponent(lblUnidadMedida)
                     .addComponent(comboBoxUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, 39)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(campoTxtStock, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addComponent(lblStockInicial))
                 .addGap(47, 47, 47)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregarIngrediente)
@@ -253,13 +253,13 @@ public class AgregarIngredientes extends javax.swing.JFrame {
     private javax.swing.JTextField campoTxtNombre;
     private javax.swing.JTextField campoTxtStock;
     private javax.swing.JComboBox<UnidadMedida> comboBoxUnidad;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel iconChefSoft;
+    private javax.swing.JLabel iconoIngredientes;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblIngredientes;
+    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblStockInicial;
+    private javax.swing.JLabel lblUnidadMedida;
     // End of variables declaration//GEN-END:variables
 }

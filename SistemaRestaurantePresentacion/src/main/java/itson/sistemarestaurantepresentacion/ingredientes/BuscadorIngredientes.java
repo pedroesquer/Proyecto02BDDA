@@ -147,7 +147,7 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
         lblBuscar = new javax.swing.JLabel();
         txtBuscar = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
-        pnlTablaProductos = new javax.swing.JScrollPane();
+        pnlTablaIngredientes = new javax.swing.JScrollPane();
         tablaIngredientes = new javax.swing.JTable();
         btnLimpiar = new javax.swing.JButton();
         botonSeleccionar = new javax.swing.JButton();
@@ -180,7 +180,7 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
             }
         });
         tablaIngredientes.setColumnSelectionAllowed(true);
-        pnlTablaProductos.setViewportView(tablaIngredientes);
+        pnlTablaIngredientes.setViewportView(tablaIngredientes);
         tablaIngredientes.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (tablaIngredientes.getColumnModel().getColumnCount() > 0) {
             tablaIngredientes.getColumnModel().getColumn(0).setResizable(false);
@@ -209,7 +209,7 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlTablaProductos)
+                    .addComponent(pnlTablaIngredientes)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -236,7 +236,7 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
                         .addComponent(btnLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnBuscar)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlTablaIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(botonSeleccionar)
                 .addContainerGap(16, Short.MAX_VALUE))
@@ -284,7 +284,7 @@ public class BuscadorIngredientes extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel lblBuscar;
-    private javax.swing.JScrollPane pnlTablaProductos;
+    private javax.swing.JScrollPane pnlTablaIngredientes;
     private javax.swing.JTable tablaIngredientes;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables

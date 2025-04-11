@@ -41,7 +41,7 @@ public class Ingredientes extends javax.swing.JFrame {
         iconAgregarIngrediente = new javax.swing.JLabel();
         lblNuevoIngrediente = new javax.swing.JLabel();
         iconBuscar = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        lblVerIngredientes = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -113,8 +113,8 @@ public class Ingredientes extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jLabel9.setText("Ver ingredientes");
+        lblVerIngredientes.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        lblVerIngredientes.setText("Ver ingredientes");
 
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -140,7 +140,7 @@ public class Ingredientes extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addComponent(lblNuevoIngrediente)
                 .addGap(66, 66, 66)
-                .addComponent(jLabel9)
+                .addComponent(lblVerIngredientes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblActualizarStock)
                 .addGap(43, 43, 43))
@@ -165,7 +165,7 @@ public class Ingredientes extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel9)
+                        .addComponent(lblVerIngredientes)
                         .addComponent(lblNuevoIngrediente))
                     .addComponent(lblActualizarStock))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
@@ -216,10 +216,10 @@ public class Ingredientes extends javax.swing.JFrame {
     private javax.swing.JLabel iconBuscar;
     private javax.swing.JLabel iconChefSoft;
     private javax.swing.JLabel iconIngrediente;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblActualizarStock;
     private javax.swing.JLabel lblNuevoIngrediente;
     private javax.swing.JLabel lblTituloIngrediente;
+    private javax.swing.JLabel lblVerIngredientes;
     private javax.swing.JPanel panelGeneral;
     private javax.swing.JPanel panelSuperior;
     // End of variables declaration//GEN-END:variables

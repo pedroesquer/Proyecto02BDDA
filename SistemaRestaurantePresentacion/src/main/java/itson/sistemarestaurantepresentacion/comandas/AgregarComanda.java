@@ -1,5 +1,6 @@
 package itson.sistemarestaurantepresentacion.comandas;
 
+import itson.sistemarestaurantenegocio.IComandasBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantepresentacion.control.Control;
 
@@ -7,19 +8,19 @@ import itson.sistemarestaurantepresentacion.control.Control;
  *
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
  */
-public class Comandas extends javax.swing.JFrame {
+public class AgregarComanda extends javax.swing.JFrame {
 
-    private IIngredientesBO ingredientesBO;
+    private IComandasBO comandasBO;
     /**
      * Creates new form Productos
      */
-    public Comandas(IIngredientesBO ingredientesBO) {
+    public AgregarComanda(IComandasBO comandasBO) {
         initComponents();
-        this.setTitle("Ingredientes");
+        this.setTitle("Comandas");
         this.setResizable(false);
         this.setSize(760,500);
         this.setLocationRelativeTo(null);
-        this.ingredientesBO = ingredientesBO;
+        this.comandasBO = comandasBO;
     }
 
     /**
@@ -33,14 +34,12 @@ public class Comandas extends javax.swing.JFrame {
 
         panelGeneral = new javax.swing.JPanel();
         panelSuperior = new javax.swing.JPanel();
-        lblTituloComandas = new javax.swing.JLabel();
+        lblTituloComanda = new javax.swing.JLabel();
         iconChefSoft = new javax.swing.JLabel();
         iconComanda = new javax.swing.JLabel();
-        iconAgregarComanda = new javax.swing.JLabel();
-        lblNuevoComanda = new javax.swing.JLabel();
-        iconBuscar = new javax.swing.JLabel();
-        lblVerComandas = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
+        pnlTablaComandas = new javax.swing.JScrollPane();
+        tablaComandas = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -48,8 +47,8 @@ public class Comandas extends javax.swing.JFrame {
 
         panelSuperior.setBackground(new java.awt.Color(235, 230, 208));
 
-        lblTituloComandas.setFont(new java.awt.Font("Helvetica Neue", 0, 64)); // NOI18N
-        lblTituloComandas.setText("Comandas");
+        lblTituloComanda.setFont(new java.awt.Font("Helvetica Neue", 0, 64)); // NOI18N
+        lblTituloComanda.setText("Comandas");
 
         iconChefSoft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logoPequenioStroke.png"))); // NOI18N
 
@@ -63,7 +62,7 @@ public class Comandas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(iconChefSoft)
                 .addGap(117, 117, 117)
-                .addComponent(lblTituloComandas)
+                .addComponent(lblTituloComanda)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
                 .addComponent(iconComanda)
                 .addGap(52, 52, 52))
@@ -74,7 +73,7 @@ public class Comandas extends javax.swing.JFrame {
                 .addGroup(panelSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panelSuperiorLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lblTituloComandas))
+                        .addComponent(lblTituloComanda))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelSuperiorLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(iconChefSoft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -84,32 +83,32 @@ public class Comandas extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        iconAgregarComanda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconos/aniadir.png"))); // NOI18N
-        iconAgregarComanda.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                iconAgregarComandaMouseClicked(evt);
-            }
-        });
-
-        lblNuevoComanda.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        lblNuevoComanda.setText("Nueva Comanda");
-
-        iconBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/comandasIcon.png"))); // NOI18N
-        iconBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                iconBuscarMouseClicked(evt);
-            }
-        });
-
-        lblVerComandas.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        lblVerComandas.setText("Ver comandas");
-
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
             }
         });
+
+        tablaComandas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Cantidad", "Producto", "Comentarios", "Precio", "Importe"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaComandas.setColumnSelectionAllowed(true);
+        pnlTablaComandas.setViewportView(tablaComandas);
+        tablaComandas.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout panelGeneralLayout = new javax.swing.GroupLayout(panelGeneral);
         panelGeneral.setLayout(panelGeneralLayout);
@@ -120,36 +119,24 @@ public class Comandas extends javax.swing.JFrame {
                 .addGap(334, 334, 334)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGeneralLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addComponent(iconAgregarComanda)
-                        .addGap(127, 127, 127)
-                        .addComponent(iconBuscar)
-                        .addGap(231, 231, 231))
-                    .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addComponent(lblNuevoComanda)
-                        .addGap(72, 72, 72)
-                        .addComponent(lblVerComandas)
-                        .addGap(191, 191, 191))))
+            .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelGeneralLayout.createSequentialGroup()
+                    .addGap(152, 152, 152)
+                    .addComponent(pnlTablaComandas)
+                    .addGap(152, 152, 152)))
         );
         panelGeneralLayout.setVerticalGroup(
             panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelGeneralLayout.createSequentialGroup()
-                .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addComponent(panelSuperior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
-                        .addComponent(iconAgregarComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(iconBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(4, 4, 4)
-                .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblVerComandas)
-                    .addComponent(lblNuevoComanda))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
+                .addComponent(panelSuperior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 378, Short.MAX_VALUE)
                 .addComponent(btnVolver)
                 .addGap(23, 23, 23))
+            .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelGeneralLayout.createSequentialGroup()
+                    .addGap(190, 190, 190)
+                    .addComponent(pnlTablaComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(190, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -166,16 +153,6 @@ public class Comandas extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void iconBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconBuscarMouseClicked
-        this.dispose();
-        Control.getInstancia().abrirListaIngredientes();
-    }//GEN-LAST:event_iconBuscarMouseClicked
-
-    private void iconAgregarComandaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconAgregarComandaMouseClicked
-        this.dispose();
-        Control.getInstancia().abrirAgregarIngredientes();
-    }//GEN-LAST:event_iconAgregarComandaMouseClicked
-
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         this.dispose();
         Control.getInstancia().abrirMenuAdministrador();
@@ -185,14 +162,12 @@ public class Comandas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVolver;
-    private javax.swing.JLabel iconAgregarComanda;
-    private javax.swing.JLabel iconBuscar;
     private javax.swing.JLabel iconChefSoft;
     private javax.swing.JLabel iconComanda;
-    private javax.swing.JLabel lblNuevoComanda;
-    private javax.swing.JLabel lblTituloComandas;
-    private javax.swing.JLabel lblVerComandas;
+    private javax.swing.JLabel lblTituloComanda;
     private javax.swing.JPanel panelGeneral;
     private javax.swing.JPanel panelSuperior;
+    private javax.swing.JScrollPane pnlTablaComandas;
+    private javax.swing.JTable tablaComandas;
     // End of variables declaration//GEN-END:variables
 }
