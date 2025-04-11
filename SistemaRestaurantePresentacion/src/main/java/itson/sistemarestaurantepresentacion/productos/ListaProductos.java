@@ -103,6 +103,7 @@ public class ListaProductos extends javax.swing.JFrame implements ProductoSelecc
         botonDetallesProducto = new javax.swing.JButton();
         botonBuscarProductos = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        menuBoton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -186,7 +187,7 @@ public class ListaProductos extends javax.swing.JFrame implements ProductoSelecc
                 botonActualizarProductoActionPerformed(evt);
             }
         });
-        jPanel1.add(botonActualizarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 420, 188, 51));
+        jPanel1.add(botonActualizarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 410, 188, 51));
 
         botonDetallesProducto.setBackground(new java.awt.Color(204, 255, 255));
         botonDetallesProducto.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
@@ -199,7 +200,7 @@ public class ListaProductos extends javax.swing.JFrame implements ProductoSelecc
                 botonDetallesProductoActionPerformed(evt);
             }
         });
-        jPanel1.add(botonDetallesProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(419, 424, 238, 51));
+        jPanel1.add(botonDetallesProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 410, 238, 51));
 
         botonBuscarProductos.setBackground(new java.awt.Color(255, 255, 255));
         botonBuscarProductos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
@@ -231,6 +232,14 @@ public class ListaProductos extends javax.swing.JFrame implements ProductoSelecc
         );
 
         jPanel1.add(botonBuscarProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 150, 30));
+
+        menuBoton.setText("Menu principal");
+        menuBoton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuBotonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(menuBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 410, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -278,6 +287,11 @@ public class ListaProductos extends javax.swing.JFrame implements ProductoSelecc
         Control.getInstancia().abrirBuscadorProductos(this);
     }//GEN-LAST:event_botonBuscarProductosMouseClicked
 
+    private void menuBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBotonActionPerformed
+        Control.getInstancia().abrirMenuAdministrador();
+        this.dispose();
+    }//GEN-LAST:event_menuBotonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonActualizarProducto;
@@ -289,6 +303,7 @@ public class ListaProductos extends javax.swing.JFrame implements ProductoSelecc
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton menuBoton;
     private javax.swing.JScrollPane pnlTablaProductos;
     private javax.swing.JTable tablaProductos;
     // End of variables declaration//GEN-END:variables

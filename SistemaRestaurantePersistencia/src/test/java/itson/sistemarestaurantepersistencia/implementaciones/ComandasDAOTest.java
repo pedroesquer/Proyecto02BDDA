@@ -4,6 +4,7 @@
  */
 package itson.sistemarestaurantepersistencia.implementaciones;
 
+import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantedominio.Comanda_;
 import itson.sistemarestaurantedominio.EstadoComanda;
 import itson.sistemarestaurantedominio.EstadoMesa;
@@ -11,6 +12,7 @@ import itson.sistemarestaurantedominio.Mesa;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.ProductoComanda;
 import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,25 +33,57 @@ public class ComandasDAOTest {
      * Test of registrar method, of class ComandasDAO.
      */
     @Test
-    public void testRegistrar() {
+    public void testRegistrarComandaOk() throws PersistenciaException {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         ComandasDAO comandasDAO = new ComandasDAO();
         NuevaComandaDTO nuevaComanda = new NuevaComandaDTO();
         
         List<ProductoComanda> productos = new ArrayList<>();
-        Producto producto = entityManager.find(Producto.class, 1L);
+        Producto producto = entityManager.find(Producto.class, 2L);
+        Mesa mesa = entityManager.find(Mesa.class, 1l);
         
         ProductoComanda productoComanda = new ProductoComanda();
         productoComanda.setCantidad(2);
         productoComanda.setProducto(producto);
-//        productoComanda.setComanda(producto);
+        productoComanda.setComentarios("Sin camaron");
+        productoComanda.setPrecioUnitario(producto.getPrecio());
+        productoComanda.setImporte(productoComanda.getPrecioUnitario()*productoComanda.getCantidad());
+        productos.add(productoComanda);
         
-        nuevaComanda.setFolio("OB-20250409-001");
+        nuevaComanda.setMesa(mesa);
         nuevaComanda.setMontoTotal(0D);
-        nuevaComanda.setFechaHora(LocalDateTime.now());
         nuevaComanda.setEstadoComanda(EstadoComanda.ABIERTA);
-//        Productocomanda 
-//        nuevaComanda.setProductoComanda();
+        nuevaComanda.setProductoComanda(productos);
+        
+        Comanda comanda = comandasDAO.registrar(nuevaComanda);  
+        assertNotNull(comanda.getId());
+        
+    }
+    
+    @Test
+    public void testRegistrarComandaSinComentarios() throws PersistenciaException {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        ComandasDAO comandasDAO = new ComandasDAO();
+        NuevaComandaDTO nuevaComanda = new NuevaComandaDTO();
+        
+        List<ProductoComanda> productos = new ArrayList<>();
+        Producto producto = entityManager.find(Producto.class, 2L);
+        Mesa mesa = entityManager.find(Mesa.class, 1l);
+        
+        ProductoComanda productoComanda = new ProductoComanda();
+        productoComanda.setCantidad(2);
+        productoComanda.setProducto(producto);
+        productoComanda.setPrecioUnitario(producto.getPrecio());
+        productoComanda.setImporte(productoComanda.getPrecioUnitario()*productoComanda.getCantidad());
+        productos.add(productoComanda);
+        
+        nuevaComanda.setMesa(mesa);
+        nuevaComanda.setMontoTotal(0D);
+        nuevaComanda.setEstadoComanda(EstadoComanda.ABIERTA);
+        nuevaComanda.setProductoComanda(productos);
+        
+        Comanda comanda = comandasDAO.registrar(nuevaComanda);  
+        assertNotNull(comanda.getId());
         
     }
 
