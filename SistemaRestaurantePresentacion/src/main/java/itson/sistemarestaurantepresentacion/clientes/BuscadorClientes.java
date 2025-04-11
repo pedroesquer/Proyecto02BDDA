@@ -9,6 +9,7 @@ import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantenegocio.utilidades.EncriptadorAES;
 import itson.sistemarestaurantepresentacion.Render;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
@@ -16,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -24,6 +27,7 @@ import javax.swing.table.DefaultTableModel;
 public class BuscadorClientes extends javax.swing.JFrame {
 
     private Consumer<Cliente> onClienteSeleccionado;
+    private List<Cliente> clientes;
     private IClientesBO clientesBO;
     private static final Logger LOG = Logger.getLogger(BuscadorClientes.class.getName());
 
@@ -35,97 +39,50 @@ public class BuscadorClientes extends javax.swing.JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setTitle("Buscador Clientes");
+        this.clientes = new ArrayList<>();
         this.clientesBO = clientesBO;
         this.cargarTabla();
         this.onClienteSeleccionado = onClienteSeleccionado;
+        this.ocultarColumnaIndice();
+    }
+    
+    private void ocultarColumnaIndice() {
+        TableColumnModel columnModel = tablaClientes.getColumnModel();
+        TableColumn columnaIndice = columnModel.getColumn(0);
+        columnModel.removeColumn(columnaIndice);
     }
 
     private void cargarTabla() {
         tablaClientes.setDefaultRenderer(Object.class, new Render());
-
-        String[] columnas = new String[]{"Nombre", "Correo", "Numero Telefono", "Puntos Fidelidad", "Seleccion"};
-        boolean[] editable = {false, false, false, false, true};
-        Class[] types = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class};
-
-        DefaultTableModel mModel = new DefaultTableModel(columnas, 0) {
-            @Override
-            public Class getColumnClass(int i) {
-                return types[i];
-            }
-
+        DefaultTableModel modeloTabla = new DefaultTableModel(
+            new String[]{"Índice", "Nombre", "Correo", "Numero Telefono", "Puntos Fidelidad"},
+            0
+        ) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return editable[column];
+                return false;
             }
         };
 
-        mModel.setRowCount(0);
-        Object[] datos = new Object[columnas.length];
-        try {
-            String filtroBusqueda = "";
-            List<Cliente> clientes = this.clientesBO.consultar(filtroBusqueda);
-            for (Cliente cliente : clientes) {
-                String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
-                if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
-                    nombreCompleto += " " + cliente.getApellidoMaterno();
-                }
-
-                // Desencriptar el numero de telefono
-                String numeroTelefonoDesencriptado;
-                try {
-                    numeroTelefonoDesencriptado = EncriptadorAES.desencriptar(cliente.getNumeroTelefono());
-                } catch (Exception ex) {
-                    numeroTelefonoDesencriptado = "Error al desencriptar";
-                    System.err.println("Error al desencriptar el numero de telefono: " + ex.getMessage());
-                }
-
-                datos[0] = nombreCompleto;
-                datos[1] = cliente.getCorreo();
-                datos[2] = numeroTelefonoDesencriptado; // Mostrar num desencriptado
-                datos[3] = cliente.getPuntosFidelidad();
-                datos[4] = false;
-
-                mModel.addRow(datos);
-            }
-
-            tablaClientes.setModel(mModel);
-
-            // Implementar un listener para cambiar el estado del checkbox 
-            tablaClientes.getModel().addTableModelListener(e -> {
-                if (e.getType() == TableModelEvent.UPDATE) {
-                    int row = e.getFirstRow();
-                    int column = e.getColumn();
-                    if (column == 4) {
-                        boolean selected = (boolean) mModel.getValueAt(row, column);
-                        if (selected) {
-                            for (int i = 0; i < mModel.getRowCount(); i++) {
-                                if (i != row) {
-                                    mModel.setValueAt(false, i, 4);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        modeloTabla.setRowCount(0);
+        tablaClientes.setModel(modeloTabla);
+        tablaClientes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void llenarTablaClientes() {
         try {
-            String filtroBusqueda = this.buscarLbl.getText();
-            List<Cliente> clientes = this.clientesBO.consultar(filtroBusqueda);
+            String filtroBusqueda = this.buscarLbl.getText().trim();
+            this.clientes = this.clientesBO.consultar(filtroBusqueda);
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaClientes.getModel();
             modeloTabla.setRowCount(0);
 
-            for (Cliente cliente : clientes) {
-                String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
+            for (int i = 0; i < clientes.size(); i++) {
+                Cliente cliente = clientes.get(i);
+                String nombreCompleto = cliente.getNombre() + " " + (cliente.getApellidoPaterno() != null ? cliente.getApellidoPaterno() : "");
                 if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
                     nombreCompleto += " " + cliente.getApellidoMaterno();
                 }
 
-                // Desencriptar el numero de telefono
                 String numeroTelefonoDesencriptado;
                 try {
                     numeroTelefonoDesencriptado = EncriptadorAES.desencriptar(cliente.getNumeroTelefono());
@@ -135,11 +92,11 @@ public class BuscadorClientes extends javax.swing.JFrame {
                 }
 
                 Object[] fila = {
-                    nombreCompleto,
+                    i,
+                    nombreCompleto.trim(),
                     cliente.getCorreo(),
-                    numeroTelefonoDesencriptado, // Mostrar el num desencriptado
-                    cliente.getPuntosFidelidad(),
-                    false
+                    numeroTelefonoDesencriptado,
+                    cliente.getPuntosFidelidad()
                 };
                 modeloTabla.addRow(fila);
             }
@@ -152,6 +109,14 @@ public class BuscadorClientes extends javax.swing.JFrame {
     public void LimpiarTabla(JTable tabla, DefaultTableModel modeloTabla) {
         this.buscarLbl.setText("");
         modeloTabla.setRowCount(0);
+    }
+    
+    private Integer obtenerIndiceCliente() {
+        int filaSeleccionada = tablaClientes.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            return Integer.parseInt(tablaClientes.getModel().getValueAt(filaSeleccionada, 0).toString());
+        }
+        return null;
     }
 
     /**
@@ -258,7 +223,7 @@ public class BuscadorClientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buscarLblActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarLblActionPerformed
-        // TODO add your handling code here:
+        this.llenarTablaClientes();
     }//GEN-LAST:event_buscarLblActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -273,44 +238,21 @@ public class BuscadorClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnSeleccionarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarClienteActionPerformed
-        // TODO add your handling code here:
-        for (int i = 0; i < tablaClientes.getRowCount(); i++) {
-            Boolean isSelected = (Boolean) tablaClientes.getValueAt(i, 4);
-
-            if (Boolean.TRUE.equals(isSelected)) {
-                String nombreCompleto = tablaClientes.getValueAt(i, 0).toString();
-                String correo = tablaClientes.getValueAt(i, 1).toString();
-                String numeroTelefono = tablaClientes.getValueAt(i, 2).toString();
-                double puntosFidelidad = Double.parseDouble(tablaClientes.getValueAt(i, 3).toString());
-
-                String[] partesNombre = nombreCompleto.trim().split("\\s+");
-                String nombre;
-                String apellidoPaterno;
-                String apellidoMaterno = null;
-
-                if (partesNombre.length < 2) {
-                    JOptionPane.showMessageDialog(this, "El nombre debe estar completo.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                } else if (partesNombre.length == 2) {
-                    nombre = partesNombre[0];
-                    apellidoPaterno = partesNombre[1];
-                } else {
-                    nombre = partesNombre[0];
-                    apellidoPaterno = partesNombre[1];
-                    apellidoMaterno = partesNombre[2];
-                }
-
-                Cliente cliente = new Cliente(nombre, apellidoPaterno, apellidoMaterno, correo, numeroTelefono, null);
-                cliente.setPuntosFidelidad(puntosFidelidad);
-
+        int filaSeleccionada = tablaClientes.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            Integer indice = obtenerIndiceCliente();
+            if (indice != null && indice >= 0 && indice < clientes.size()) {
+                Cliente cliente = clientes.get(indice);
                 if (onClienteSeleccionado != null) {
                     onClienteSeleccionado.accept(cliente);
                 }
-
-                break;
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al obtener el cliente seleccionado. Por favor, intenta de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un cliente haciendo clic en una fila de la tabla.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        this.dispose();
     }//GEN-LAST:event_btnSeleccionarClienteActionPerformed
 
 
