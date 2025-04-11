@@ -4,6 +4,7 @@
  */
 package itson.sistemarestaurantepresentacion.clientes;
 
+
 import itson.sistemarestaurantedominio.dtos.NuevoClienteDTO;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
@@ -50,9 +51,6 @@ public class AgregarCliente extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         LblAgregarCliente = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         LblNombre = new javax.swing.JLabel();
@@ -70,12 +68,6 @@ public class AgregarCliente extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(235, 230, 208));
 
-        jLabel1.setText("jLabel1");
-
-        jLabel2.setText("jLabel2");
-
-        jLabel3.setText("jLabel3");
-
         LblAgregarCliente.setBackground(new java.awt.Color(235, 230, 208));
         LblAgregarCliente.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         LblAgregarCliente.setText("Agregar Cliente");
@@ -85,27 +77,14 @@ public class AgregarCliente extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
+                .addContainerGap(234, Short.MAX_VALUE)
                 .addComponent(LblAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15))
+                .addGap(140, 140, 140))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addComponent(LblAgregarCliente)
                 .addGap(20, 20, 20))
         );
@@ -333,9 +312,6 @@ public class AgregarCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField textFieldNombre;
