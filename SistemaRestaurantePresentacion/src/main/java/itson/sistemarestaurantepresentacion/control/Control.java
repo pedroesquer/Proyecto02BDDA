@@ -229,5 +229,10 @@ public class Control {
         buscador.setVisible(true);
     }
     
+    public void volverAlMenuPrincipal(JFrame ventanaActual) {
+        ventanaActual.dispose();
+        abrirMenuAdministrador();
+    }
+    
 
 }
