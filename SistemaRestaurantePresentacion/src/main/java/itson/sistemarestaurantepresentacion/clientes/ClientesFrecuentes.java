@@ -10,7 +10,9 @@ import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantenegocio.utilidades.EncriptadorAES;
 import itson.sistemarestaurantepresentacion.Render;
 import itson.sistemarestaurantepresentacion.control.Control;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.event.TableModelEvent;
@@ -22,15 +24,18 @@ import javax.swing.table.TableRowSorter;
  * @author victoria
  */
 public class ClientesFrecuentes extends javax.swing.JFrame {
-
+    private IClientesBO clientesBO;
+    private List<Cliente> clientesSeleccionados;
+    private static final Logger LOG = Logger.getLogger(ClientesFrecuentes.class.getName());
     
-    IClientesBO clientesBO;
     /**
      * Creates new form ClientesFrecuentes
      */
     public ClientesFrecuentes(IClientesBO clientesBO) {
         initComponents();
         this.clientesBO = clientesBO;
+        List<Cliente> clientesSeleccionados1 = this.clientesSeleccionados;
+new ArrayList<>();
         cargarTabla();
     }
 
@@ -184,18 +189,7 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarClienteActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-        String searchQuery = btnBuscar.getText().toLowerCase();
-
-        DefaultTableModel model = (DefaultTableModel) tablaClientes.getModel();
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-        tablaClientes.setRowSorter(sorter);
-
-        if (searchQuery.trim().isEmpty()) {
-            sorter.setRowFilter(null); // Mostrar todas las filas
-        } else {
-            sorter.setRowFilter(RowFilter.regexFilter(searchQuery)); // Filtrar filas x busqueda
-        }
+        abrirBuscadorClientes();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -203,6 +197,7 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
         // Limpiar tabla
         DefaultTableModel model = (DefaultTableModel) tablaClientes.getModel();
         model.setRowCount(0);
+        clientesSeleccionados.clear();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     
@@ -276,6 +271,50 @@ public class ClientesFrecuentes extends javax.swing.JFrame {
             });
            } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+        
+    private void agregarClienteATabla(Cliente cliente) {
+        DefaultTableModel modeloTabla = (DefaultTableModel) tablaClientes.getModel();
+        modeloTabla.setRowCount(0); 
+
+        String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
+        if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
+            nombreCompleto += " " + cliente.getApellidoMaterno();
+        }
+
+        String numeroTelefonoDesencriptado;
+        try {
+            numeroTelefonoDesencriptado = EncriptadorAES.desencriptar(cliente.getNumeroTelefono());
+        } catch (Exception ex) {
+            numeroTelefonoDesencriptado = "Error al desencriptar";
+            System.err.println("Error al desencriptar el numero de telefono: " + ex.getMessage());
+        }
+
+        Object[] fila = {
+            nombreCompleto,
+            cliente.getCorreo(),
+            numeroTelefonoDesencriptado,
+            cliente.getPuntosFidelidad(),
+            false
+        };
+        modeloTabla.addRow(fila);
+
+        clientesSeleccionados.clear();
+        clientesSeleccionados.add(cliente);
+    }
+
+    private void abrirBuscadorClientes() {
+        try {
+            BuscadorClientes buscador = new BuscadorClientes(clientesBO, clienteSeleccionado -> {
+                if (clienteSeleccionado != null) {
+                    agregarClienteATabla(clienteSeleccionado);
+                }
+            });
+            buscador.setVisible(true);
+        } catch (Exception ex) {
+            LOG.severe("Error al abrir el buscador de clientes: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al abrir el buscador de clientes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
