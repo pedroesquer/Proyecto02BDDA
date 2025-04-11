@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -70,29 +71,33 @@ public class ClientesDAO implements IClientesDAO {
         CriteriaQuery<Cliente> criteriaQuery = criteriaBuilder.createQuery(Cliente.class);
         Root<Cliente> root = criteriaQuery.from(Cliente.class);
         
-        Predicate condicionNombre = criteriaBuilder.like(root.get("nombre"), "%" + filtroBusqueda + "%");
-        Predicate condicionApellido = criteriaBuilder.like(root.get("apellidoPaterno"), "%" + filtroBusqueda + "%");
-        Predicate condicion = criteriaBuilder.or(condicionNombre, condicionApellido);
+        if (filtroBusqueda == null || filtroBusqueda.trim().isEmpty()) {
+                criteriaQuery.select(root);
+            } else {
+                String filtro = "%" + filtroBusqueda.toLowerCase() + "%";
+                Expression<String> nombreCompleto = criteriaBuilder.concat(
+                        criteriaBuilder.concat(
+                                criteriaBuilder.lower(root.get("nombre")),
+                                " "
+                        ),
+                        criteriaBuilder.concat(
+                                criteriaBuilder.lower(root.get("apellidoPaterno")),
+                                criteriaBuilder.concat(
+                                        " ",
+                                        criteriaBuilder.lower(criteriaBuilder.coalesce(root.get("apellidoMaterno"), ""))
+                                )
+                        )
+                );
         
-        criteriaQuery.where(condicion);
-        TypedQuery<Cliente> query = entityManager.createQuery(criteriaQuery);
-        return query.getResultList();
-    }
-    
-    /**
-     * Busca clientes por correo electronico
-     * @param correo del cliente a buscar
-     * @return Cliente encontrado o null si no existe
-     */
-    public Cliente consultarClientePorCorreo(String correo){
-        EntityManager entityManager = ManejadorConexiones.getEntityManager();
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
-        Root<Cliente> root = cq.from(Cliente.class);
-        cq.select(root).where(cb.equal(root.get("correo"), correo));
-        TypedQuery<Cliente> query = entityManager.createQuery(cq);
-        List<Cliente> resultados = query.getResultList();
-        return resultados.isEmpty() ? null : resultados.get(0);
+        Predicate condicionNombreCompleto = criteriaBuilder.like(nombreCompleto, filtro);
+        Predicate condicionCorreo = criteriaBuilder.like(criteriaBuilder.lower(root.get("correo")), filtro);
+        Predicate condicionFinal = criteriaBuilder.or(condicionNombreCompleto, condicionCorreo);
+
+                criteriaQuery.where(condicionFinal);
+            }
+
+            TypedQuery<Cliente> query = entityManager.createQuery(criteriaQuery);
+            return query.getResultList();
     }
     
     /**
@@ -117,9 +122,21 @@ public class ClientesDAO implements IClientesDAO {
         return clienteActualizado; 
     }
 
+     /**
+     * Busca clientes por correo electronico
+     * @param correo del cliente a buscar
+     * @return Cliente encontrado o null si no existe
+     */
     @Override
     public Cliente consultarClienteporCorreo(String correo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+        Root<Cliente> root = cq.from(Cliente.class);
+        cq.select(root).where(cb.equal(root.get("correo"), correo));
+        TypedQuery<Cliente> query = entityManager.createQuery(cq);
+        List<Cliente> resultados = query.getResultList();
+        return resultados.isEmpty() ? null : resultados.get(0);
     }
 
 }
