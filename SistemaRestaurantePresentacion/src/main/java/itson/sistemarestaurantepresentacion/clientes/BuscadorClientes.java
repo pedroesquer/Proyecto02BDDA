@@ -23,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class BuscadorClientes extends javax.swing.JFrame {
 
-    private Consumer<Cliente> onClienteSeleccionado; 
+    private Consumer<Cliente> onClienteSeleccionado;
     private IClientesBO clientesBO;
     private static final Logger LOG = Logger.getLogger(BuscadorClientes.class.getName());
 
@@ -37,41 +37,41 @@ public class BuscadorClientes extends javax.swing.JFrame {
         this.setTitle("Buscador Clientes");
         this.clientesBO = clientesBO;
         this.cargarTabla();
-        this.onClienteSeleccionado = onClienteSeleccionado; 
+        this.onClienteSeleccionado = onClienteSeleccionado;
     }
- 
+
     private void cargarTabla() {
-    tablaClientes.setDefaultRenderer(Object.class, new Render());
+        tablaClientes.setDefaultRenderer(Object.class, new Render());
 
-    String[] columnas = new String[]{"Nombre", "Correo", "Numero Telefono", "Puntos Fidelidad", "Seleccion"};
-    boolean[] editable = {false, false, false, false, true};
-    Class[] types = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class};
+        String[] columnas = new String[]{"Nombre", "Correo", "Numero Telefono", "Puntos Fidelidad", "Seleccion"};
+        boolean[] editable = {false, false, false, false, true};
+        Class[] types = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class};
 
-    DefaultTableModel mModel = new DefaultTableModel(columnas, 0) {
-        @Override
-        public Class getColumnClass(int i) {
-            return types[i];
-        }
-
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return editable[column];
-        }
-    };
-
-    mModel.setRowCount(0);
-    Object[] datos = new Object[columnas.length];
-    try {
-        String filtroBusqueda = "";
-        List<Cliente> clientes = this.clientesBO.consultar(filtroBusqueda);
-        for (Cliente cliente : clientes) {
-            String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
-            if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
-                nombreCompleto += " " + cliente.getApellidoMaterno();
+        DefaultTableModel mModel = new DefaultTableModel(columnas, 0) {
+            @Override
+            public Class getColumnClass(int i) {
+                return types[i];
             }
 
-            // Desencriptar el numero de telefono
-            String numeroTelefonoDesencriptado;
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return editable[column];
+            }
+        };
+
+        mModel.setRowCount(0);
+        Object[] datos = new Object[columnas.length];
+        try {
+            String filtroBusqueda = "";
+            List<Cliente> clientes = this.clientesBO.consultar(filtroBusqueda);
+            for (Cliente cliente : clientes) {
+                String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
+                if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
+                    nombreCompleto += " " + cliente.getApellidoMaterno();
+                }
+
+                // Desencriptar el numero de telefono
+                String numeroTelefonoDesencriptado;
                 try {
                     numeroTelefonoDesencriptado = EncriptadorAES.desencriptar(cliente.getNumeroTelefono());
                 } catch (Exception ex) {
@@ -79,55 +79,54 @@ public class BuscadorClientes extends javax.swing.JFrame {
                     System.err.println("Error al desencriptar el numero de telefono: " + ex.getMessage());
                 }
 
-            datos[0] = nombreCompleto;
-            datos[1] = cliente.getCorreo();
-            datos[2] = numeroTelefonoDesencriptado; // Mostrar num desencriptado
-            datos[3] = cliente.getPuntosFidelidad();
-            datos[4] = false;
+                datos[0] = nombreCompleto;
+                datos[1] = cliente.getCorreo();
+                datos[2] = numeroTelefonoDesencriptado; // Mostrar num desencriptado
+                datos[3] = cliente.getPuntosFidelidad();
+                datos[4] = false;
 
-            mModel.addRow(datos);
-        }
+                mModel.addRow(datos);
+            }
 
-        tablaClientes.setModel(mModel);
+            tablaClientes.setModel(mModel);
 
-        // Implementar un listener para cambiar el estado del checkbox 
-        tablaClientes.getModel().addTableModelListener(e -> {
-            if (e.getType() == TableModelEvent.UPDATE) {
-                int row = e.getFirstRow();
-                int column = e.getColumn();
-                if (column == 4) {  
-                    boolean selected = (boolean) mModel.getValueAt(row, column);
-                    if (selected) {
-                        for (int i = 0; i < mModel.getRowCount(); i++) {
-                            if (i != row) {
-                                mModel.setValueAt(false, i, 4);  
+            // Implementar un listener para cambiar el estado del checkbox 
+            tablaClientes.getModel().addTableModelListener(e -> {
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    int row = e.getFirstRow();
+                    int column = e.getColumn();
+                    if (column == 4) {
+                        boolean selected = (boolean) mModel.getValueAt(row, column);
+                        if (selected) {
+                            for (int i = 0; i < mModel.getRowCount(); i++) {
+                                if (i != row) {
+                                    mModel.setValueAt(false, i, 4);
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
-    } catch (NegocioException ex) {
-        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            });
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-}
-
 
     private void llenarTablaClientes() {
-    try {
-        String filtroBusqueda = this.buscarLbl.getText();
-        List<Cliente> clientes = this.clientesBO.consultar(filtroBusqueda);
-        DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaClientes.getModel();
-        modeloTabla.setRowCount(0);
+        try {
+            String filtroBusqueda = this.buscarLbl.getText();
+            List<Cliente> clientes = this.clientesBO.consultar(filtroBusqueda);
+            DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaClientes.getModel();
+            modeloTabla.setRowCount(0);
 
-        for (Cliente cliente : clientes) {
-            String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
-            if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
-                nombreCompleto += " " + cliente.getApellidoMaterno();
-            }
+            for (Cliente cliente : clientes) {
+                String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
+                if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
+                    nombreCompleto += " " + cliente.getApellidoMaterno();
+                }
 
-            // Desencriptar el numero de telefono
-            String numeroTelefonoDesencriptado;
+                // Desencriptar el numero de telefono
+                String numeroTelefonoDesencriptado;
                 try {
                     numeroTelefonoDesencriptado = EncriptadorAES.desencriptar(cliente.getNumeroTelefono());
                 } catch (Exception ex) {
@@ -135,29 +134,26 @@ public class BuscadorClientes extends javax.swing.JFrame {
                     System.err.println("Error al desencriptar el numero de telefono: " + ex.getMessage());
                 }
 
-            Object[] fila = {
-                nombreCompleto,
-                cliente.getCorreo(),
-                numeroTelefonoDesencriptado, // Mostrar el num desencriptado
-                cliente.getPuntosFidelidad(),
-                false
-            };
-            modeloTabla.addRow(fila);
+                Object[] fila = {
+                    nombreCompleto,
+                    cliente.getCorreo(),
+                    numeroTelefonoDesencriptado, // Mostrar el num desencriptado
+                    cliente.getPuntosFidelidad(),
+                    false
+                };
+                modeloTabla.addRow(fila);
+            }
+        } catch (NegocioException ex) {
+            LOG.severe("No se pudo llenar la tabla: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (NegocioException ex) {
-        LOG.severe("No se pudo llenar la tabla: " + ex.getMessage());
-        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-}
 
-    
     public void LimpiarTabla(JTable tabla, DefaultTableModel modeloTabla) {
         this.buscarLbl.setText("");
         modeloTabla.setRowCount(0);
     }
 
-
-   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -285,8 +281,8 @@ public class BuscadorClientes extends javax.swing.JFrame {
                 String nombreCompleto = tablaClientes.getValueAt(i, 0).toString();
                 String correo = tablaClientes.getValueAt(i, 1).toString();
                 String numeroTelefono = tablaClientes.getValueAt(i, 2).toString();
-                int puntosFidelidad = Integer.parseInt(tablaClientes.getValueAt(i, 3).toString());
-                
+                double puntosFidelidad = Double.parseDouble(tablaClientes.getValueAt(i, 3).toString());
+
                 String[] partesNombre = nombreCompleto.trim().split("\\s+");
                 String nombre;
                 String apellidoPaterno;
@@ -317,7 +313,6 @@ public class BuscadorClientes extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnSeleccionarClienteActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;

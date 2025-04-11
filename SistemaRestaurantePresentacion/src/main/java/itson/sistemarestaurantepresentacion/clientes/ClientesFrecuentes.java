@@ -24,18 +24,19 @@ import javax.swing.table.TableRowSorter;
  * @author victoria
  */
 public class ClientesFrecuentes extends javax.swing.JFrame {
+
     private IClientesBO clientesBO;
-    private List<Cliente> clientesSeleccionados;
+    List<Cliente> clientesSeleccionados = new ArrayList<>();
+
     private static final Logger LOG = Logger.getLogger(ClientesFrecuentes.class.getName());
-    
+
     /**
      * Creates new form ClientesFrecuentes
      */
     public ClientesFrecuentes(IClientesBO clientesBO) {
         initComponents();
         this.clientesBO = clientesBO;
-        List<Cliente> clientesSeleccionados1 = this.clientesSeleccionados;
-new ArrayList<>();
+
         cargarTabla();
     }
 
@@ -182,7 +183,7 @@ new ArrayList<>();
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
         Control.getInstancia().abrirAgregarCliente();
         this.dispose();
@@ -193,14 +194,9 @@ new ArrayList<>();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        // TODO add your handling code here:
-        // Limpiar tabla
-        DefaultTableModel model = (DefaultTableModel) tablaClientes.getModel();
-        model.setRowCount(0);
-        clientesSeleccionados.clear();
+        this.cargarTabla();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
-    
     private void cargarTabla() {
         tablaClientes.setDefaultRenderer(Object.class, new Render());
 
@@ -250,7 +246,7 @@ new ArrayList<>();
             }
 
             tablaClientes.setModel(mModel);
-            
+
             // Implementar un listener para cambiar el estado del checkbox
             tablaClientes.getModel().addTableModelListener(e -> {
                 if (e.getType() == TableModelEvent.UPDATE) {
@@ -269,14 +265,14 @@ new ArrayList<>();
                     }
                 }
             });
-           } catch (NegocioException ex) {
+        } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-        
+
     private void agregarClienteATabla(Cliente cliente) {
         DefaultTableModel modeloTabla = (DefaultTableModel) tablaClientes.getModel();
-        modeloTabla.setRowCount(0); 
+        modeloTabla.setRowCount(0);
 
         String nombreCompleto = cliente.getNombre() + " " + cliente.getApellidoPaterno();
         if (cliente.getApellidoMaterno() != null && !cliente.getApellidoMaterno().isEmpty()) {
@@ -300,7 +296,6 @@ new ArrayList<>();
         };
         modeloTabla.addRow(fila);
 
-        clientesSeleccionados.clear();
         clientesSeleccionados.add(cliente);
     }
 
@@ -319,7 +314,6 @@ new ArrayList<>();
     }
 
 
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LblAgregarCliente;
     private javax.swing.JLabel LblClientesFrecuentes;
