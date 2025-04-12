@@ -33,6 +33,10 @@ import itson.sistemarestaurantepresentacion.productos.FrmAgregarIngredientes;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
 import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
 import itson.sistemarestaurantepresentacion.productos.ActualizarPreciosProductos;
+import itson.sistemarestaurantepresentacion.reportes.GenerarReporte;
+import itson.sistemarestaurantepresentacion.reportes.ReporteComandas;
+import itson.sistemarestaurantepresentacion.reportes.Reportes;
+import java.util.Date;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
 
@@ -248,4 +252,37 @@ public class Control {
         formListaComandas.setVisible(true);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public void abrirGenerarReporte(Date fechaInicio, Date fechaFin) {
+        GenerarReporte formGenerarReporte = new GenerarReporte(fechaInicio, fechaFin);
+        formGenerarReporte.setVisible(true);
+
+    }
+
+    public void abrirReporteComandas() {
+        ReporteComandas formReporteComandas = new ReporteComandas();
+        formReporteComandas.setVisible(true);
+    }
+
+    public void abrirReportes() {
+        Reportes formReporteComandas = new Reportes();
+        formReporteComandas.setVisible(true);
+    }
 }
