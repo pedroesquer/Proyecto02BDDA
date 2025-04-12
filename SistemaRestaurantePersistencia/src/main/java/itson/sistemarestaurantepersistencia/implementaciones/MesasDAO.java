@@ -60,4 +60,18 @@ public class MesasDAO implements IMesasDAO {
         return mesas;
     }
 
+    @Override
+    public Mesa consultarMesaPorNombre(String numeroMesa) {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Mesa> cq = cb.createQuery(Mesa.class);
+        Root<Mesa> mesaRoot = cq.from(Mesa.class);
+
+        cq.select(mesaRoot)
+                .where(cb.equal(mesaRoot.get("numeroMesa"), numeroMesa));
+
+        Mesa mesa = entityManager.createQuery(cq).getSingleResult();
+        return mesa;
+    }
+
 }

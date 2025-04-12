@@ -14,23 +14,28 @@ import java.util.List;
  *
  * @author pedro
  */
-public class MesasBO implements IMesasBO{
-    
+public class MesasBO implements IMesasBO {
+
     private IMesasDAO mesasDAO;
 
     public MesasBO(IMesasDAO mesasDAO) {
         this.mesasDAO = mesasDAO;
     }
-    
-    
-    
-    
+
     @Override
-    public List<Mesa> consultarMesas() throws NegocioException{
-        if(mesasDAO.consultarMesas() == null){
+    public List<Mesa> consultarMesas() throws NegocioException {
+        if (mesasDAO.consultarMesas() == null) {
             throw new NegocioException("No puede haber mesas vacias");
         }
         return this.mesasDAO.consultarMesas();
     }
-    
+
+    @Override
+    public Mesa consultarMesaPorNombre(String numeroMesa) throws NegocioException {
+        if (mesasDAO.consultarMesaPorNombre(numeroMesa) != null) {
+            throw new NegocioException("No existe mesa con ese numero");
+        }
+        return this.mesasDAO.consultarMesaPorNombre(numeroMesa);
+    }
+
 }

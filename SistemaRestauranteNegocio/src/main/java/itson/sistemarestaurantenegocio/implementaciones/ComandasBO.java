@@ -50,7 +50,7 @@ public class ComandasBO implements IComandasBO {
 
     @Override
     public Comanda cerrarComanda(Long idComanda) throws NegocioException, PersistenciaException, CantidadInexistenteException {
-        if (idComanda != null) {
+        if (idComanda == null) {
             throw new NegocioException("La comanda no existe");
         }
         if (comandasDAO.consultarComandaIndividual(idComanda).getEstado() == EstadoComanda.CERRADA) {
@@ -61,7 +61,7 @@ public class ComandasBO implements IComandasBO {
 
     @Override
     public Comanda cancelarComanda(Long idComanda) throws NegocioException, PersistenciaException, CantidadInexistenteException {
-        if (idComanda != null) {
+        if (idComanda == null) {
             throw new NegocioException("La comanda no existe");
         }
         if (comandasDAO.consultarComandaIndividual(idComanda).getEstado() == EstadoComanda.CERRADA) {

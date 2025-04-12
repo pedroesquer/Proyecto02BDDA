@@ -11,4 +11,6 @@ public interface IMesasDAO {
     public abstract void precargarMesas();
     
     public abstract List<Mesa> consultarMesas();
+    
+    public Mesa consultarMesaPorNombre(String numeroMesa);
 }

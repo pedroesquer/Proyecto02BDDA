@@ -2,6 +2,7 @@ package itson.sistemarestaurantepresentacion.control;
 
 import itson.sistemarestaurantedominio.Cliente;
 import itson.sistemarestaurantedominio.Producto;
+import static itson.sistemarestaurantedominio.ProductoComanda_.producto;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.IComandasBO;
@@ -29,9 +30,11 @@ import itson.sistemarestaurantepresentacion.productos.ListaProductos;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
 import itson.sistemarestaurantepresentacion.clientes.BuscadorClientes;
 import itson.sistemarestaurantepresentacion.comandas.AgregarComanda;
+import itson.sistemarestaurantepresentacion.comandas.AgregarDetalleComanda;
 import itson.sistemarestaurantepresentacion.comandas.Comandas;
 import itson.sistemarestaurantepresentacion.comandas.DetallesComanda;
 import itson.sistemarestaurantepresentacion.comandas.ListaComandas;
+import itson.sistemarestaurantepresentacion.observers.AgregarDetallesComandaObserver;
 import itson.sistemarestaurantepresentacion.productos.Productos;
 import itson.sistemarestaurantepresentacion.productos.FrmAgregarIngredientes;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
@@ -56,7 +59,7 @@ public class Control {
     IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();
     IClientesBO clientesBO = FabricaObjetosNegocio.crearClientesBO();
     IComandasBO comandasBO = FabricaObjetosNegocio.crearComandasBO();
-    IProductosComandaBO  prp = FabricaObjetosNegocio.crearProductoComandaBO();
+    IProductosComandaBO prp = FabricaObjetosNegocio.crearProductoComandaBO();
     IMesasBO mesasBO = FabricaObjetosNegocio.crearMesasBO();
     MenuAdministrador formMenuAdministrador;
 
@@ -257,35 +260,23 @@ public class Control {
         ListaComandas formListaComandas = new ListaComandas(comandasBO);
         formListaComandas.setVisible(true);
     }
-    
-    public void abrirDetallesComanda(Long idComanda){
+
+    public void abrirDetallesComanda(Long idComanda) {
         DetallesComanda formDetallesComanda = new DetallesComanda(idComanda, comandasBO, prp);
         formDetallesComanda.setVisible(true);
     }
-    
+
     public void abrirAgregarComandas() {
-        AgregarComanda formAgregarComanda = new AgregarComanda(comandasBO, mesasBO);
+        AgregarComanda formAgregarComanda = new AgregarComanda(comandasBO, mesasBO, productosBO);
         formAgregarComanda.setVisible(true);
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public void abrirAgregarDetalleComanda(Producto producto, AgregarDetallesComandaObserver observer) {
+        AgregarDetalleComanda formAgregarDetalleComanda = new AgregarDetalleComanda(comandasBO, producto);
+        formAgregarDetalleComanda.agregarObserver(observer);
+        formAgregarDetalleComanda.setVisible(true);
+    }
+
     public void abrirGenerarReporte(Date fechaInicio, Date fechaFin) {
         GenerarReporte formGenerarReporte = new GenerarReporte(fechaInicio, fechaFin);
         formGenerarReporte.setVisible(true);

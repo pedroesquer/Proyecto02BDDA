@@ -1,39 +1,72 @@
 package itson.sistemarestaurantepresentacion.comandas;
 
+import itson.sistemarestaurantedominio.EstadoComanda;
 import itson.sistemarestaurantedominio.Mesa;
+import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantedominio.ProductoComanda;
+import itson.sistemarestaurantedominio.dtos.AgregarProductoComandaDTO;
+import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
+import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
+import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantenegocio.IComandasBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.IMesasBO;
+import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import itson.sistemarestaurantepresentacion.control.Control;
+import itson.sistemarestaurantepresentacion.observers.AgregarDetallesComandaObserver;
+import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
+ * ntenegocio.IMesasBO; import
+ * itson.sistemarestaurantenegocio.excepciones.NegocioException; import
+ * itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio; import
+ * itson.sistemarestaurantepresentacion.control.Control; import
+ * itson.sistemarestaurantepresentacion.observers.AgregarDetallesComandaObserver;
+ * import
+ * itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
+ * import java.util.List; import java.util.logging.Level; import
+ * java.util.logging.Logger; import javax.swing.DefaultComboBoxModel;
+ *
  *
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
  * Soto
  */
-public class AgregarComanda extends javax.swing.JFrame {
+public class AgregarComanda extends javax.swing.JFrame implements ProductoSeleccionadoObserver, AgregarDetallesComandaObserver {
 
-    private IComandasBO comandasBO;
     private IMesasBO mesasBO;
+    private IProductosBO productosBO;
+    private IComandasBO comandaBO;
+
+    DefaultTableModel modeloTabla;
 
     /**
      * Creates new form Productos
      */
-    public AgregarComanda(IComandasBO comandasBO, IMesasBO mesasBO) {
+    public AgregarComanda(IComandasBO comandasBO, IMesasBO mesasBO, IProductosBO productosBO) {
+        this.comandaBO = FabricaObjetosNegocio.crearComandasBO();
         initComponents();
         this.setTitle("Comandas");
         this.setResizable(false);
         this.setSize(760, 500);
         this.setLocationRelativeTo(null);
-        this.comandasBO = comandasBO;
         this.mesasBO = mesasBO;
+        this.productosBO = productosBO;
         DefaultComboBoxModel<Mesa> modeloMesas = new DefaultComboBoxModel<>();
         comboBoxMesa.setModel(modeloMesas);
+        tablaComandas.removeColumn(tablaComandas.getColumnModel().getColumn(0));
+        modeloTabla = (DefaultTableModel) this.tablaComandas.getModel();
+        modeloTabla.setRowCount(0);
         try {
             obtenerNombresMesa();
         } catch (NegocioException ex) {
@@ -59,7 +92,7 @@ public class AgregarComanda extends javax.swing.JFrame {
         btnBuscarCliente = new javax.swing.JButton();
         pnlTablaComandas = new javax.swing.JScrollPane();
         tablaComandas = new javax.swing.JTable();
-        btnVolver1 = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
         comboBoxMesa = new javax.swing.JComboBox<>();
         btnBuscarProducto1 = new javax.swing.JButton();
@@ -140,13 +173,13 @@ public class AgregarComanda extends javax.swing.JFrame {
 
         panelGeneral.add(pnlTablaComandas, new org.netbeans.lib.awtextra.AbsoluteConstraints(152, 190, 470, 154));
 
-        btnVolver1.setText("Volver");
-        btnVolver1.addActionListener(new java.awt.event.ActionListener() {
+        btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVolver1ActionPerformed(evt);
+                btnVolverActionPerformed(evt);
             }
         });
-        panelGeneral.add(btnVolver1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 420, 93, -1));
+        panelGeneral.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 400, 93, -1));
 
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -154,7 +187,7 @@ public class AgregarComanda extends javax.swing.JFrame {
                 btnAceptarActionPerformed(evt);
             }
         });
-        panelGeneral.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, 93, -1));
+        panelGeneral.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 400, 93, -1));
 
         comboBoxMesa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -169,7 +202,7 @@ public class AgregarComanda extends javax.swing.JFrame {
                 btnBuscarProducto1ActionPerformed(evt);
             }
         });
-        panelGeneral.add(btnBuscarProducto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 380, 116, -1));
+        panelGeneral.add(btnBuscarProducto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 350, 116, -1));
 
         lblNombreCliente.setText("-");
         panelGeneral.add(lblNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 133, 97, -1));
@@ -182,7 +215,7 @@ public class AgregarComanda extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
         );
 
         pack();
@@ -198,32 +231,86 @@ public class AgregarComanda extends javax.swing.JFrame {
         }
     }
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
-        Control.getInstancia().abrirMenuAdministrador();
-        this.dispose();
+
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
-    private void btnVolver1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolver1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnVolver1ActionPerformed
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        Control.getInstancia().abrirComandas();
+        this.dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
 
+    private Mesa obtenerMesa() throws NegocioException {
+        return (Mesa) comboBoxMesa.getSelectedItem();
+    }
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        // TODO add your handling code here:
+        try {
+            NuevaComandaDTO comandaDTO = new NuevaComandaDTO();
+            //TIENES QUE SETEAR MONTO TOTAL EN 0, ESTADO EN ABIERTA Y VERIFICAR SI TIENE O NO CLIENTE Y ASIGNARLO DEPENDIENDO
+            comandaDTO.setFechaHora(LocalDateTime.now());
+            comandaDTO.setMontoTotal(0.0);
+            comandaDTO.setMesa(obtenerMesa());
+            comandaDTO.setEstadoComanda(EstadoComanda.ABIERTA);
+            comandaDTO.setProductoComanda(generarListaProductosComanda());
+            try {
+                comandaBO.crearComanda(comandaDTO);
+                JOptionPane.showMessageDialog(this, "La comanda fue agregada correctamente.",
+                        "Comanda registrada", JOptionPane.INFORMATION_MESSAGE);
+                Logger.getLogger(AgregarComanda.class.getName()).log(Level.INFO, "Nueva comanda creada exitosamente.");
+            } catch (NegocioException ex) {
+                Logger.getLogger(AgregarComanda.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PersistenciaException ex) {
+                Logger.getLogger(AgregarComanda.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } catch (NegocioException ex) {
+            Logger.getLogger(AgregarComanda.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnBuscarProducto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProducto1ActionPerformed
-        
+        Control.getInstancia().abrirBuscadorProductos(this);
     }//GEN-LAST:event_btnBuscarProducto1ActionPerformed
 
     private void comboBoxMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxMesaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxMesaActionPerformed
 
+    private List<ProductoComanda> generarListaProductosComanda() {
+        DefaultTableModel modelo = (DefaultTableModel) tablaComandas.getModel();
+
+        List<ProductoComanda> lista = new ArrayList<>();
+
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            ProductoComanda producto = new ProductoComanda();
+
+            // Se obtiene la cantidad (columna 1)
+            producto.setCantidad(Integer.parseInt(modelo.getValueAt(i, 1).toString()));
+
+            // Se consulta el producto usando el ID (columna 2)
+            producto.setProducto(productosBO.consultarProductoIndividual(
+                    Long.parseLong(modelo.getValueAt(i, 0).toString()))
+            );
+
+            // Aquí debería ser otra columna, por ejemplo la columna 3, si es que es la de comentarios
+            producto.setComentarios(modelo.getValueAt(i, 3).toString());  // Ajuste
+
+            // Se obtiene el precio unitario (columna 4)
+            producto.setPrecioUnitario(Float.parseFloat(modelo.getValueAt(i, 4).toString()));
+
+            // Se calcula el importe (columna 4)
+            producto.setImporte(Float.parseFloat(modelo.getValueAt(i, 4).toString()));
+
+            lista.add(producto);
+        }
+        return lista;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnBuscarProducto1;
-    private javax.swing.JButton btnVolver1;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<Mesa> comboBoxMesa;
     private javax.swing.JLabel iconChefSoft;
     private javax.swing.JLabel iconComanda;
@@ -234,4 +321,28 @@ public class AgregarComanda extends javax.swing.JFrame {
     private javax.swing.JScrollPane pnlTablaComandas;
     private javax.swing.JTable tablaComandas;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void productoSeleccionado(NuevoProductoDTO productoDTO) {
+        Producto producto = productosBO.consultarProductoIndividual(productoDTO.getId());
+        Control.getInstancia().abrirAgregarDetalleComanda(producto, this);
+    }
+
+    private void actualizarTablaConProducto(AgregarProductoComandaDTO productoComandaDTO) {
+
+        Object[] fila = {
+            productoComandaDTO.getIdProducto(),
+            productoComandaDTO.getCantidad(),
+            productosBO.consultarProductoIndividual(productoComandaDTO.getIdProducto()).getNombre(),
+            productoComandaDTO.getComentario(),
+            productoComandaDTO.getPrecioUnitario(),
+            productoComandaDTO.getImporte()
+        };
+        modeloTabla.addRow(fila);
+    }
+
+    @Override
+    public void detallesProductoComandaAceptado(AgregarProductoComandaDTO productoComandaDTO) {
+        actualizarTablaConProducto(productoComandaDTO);
+    }
 }

@@ -1,6 +1,13 @@
     package itson.sistemarestaurantepresentacion.comandas;
 
+import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantedominio.dtos.AgregarProductoComandaDTO;
+import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantenegocio.IComandasBO;
+import itson.sistemarestaurantepresentacion.observers.AgregarDetallesComandaObserver;
+import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -8,18 +15,24 @@ import itson.sistemarestaurantenegocio.IComandasBO;
  */
 public class AgregarDetalleComanda extends javax.swing.JFrame {
 
+    private Producto producto;
     private IComandasBO comandasBO;
+    private List<AgregarDetallesComandaObserver> observers = new ArrayList<>();
     /**
      * Creates new form Productos
      */
-    public AgregarDetalleComanda(IComandasBO comandasBO) {
+    public AgregarDetalleComanda(IComandasBO comandasBO, Producto producto) {
         initComponents();
         this.setTitle("Comandas");
         this.setResizable(false);
         this.setSize(400,250);
         this.setLocationRelativeTo(null);
         this.comandasBO = comandasBO;
+        this.producto = producto;
+        this.lblProducto.setText(producto.getNombre());
     }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,31 +44,41 @@ public class AgregarDetalleComanda extends javax.swing.JFrame {
     private void initComponents() {
 
         panelGeneral = new javax.swing.JPanel();
-        jTextField2 = new javax.swing.JTextField();
-        lblStockActual = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        textFieldComentario = new javax.swing.JTextField();
+        lblProducto = new javax.swing.JLabel();
+        btnCancelar = new javax.swing.JButton();
+        btnAceptar = new javax.swing.JButton();
         lblStockActual1 = new javax.swing.JLabel();
         lblStockActual2 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        spinnerCantidad = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         panelGeneral.setBackground(new java.awt.Color(221, 218, 174));
         panelGeneral.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        panelGeneral.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 184, 52));
+        panelGeneral.add(textFieldComentario, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 184, 52));
 
-        lblStockActual.setBackground(new java.awt.Color(0, 0, 0));
-        lblStockActual.setFont(new java.awt.Font("Helvetica Neue", 0, 20)); // NOI18N
-        lblStockActual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblStockActual.setText("Producto");
-        panelGeneral.add(lblStockActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, 250, -1));
+        lblProducto.setBackground(new java.awt.Color(0, 0, 0));
+        lblProducto.setFont(new java.awt.Font("Helvetica Neue", 0, 20)); // NOI18N
+        lblProducto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblProducto.setText("Producto");
+        panelGeneral.add(lblProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 250, -1));
 
-        jButton1.setText("Cancelar");
-        panelGeneral.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 214, 78, -1));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        panelGeneral.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 78, -1));
 
-        jButton2.setText("Aceptar");
-        panelGeneral.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 188, 150, 40));
+        btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
+        panelGeneral.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 170, 150, 40));
 
         lblStockActual1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         lblStockActual1.setText("Comentario:");
@@ -64,7 +87,9 @@ public class AgregarDetalleComanda extends javax.swing.JFrame {
         lblStockActual2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         lblStockActual2.setText("Cantidad:");
         panelGeneral.add(lblStockActual2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 100, -1, -1));
-        panelGeneral.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 90, 73, 44));
+
+        spinnerCantidad.setModel(new javax.swing.SpinnerNumberModel(1, null, null, 1));
+        panelGeneral.add(spinnerCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 90, 73, 44));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -80,16 +105,55 @@ public class AgregarDetalleComanda extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        AgregarProductoComandaDTO productoComanda = new AgregarProductoComandaDTO();
+        Integer cantidad = (Integer) spinnerCantidad.getValue();
+        productoComanda.setCantidad(cantidad);
+        productoComanda.setComentario(textFieldComentario.getText());
+        productoComanda.setIdProducto(producto.getId());
+        productoComanda.setPrecioUnitario(producto.getPrecio());
+        productoComanda.setImporte(producto.getPrecio() * cantidad);
+        notificarObservers(productoComanda);
+        this.dispose();
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+       /**
+     * Registra un nuevo observador para ser notificado cuando un jugador sea
+     * seleccionado.
+     *
+     * @param obs la clase que implementa JugadorSeleccionadoObserver
+     */
+    public void agregarObserver(AgregarDetallesComandaObserver obs) {
+        observers.add(obs);
+    }
+
+    /**
+     * Notifica a todos los observadores registrados que un jugador ha sido
+     * seleccionado.
+     *
+     * @param producto el jugador seleccionado
+     */
+    private void notificarObservers(AgregarProductoComandaDTO productoComanda) {
+        for (AgregarDetallesComandaObserver o : observers) {
+            o.detallesProductoComandaAceptado(productoComanda);
+        }
+    }
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JLabel lblStockActual;
+    private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JLabel lblProducto;
     private javax.swing.JLabel lblStockActual1;
     private javax.swing.JLabel lblStockActual2;
     private javax.swing.JPanel panelGeneral;
+    private javax.swing.JSpinner spinnerCantidad;
+    private javax.swing.JTextField textFieldComentario;
     // End of variables declaration//GEN-END:variables
+
+
 }

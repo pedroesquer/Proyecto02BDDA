@@ -150,7 +150,7 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
         iconComanda = new javax.swing.JLabel();
         pnlTablaComanda = new javax.swing.JScrollPane();
         tablaComandas = new javax.swing.JTable();
-        btnBuscar = new javax.swing.JButton();
+        btnSeleccionComanda = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -226,13 +226,13 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
 
         panelGeneral.add(pnlTablaComanda, new org.netbeans.lib.awtextra.AbsoluteConstraints(151, 188, 491, 154));
 
-        btnBuscar.setText("Seleccionar comanda");
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+        btnSeleccionComanda.setText("Seleccionar comanda");
+        btnSeleccionComanda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
+                btnSeleccionComandaActionPerformed(evt);
             }
         });
-        panelGeneral.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 370, 150, -1));
+        panelGeneral.add(btnSeleccionComanda, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 370, 150, -1));
 
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -262,7 +262,7 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+    private void btnSeleccionComandaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionComandaActionPerformed
         int filaSeleccionada = tablaComandas.getSelectedRow();
         if (filaSeleccionada != -1) {
             Long id = obtenerIdComanda();
@@ -272,14 +272,14 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
             JOptionPane.showMessageDialog(this, "No seleccionaste nada");
         }
         this.dispose();  // Cerrar la ventanaControl.getInstancia().abrirBuscadorIngredientes(this);
-    }//GEN-LAST:event_btnBuscarActionPerformed
+    }//GEN-LAST:event_btnSeleccionComandaActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnSeleccionComanda;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel iconChefSoft;
     private javax.swing.JLabel iconComanda;

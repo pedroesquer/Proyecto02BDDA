@@ -9,10 +9,13 @@ import itson.sistemarestaurantenegocio.IComandasBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.IProductosComandaBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantepersistencia.excepciones.CantidadInexistenteException;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import itson.sistemarestaurantepresentacion.control.Control;
 import itson.sistemarestaurantepresentacion.observers.ComandaSeleccionadaObserver;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -94,9 +97,9 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
         pnlTablaProductosComanda = new javax.swing.JScrollPane();
         tablaProductosComanda = new javax.swing.JTable();
         btnVolver = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        lblAgregarIcon = new javax.swing.JLabel();
         lblEntregar = new javax.swing.JLabel();
-        lblAgregar1 = new javax.swing.JLabel();
+        lblAgregar = new javax.swing.JLabel();
         lblEntregarComanda = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -174,20 +177,30 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
         });
         panelGeneral.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 410, 93, -1));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/aniadirProducto.png"))); // NOI18N
-        panelGeneral.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 190, 110, 110));
+        lblAgregarIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/aniadirProducto.png"))); // NOI18N
+        lblAgregarIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblAgregarIconMouseClicked(evt);
+            }
+        });
+        panelGeneral.add(lblAgregarIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 110, 110));
 
         lblEntregar.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         lblEntregar.setText("Entregar Comanda");
-        panelGeneral.add(lblEntregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 320, -1, -1));
+        panelGeneral.add(lblEntregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 310, -1, -1));
 
-        lblAgregar1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        lblAgregar1.setText("Agregar");
-        panelGeneral.add(lblAgregar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, -1, -1));
+        lblAgregar.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        lblAgregar.setText("Agregar");
+        panelGeneral.add(lblAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, -1, -1));
 
         lblEntregarComanda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/entregarComanda.png"))); // NOI18N
         lblEntregarComanda.setText("s");
-        panelGeneral.add(lblEntregarComanda, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 170, -1, -1));
+        lblEntregarComanda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblEntregarComandaMouseClicked(evt);
+            }
+        });
+        panelGeneral.add(lblEntregarComanda, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 170, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -208,6 +221,31 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    private void lblAgregarIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAgregarIconMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblAgregarIconMouseClicked
+
+    private void lblEntregarComandaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblEntregarComandaMouseClicked
+        try {
+            comandasBO.cerrarComanda(idComanda);
+            JOptionPane.showMessageDialog(this, "La comanda fue cerrada exitosamente.",
+                    "Comanda cerrada", JOptionPane.INFORMATION_MESSAGE);
+        } catch (CantidadInexistenteException ex) {
+            JOptionPane.showMessageDialog(this, "No hay suficiente stock para completar la comanda:\n" + ex.getMessage(),
+                    "Stock insuficiente", JOptionPane.WARNING_MESSAGE);
+            Logger.getLogger(DetallesComanda.class.getName()).log(Level.WARNING, "Stock insuficiente al cerrar comanda", ex);
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error de negocio:\n" + ex.getMessage(),
+                    "Error de negocio", JOptionPane.WARNING_MESSAGE);
+            Logger.getLogger(DetallesComanda.class.getName()).log(Level.WARNING, "Error de negocio al cerrar comanda", ex);
+        } catch (PersistenciaException ex) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error al acceder a la base de datos:\n" + ex.getMessage(),
+                    "Error de persistencia", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(DetallesComanda.class.getName()).log(Level.SEVERE, "Error de persistencia al cerrar comanda", ex);
+        }
+
+    }//GEN-LAST:event_lblEntregarComandaMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -216,8 +254,8 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel iconChefSoft;
     private javax.swing.JLabel iconComanda;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel lblAgregar1;
+    private javax.swing.JLabel lblAgregar;
+    private javax.swing.JLabel lblAgregarIcon;
     private javax.swing.JLabel lblEntregar;
     private javax.swing.JLabel lblEntregarComanda;
     private javax.swing.JLabel lblTituloComanda;

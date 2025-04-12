@@ -213,9 +213,10 @@ public class ComandasDAO implements IComandasDAO {
 
     /**
      * Método para buscar comandas dentro de una fechas especificas.
+     *
      * @param desde
      * @param hasta
-     * @return 
+     * @return
      */
     public List<Comanda> buscarPorRangoFechas(Date desde, Date hasta) {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();

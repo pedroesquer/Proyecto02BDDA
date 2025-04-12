@@ -14,4 +14,6 @@ import java.util.List;
  */
 public interface IMesasBO {
     List<Mesa> consultarMesas() throws NegocioException;
+    
+    Mesa consultarMesaPorNombre(String numeroMesa) throws NegocioException;
 }
