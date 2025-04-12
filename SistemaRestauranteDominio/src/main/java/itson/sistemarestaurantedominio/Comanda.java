@@ -124,7 +124,7 @@ public class Comanda implements Serializable {
     public String getEstadoString() {
         return estado != null ? estado.name() : "";
     }
-    
+    //Profe disculpe por estos es que la neta el JaspertReports tenia muchos problemas
     public String getMesaString(){
         return mesa.getNumeroMesa();
     }

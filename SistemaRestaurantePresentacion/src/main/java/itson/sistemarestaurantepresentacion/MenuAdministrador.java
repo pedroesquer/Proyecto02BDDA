@@ -71,6 +71,11 @@ public class MenuAdministrador extends javax.swing.JFrame {
         lblReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportesIcon.png"))); // NOI18N
         lblReportes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblReportes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblReportes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblReportesMouseClicked(evt);
+            }
+        });
 
         lblProductos.setBackground(new java.awt.Color(235, 230, 208));
         lblProductos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -235,6 +240,11 @@ public class MenuAdministrador extends javax.swing.JFrame {
         Control.getInstancia().abrirComandas();
         this.setVisible(false);
     }//GEN-LAST:event_comandasLabelMouseClicked
+
+    private void lblReportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblReportesMouseClicked
+        Control.getInstancia().abrirReportes();
+        this.setVisible(false);
+    }//GEN-LAST:event_lblReportesMouseClicked
 
     
    
