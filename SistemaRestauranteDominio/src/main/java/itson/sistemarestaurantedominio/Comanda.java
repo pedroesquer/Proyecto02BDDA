@@ -119,6 +119,24 @@ public class Comanda implements Serializable {
     public EstadoComanda getEstado() {
         return estado;
     }
+    
+    // Este método se llama antes de pasar los datos al reporte
+    public String getEstadoString() {
+        return estado != null ? estado.name() : "";
+    }
+    
+    public String getMesaString(){
+        return mesa.getNumeroMesa();
+    }
+    
+    public String getClienteString(){
+        if (cliente!=null)
+            return cliente.getNombre() + cliente.getApellidoPaterno();
+        else{
+            return "-";
+        }
+    }
+
 
     public void setEstado(EstadoComanda estado) {
         this.estado = estado;
