@@ -76,10 +76,10 @@ public class BuscadorProductos extends javax.swing.JFrame {
     }
 
     /**
-     * Registra un nuevo observador para ser notificado cuando un jugador sea
+     * Registra un nuevo observador para ser notificado cuando un producto sea
      * seleccionado.
      *
-     * @param obs la clase que implementa JugadorSeleccionadoObserver
+     * @param obs la clase que implementa ProductoSeleccionadoObserver
      */
     public void agregarObserver(ProductoSeleccionadoObserver obs) {
         observers.add(obs);
