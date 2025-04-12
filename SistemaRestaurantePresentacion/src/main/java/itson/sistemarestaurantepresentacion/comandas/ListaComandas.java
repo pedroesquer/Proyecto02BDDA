@@ -1,8 +1,10 @@
 package itson.sistemarestaurantepresentacion.comandas;
 
+import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantepresentacion.ingredientes.*;
 import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
+import itson.sistemarestaurantenegocio.IComandasBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
@@ -24,17 +26,17 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
     /**
      * Creates new form Productos
      */
-    private IIngredientesBO ingredientesBO;
+    private IComandasBO comandasBO;
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
 
-    public ListaComandas(IIngredientesBO ingredientesBO) {
+    public ListaComandas(IComandasBO comandasBO) {
         initComponents();
-        this.setTitle("Lista ingredientes");
+        this.setTitle("Lista comandas");
         this.setResizable(false);
         this.setSize(760, 500);
         this.setLocationRelativeTo(null);
-        this.ingredientesBO = ingredientesBO;
-        this.llenarTablaIngredientes();
+        this.comandasBO = comandasBO;
+        this.llenarTablaComandas();
         this.ocultarColumnaID();
     }
 
@@ -42,17 +44,17 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
      * Llena la tabla con todos los ingredientes disponibles. Consulta los
      * ingredientes y los agrega a la tabla.
      */
-    private void llenarTablaIngredientes() {
+    private void llenarTablaComandas() {
         try {
-            List<Ingrediente> ingredientes = this.ingredientesBO.consultar("");
+            List<Comanda> comandas = this.comandasBO.consultar();
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaComandas.getModel();
             modeloTabla.setRowCount(0);
-            for (Ingrediente ingrediente : ingredientes) {
+            for (Comanda comanda : comandas) {
                 Object[] fila = {
-                    ingrediente.getId(),
-                    ingrediente.getNombre(),
-                    ingrediente.getUnidadMedida(),
-                    ingrediente.getStock()
+                    comanda.getId(),
+                    comanda.getMesa(),
+                    comanda.getFechaHora(),
+                    comanda.getMontoTotal()
                 };
                 modeloTabla.addRow(fila);
             }
@@ -62,11 +64,12 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
         }
     }
 
-     private void ocultarColumnaID() {
+    private void ocultarColumnaID() {
         TableColumnModel columnModel = tablaComandas.getColumnModel();
         TableColumn columnaID = columnModel.getColumn(0);
-        columnModel.removeColumn(columnaID); 
+        columnModel.removeColumn(columnaID);
     }
+
     /**
      * Actualiza la tabla con los datos de un ingrediente seleccionado.
      *

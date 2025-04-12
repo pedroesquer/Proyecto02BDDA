@@ -5,6 +5,7 @@ itson\sistemarestaurantedominio\ProductoComanda_.class
 itson\sistemarestaurantedominio\Producto.class
 itson\sistemarestaurantedominio\ProductoComanda.class
 itson\sistemarestaurantedominio\dtos\NuevoClienteDTO.class
+itson\sistemarestaurantedominio\dtos\CerrarComandaDTO.class
 itson\sistemarestaurantedominio\Comanda_.class
 itson\sistemarestaurantedominio\Producto_.class
 itson\sistemarestaurantedominio\Comanda.class

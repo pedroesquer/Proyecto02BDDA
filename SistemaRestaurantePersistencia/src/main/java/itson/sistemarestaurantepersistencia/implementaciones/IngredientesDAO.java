@@ -85,6 +85,7 @@ public class IngredientesDAO implements IIngredientesDAO {
      * datos.
      *
      *
+     * @param filtroBusqueda
      * @return Lista de ingredientes.
      */
     @Override

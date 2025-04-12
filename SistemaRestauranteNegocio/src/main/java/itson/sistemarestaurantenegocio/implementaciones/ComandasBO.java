@@ -4,6 +4,7 @@
  */
 package itson.sistemarestaurantenegocio.implementaciones;
 
+import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantedominio.Mesa;
 import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
 import itson.sistemarestaurantenegocio.IComandasBO;
@@ -15,37 +16,44 @@ import itson.sistemarestaurantedominio.EstadoMesa;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.ProductoComanda;
 import java.util.List;
+
 /**
  *
- * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto.
+ * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
+ * Soto.
  */
-public class ComandasBO  implements IComandasBO{
+public class ComandasBO implements IComandasBO {
+
     private IComandasDAO comandasDAO;
-    private MesasDAO mesasDAO;
-    private ProductosDAO productosDAO;
-    
-    public ComandasBO(IComandasDAO comandasDAO, MesasDAO mesasDAO, ProductosDAO productosDAO){
-        this.comandasDAO=comandasDAO;
-        this.mesasDAO=mesasDAO;
-        this.productosDAO=productosDAO;
+    private static final int LIMITE_CARACTERES_NOMBRE = 50;
+
+    private static final int LIMITE_FILTRO_BUSQUEDA = 50;
+
+    public ComandasBO(IComandasDAO comandasDAO) {
+        this.comandasDAO = comandasDAO;
     }
-    
-    public void crearComanda(NuevaComandaDTO nuevaComandaDTO) throws NegocioException{
-        try{
-            Mesa mesa = nuevaComandaDTO.getMesa();
-            if(mesa == null){
-                throw new NegocioException("La mesa no debe ser nula.");
-            }
-            if(mesa.getEstado() != EstadoMesa.DISPONIBLE){
-                throw new NegocioException("Mesa ocupada.");
-            }
-            List<ProductoComanda> productos = nuevaComandaDTO.getProductoComanda();
-            if(productos==null || productos.isEmpty()){
-                throw new NegocioException("La comanda debe tener al menos un producto.");
-            }  
-        } catch (Exception ex){
-            throw new NegocioException("Error al crear la comanda: " + ex.getMessage());
+
+    @Override
+    public List<Comanda> consultar() throws NegocioException {
+        if(comandasDAO.consultarComanda().isEmpty()){
+            throw new NegocioException("No existen comandas abiertas por el momento");
         }
+        return comandasDAO.consultarComanda();
     }
-    
+
+    @Override
+    public Comanda crearComanda(NuevaComandaDTO nuevaComandaDTO) throws NegocioException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Comanda cerrarComanda(Long idComanda) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Comanda cancelarComanda(Long idComanda) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

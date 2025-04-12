@@ -1,25 +1,28 @@
 package itson.sistemarestaurantepresentacion.comandas;
 
+import itson.sistemarestaurantenegocio.IComandasBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantepresentacion.control.Control;
 
 /**
  *
- * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
+ * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
+ * Soto
  */
 public class Comandas extends javax.swing.JFrame {
 
-    private IIngredientesBO ingredientesBO;
+    private IComandasBO comandasBO;
+
     /**
      * Creates new form Productos
      */
-    public Comandas(IIngredientesBO ingredientesBO) {
+    public Comandas(IComandasBO comandasBO) {
         initComponents();
         this.setTitle("Ingredientes");
         this.setResizable(false);
-        this.setSize(760,500);
+        this.setSize(760, 500);
         this.setLocationRelativeTo(null);
-        this.ingredientesBO = ingredientesBO;
+        this.comandasBO = comandasBO;
     }
 
     /**
@@ -181,7 +184,6 @@ public class Comandas extends javax.swing.JFrame {
         Control.getInstancia().abrirMenuAdministrador();
     }//GEN-LAST:event_btnVolverActionPerformed
 
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVolver;

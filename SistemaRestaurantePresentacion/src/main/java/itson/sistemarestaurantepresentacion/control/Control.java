@@ -4,6 +4,7 @@ import itson.sistemarestaurantedominio.Cliente;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IClientesBO;
+import itson.sistemarestaurantenegocio.IComandasBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.IIngredientesProductosBO;
 import itson.sistemarestaurantenegocio.IProductosBO;
@@ -25,6 +26,8 @@ import itson.sistemarestaurantepresentacion.ingredientes.ListaIngredientes;
 import itson.sistemarestaurantepresentacion.productos.ListaProductos;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
 import itson.sistemarestaurantepresentacion.clientes.BuscadorClientes;
+import itson.sistemarestaurantepresentacion.comandas.Comandas;
+import itson.sistemarestaurantepresentacion.comandas.ListaComandas;
 import itson.sistemarestaurantepresentacion.productos.Productos;
 import itson.sistemarestaurantepresentacion.productos.FrmAgregarIngredientes;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
@@ -32,7 +35,6 @@ import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserv
 import itson.sistemarestaurantepresentacion.productos.ActualizarPreciosProductos;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
-
 
 /**
  *
@@ -43,8 +45,9 @@ public class Control {
     private static Control instance;
     IIngredientesBO ingredientesBO = FabricaObjetosNegocio.crearIngredientesBO();
     IProductosBO productosBO = FabricaObjetosNegocio.crearProductosBO();
-    IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();   
+    IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();
     IClientesBO clientesBO = FabricaObjetosNegocio.crearClientesBO();
+    IComandasBO comandasBO = FabricaObjetosNegocio.crearComandasBO();
     MenuAdministrador formMenuAdministrador;
 
     /**
@@ -88,7 +91,7 @@ public class Control {
      * Método que abre la pantalla del menú del administrador.
      */
     public void abrirMenuAdministrador() {
-        if(formMenuAdministrador == null){
+        if (formMenuAdministrador == null) {
             formMenuAdministrador = new MenuAdministrador();
         }
         formMenuAdministrador.setVisible(true);
@@ -108,7 +111,7 @@ public class Control {
      * @param id del producto a actualizar.
      */
     public void abrirActualizarProducto(Producto producto) {
-        ActualizarProducto formActualizarProducto = new ActualizarProducto(producto,ingredientesProductoBO);
+        ActualizarProducto formActualizarProducto = new ActualizarProducto(producto, ingredientesProductoBO);
         formActualizarProducto.setVisible(true);
 
     }
@@ -123,6 +126,7 @@ public class Control {
 
     /**
      * Método que abre la pantalla del buscador de ingrediente.
+     *
      * @param observer
      */
     public void abrirBuscadorIngredientes(IngredienteSeleccionadoObserver observer) {
@@ -138,7 +142,6 @@ public class Control {
         ListaIngredientes formListaIngredientes = new ListaIngredientes(ingredientesBO);
         formListaIngredientes.setVisible(true);
     }
-
 
     /**
      * Método que abre la pantalla del actualizador de stock.
@@ -193,22 +196,22 @@ public class Control {
         ClientesFrecuentes formClientesFrecuentes = new ClientesFrecuentes(clientesBO);
         formClientesFrecuentes.setVisible(true);
     }
-    
-     /**
+
+    /**
      * Metodo que abre la pantalla de clientes frecuentes.
      */
     public void abrirActualizarIngredientes() {
         ActualizarIngredientes formActualizarIngredientes = new ActualizarIngredientes(ingredientesBO);
         formActualizarIngredientes.setVisible(true);
     }
-    
-    public JFrame abrirFrameAgregarIngredientes(Producto producto){
-        FrmAgregarIngredientes formAgregarIngredientes = new FrmAgregarIngredientes(producto,ingredientesProductoBO);
+
+    public JFrame abrirFrameAgregarIngredientes(Producto producto) {
+        FrmAgregarIngredientes formAgregarIngredientes = new FrmAgregarIngredientes(producto, ingredientesProductoBO);
         formAgregarIngredientes.setVisible(true);
         return formAgregarIngredientes;
     }
-    
-    public void abrirBuscadorProductos(ProductoSeleccionadoObserver observer){
+
+    public void abrirBuscadorProductos(ProductoSeleccionadoObserver observer) {
         BuscadorProductos formBuscadorProductos = new BuscadorProductos(productosBO);
         formBuscadorProductos.agregarObserver(observer);
         formBuscadorProductos.setVisible(true);
@@ -218,21 +221,31 @@ public class Control {
         AgregarCliente formAgregarCliente = new AgregarCliente(clientesBO);
         formAgregarCliente.setVisible(true);
     }
-    
-    public void abrirActualizarPreciosProductos(){
+
+    public void abrirActualizarPreciosProductos() {
         ActualizarPreciosProductos formActualizarProductos = new ActualizarPreciosProductos(productosBO);
         formActualizarProductos.setVisible(true);
-                
+
     }
+
     public void abrirBuscadorClientes(IClientesBO clientesBO, Consumer<Cliente> onClienteSeleccionado) {
         BuscadorClientes buscador = new BuscadorClientes(clientesBO, onClienteSeleccionado);
         buscador.setVisible(true);
     }
-    
+
     public void volverAlMenuPrincipal(JFrame ventanaActual) {
         ventanaActual.dispose();
         abrirMenuAdministrador();
     }
-    
+
+    public void abrirComandas() {
+        Comandas formComandas = new Comandas(comandasBO);
+        formComandas.setVisible(true);
+    }
+
+    public void abrirListaComandas() {
+        ListaComandas formListaComandas = new ListaComandas(comandasBO);
+        formListaComandas.setVisible(true);
+    }
 
 }
