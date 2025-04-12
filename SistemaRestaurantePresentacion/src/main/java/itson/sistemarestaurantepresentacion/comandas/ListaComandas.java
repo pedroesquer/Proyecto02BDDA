@@ -52,7 +52,7 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
             for (Comanda comanda : comandas) {
                 Object[] fila = {
                     comanda.getId(),
-                    comanda.getMesa(),
+                    comanda.getMesa().getNumeroMesa(),
                     comanda.getFechaHora(),
                     comanda.getMontoTotal()
                 };

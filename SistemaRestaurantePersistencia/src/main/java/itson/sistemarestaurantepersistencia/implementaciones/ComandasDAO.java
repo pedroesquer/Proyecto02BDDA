@@ -194,7 +194,8 @@ public class ComandasDAO implements IComandasDAO {
         Root<Comanda> root = criteriaQuery.from(Comanda.class);
 
         // Condición para que el estado sea igual a "abierto"
-        Predicate condicionEstadoAbierto = criteriaBuilder.equal(root.get("estado"), "abierto");
+        // Asegúrate de que al comparar, estés usando el Enum en vez de un String
+        Predicate condicionEstadoAbierto = criteriaBuilder.equal(root.get("estado"), EstadoComanda.ABIERTA);
 
         // Aplicamos la condición al WHERE
         criteriaQuery.where(condicionEstadoAbierto);
