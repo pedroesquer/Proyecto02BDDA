@@ -113,7 +113,6 @@ public class AgregarDetalleComanda extends javax.swing.JFrame {
         productoComanda.setCantidad(cantidad);
         productoComanda.setComentario(textFieldComentario.getText());
         productoComanda.setIdProducto(producto.getId());
-        productoComanda.setIdComanda(comanda.getId());
         productoComanda.setPrecioUnitario(producto.getPrecio());
         productoComanda.setImporte(producto.getPrecio() * cantidad);
         notificarObservers(productoComanda);

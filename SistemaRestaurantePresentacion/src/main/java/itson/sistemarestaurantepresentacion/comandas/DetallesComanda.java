@@ -386,6 +386,7 @@ public class DetallesComanda extends javax.swing.JFrame implements ProductoSelec
 
     @Override
     public void detallesProductoComandaAceptado(AgregarProductoComandaDTO productoComandaDTO) {
+        productoComandaDTO.setIdComanda(idComanda);
         actualizarTablaConProducto(productoComandaDTO);
         try {
             agregarProductosComanda(productoComandaDTO);

@@ -38,7 +38,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
      *
      * @param productosBO
      */
-    public BuscadorProductos(IProductosBO productosBO) {
+        public BuscadorProductos(IProductosBO productosBO) {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
