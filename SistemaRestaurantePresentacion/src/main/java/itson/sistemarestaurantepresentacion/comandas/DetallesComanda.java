@@ -2,10 +2,15 @@ package itson.sistemarestaurantepresentacion.comandas;
 
 import itson.sistemarestaurantepresentacion.ingredientes.*;
 import itson.sistemarestaurantedominio.Ingrediente;
+import itson.sistemarestaurantedominio.ProductoComanda;
+import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
+import itson.sistemarestaurantenegocio.IComandasBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
+import itson.sistemarestaurantenegocio.IProductosComandaBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
+import itson.sistemarestaurantepresentacion.observers.ComandaSeleccionadaObserver;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
 import java.util.List;
 import java.util.logging.Logger;
@@ -19,22 +24,26 @@ import javax.swing.table.TableColumnModel;
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
  * Sooto
  */
-public class DetallesComanda extends javax.swing.JFrame implements IngredienteSeleccionadoObserver {
+public class DetallesComanda extends javax.swing.JFrame implements ComandaSeleccionadaObserver {
 
     /**
      * Creates new form Productos
      */
-    private IIngredientesBO ingredientesBO;
+    private Long idComanda;
+    private IComandasBO comandasBO;
+    private IProductosComandaBO productosComandaBO;
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
 
-    public DetallesComanda(IIngredientesBO ingredientesBO) {
+    public DetallesComanda(Long idComanda, IComandasBO comandasBO, IProductosComandaBO productosComandaBO) {
         initComponents();
-        this.setTitle("Lista ingredientes");
+        this.setTitle("Detalles comanda");
         this.setResizable(false);
         this.setSize(760, 500);
         this.setLocationRelativeTo(null);
-        this.ingredientesBO = ingredientesBO;
-        this.llenarTablaIngredientes();
+        this.comandasBO = comandasBO;
+        this.idComanda = idComanda;
+        this.productosComandaBO = productosComandaBO;
+        this.llenarTablaComanda();
         this.ocultarColumnaID();
     }
 
@@ -42,17 +51,17 @@ public class DetallesComanda extends javax.swing.JFrame implements IngredienteSe
      * Llena la tabla con todos los ingredientes disponibles. Consulta los
      * ingredientes y los agrega a la tabla.
      */
-    private void llenarTablaIngredientes() {
+    private void llenarTablaComanda() {
         try {
-            List<Ingrediente> ingredientes = this.ingredientesBO.consultar("");
+            List<ProductoComanda> productos = this.productosComandaBO.consultar(idComanda);
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaProductosComanda.getModel();
             modeloTabla.setRowCount(0);
-            for (Ingrediente ingrediente : ingredientes) {
+            for (ProductoComanda productosComanda : productos) {
                 Object[] fila = {
-                    ingrediente.getId(),
-                    ingrediente.getNombre(),
-                    ingrediente.getUnidadMedida(),
-                    ingrediente.getStock()
+                    productosComanda.getId(),
+                    productosComanda.getProducto().getNombre(),
+                    productosComanda.getComentarios(),
+                    productosComanda.getPrecioUnitario()
                 };
                 modeloTabla.addRow(fila);
             }
@@ -62,33 +71,10 @@ public class DetallesComanda extends javax.swing.JFrame implements IngredienteSe
         }
     }
 
-     private void ocultarColumnaID() {
+    private void ocultarColumnaID() {
         TableColumnModel columnModel = tablaProductosComanda.getColumnModel();
         TableColumn columnaID = columnModel.getColumn(0);
-        columnModel.removeColumn(columnaID); 
-    }
-    /**
-     * Actualiza la tabla con los datos de un ingrediente seleccionado.
-     *
-     * @param ingredienteSeleccionado El ingrediente a mostrar en la tabla.
-     */
-    public void actualizarIngredientesSeleccionados(NuevoIngredienteDTO ingredienteSeleccionado) {
-        try {
-            DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaProductosComanda.getModel();
-            modeloTabla.setRowCount(0); // Limpiamos la tabla antes de llenarla nuevamente
-
-            Object[] fila = {
-                ingredienteSeleccionado.getId(),
-                ingredienteSeleccionado.getNombre(),
-                ingredienteSeleccionado.getUnidadMedida(),
-                ingredienteSeleccionado.getStock()
-            };
-            modeloTabla.addRow(fila);
-
-        } catch (Exception ex) {
-            LOG.severe("No se pudo actualizar la tabla con los ingredientes seleccionados");
-            JOptionPane.showInputDialog(this, ex.getMessage());
-        }
+        columnModel.removeColumn(columnaID);
     }
 
     /**
@@ -107,7 +93,6 @@ public class DetallesComanda extends javax.swing.JFrame implements IngredienteSe
         lblTituloComanda = new javax.swing.JLabel();
         pnlTablaProductosComanda = new javax.swing.JScrollPane();
         tablaProductosComanda = new javax.swing.JTable();
-        btnBuscar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblEntregar = new javax.swing.JLabel();
@@ -164,7 +149,7 @@ public class DetallesComanda extends javax.swing.JFrame implements IngredienteSe
 
             },
             new String [] {
-                "ID", "Mesa", "Hora", "Total"
+                "ID", "Producto", "Comentario", "Precio"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -181,21 +166,13 @@ public class DetallesComanda extends javax.swing.JFrame implements IngredienteSe
 
         panelGeneral.add(pnlTablaProductosComanda, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, 380, 154));
 
-        btnBuscar.setText("Buscar");
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
-        panelGeneral.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 125, -1));
-
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
             }
         });
-        panelGeneral.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(342, 414, 93, -1));
+        panelGeneral.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 410, 93, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/aniadirProducto.png"))); // NOI18N
         panelGeneral.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 190, 110, 110));
@@ -227,20 +204,15 @@ public class DetallesComanda extends javax.swing.JFrame implements IngredienteSe
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        Control.getInstancia().abrirComandas();
         this.dispose();
-        Control.getInstancia().abrirIngredientes();
     }//GEN-LAST:event_btnVolverActionPerformed
-
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        Control.getInstancia().abrirBuscadorIngredientes(this);
-    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel iconChefSoft;
     private javax.swing.JLabel iconComanda;
@@ -256,7 +228,7 @@ public class DetallesComanda extends javax.swing.JFrame implements IngredienteSe
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void ingredienteSeleccionado(NuevoIngredienteDTO ingrediente) {
-        actualizarIngredientesSeleccionados(ingrediente);
+    public void comandaSeleccionada(NuevaComandaDTO comanda) {
+        llenarTablaComanda();
     }
 }

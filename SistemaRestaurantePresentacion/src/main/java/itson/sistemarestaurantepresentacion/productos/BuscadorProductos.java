@@ -144,7 +144,6 @@ public class BuscadorProductos extends javax.swing.JFrame {
         tablaProductos = new javax.swing.JTable();
         btnLimpiar = new javax.swing.JButton();
         botonSeleccionar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -192,13 +191,6 @@ public class BuscadorProductos extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("ID");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -217,8 +209,6 @@ public class BuscadorProductos extends javax.swing.JFrame {
                         .addComponent(btnLimpiar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(137, 137, 137)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(botonSeleccionar)))
                 .addContainerGap())
@@ -237,9 +227,7 @@ public class BuscadorProductos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botonSeleccionar)
-                    .addComponent(jButton1))
+                .addComponent(botonSeleccionar)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -276,15 +264,6 @@ public class BuscadorProductos extends javax.swing.JFrame {
 
     }//GEN-LAST:event_botonSeleccionarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Long id = obtenerIdProducto();
-        if (id != null) {
-            JOptionPane.showMessageDialog(this, "ID seleccionado " + id);
-        } else {
-            JOptionPane.showMessageDialog(this, "Debes seleccionar una celda ");
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private Long obtenerIdProducto() {
         int filaSeleccionada = tablaProductos.getSelectedRow();
         if (filaSeleccionada != -1) {
@@ -297,7 +276,6 @@ public class BuscadorProductos extends javax.swing.JFrame {
     private javax.swing.JButton botonSeleccionar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLimpiar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblBuscar;
     private javax.swing.JScrollPane pnlTablaProductos;
     private javax.swing.JTable tablaProductos;

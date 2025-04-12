@@ -176,7 +176,7 @@ public class Comandas extends javax.swing.JFrame {
 
     private void iconAgregarComandaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconAgregarComandaMouseClicked
         this.dispose();
-        Control.getInstancia().abrirListaComandas();
+        Control.getInstancia().abrirAgregarComandas();
     }//GEN-LAST:event_iconAgregarComandaMouseClicked
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed

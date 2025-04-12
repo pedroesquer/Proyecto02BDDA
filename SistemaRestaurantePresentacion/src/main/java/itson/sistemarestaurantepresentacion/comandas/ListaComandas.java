@@ -3,12 +3,17 @@ package itson.sistemarestaurantepresentacion.comandas;
 import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantepresentacion.ingredientes.*;
 import itson.sistemarestaurantedominio.Ingrediente;
+import itson.sistemarestaurantedominio.Mesa;
+import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantenegocio.IComandasBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
+import itson.sistemarestaurantepresentacion.observers.ComandaSeleccionadaObserver;
 import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -25,7 +30,9 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
 
     /**
      * Creates new form Productos
-     */
+     */    
+    private List<ComandaSeleccionadaObserver> observers = new ArrayList<>();
+
     private IComandasBO comandasBO;
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
 
@@ -36,8 +43,41 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
         this.setSize(760, 500);
         this.setLocationRelativeTo(null);
         this.comandasBO = comandasBO;
+
         this.llenarTablaComandas();
         this.ocultarColumnaID();
+
+    }
+    /**
+    * Registra un nuevo observador para ser notificado cuando una comanda sea
+    * seleccionado.
+    *
+     * @param
+    obs la clase que implementa ComandaSeleccionadaObserver
+
+    */
+    public void agregarObserver(ComandaSeleccionadaObserver obs) {
+        observers.add(obs);
+    }
+
+    /**
+     * Notifica a todos los observadores registrados que una comanda ha sido
+     * seleccionado.
+     *
+     * @param comanda la comanda seleccionada
+     */
+    private void notificarObservers(NuevaComandaDTO comanda) {
+        for (ComandaSeleccionadaObserver o : observers) {
+            o.comandaSeleccionada(comanda);
+        }
+    }
+
+    private Long obtenerIdComanda() {
+        int filaSeleccionada = tablaComandas.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            return Long.valueOf(tablaComandas.getModel().getValueAt(filaSeleccionada, 0).toString());
+        }
+        return null;
     }
 
     /**
@@ -178,16 +218,21 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
         tablaComandas.setColumnSelectionAllowed(true);
         pnlTablaComanda.setViewportView(tablaComandas);
         tablaComandas.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        if (tablaComandas.getColumnModel().getColumnCount() > 0) {
+            tablaComandas.getColumnModel().getColumn(0).setResizable(false);
+            tablaComandas.getColumnModel().getColumn(1).setResizable(false);
+            tablaComandas.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         panelGeneral.add(pnlTablaComanda, new org.netbeans.lib.awtextra.AbsoluteConstraints(151, 188, 491, 154));
 
-        btnBuscar.setText("Buscar");
+        btnBuscar.setText("Seleccionar comanda");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
             }
         });
-        panelGeneral.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 130, 125, -1));
+        panelGeneral.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 370, 150, -1));
 
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -195,7 +240,7 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
                 btnVolverActionPerformed(evt);
             }
         });
-        panelGeneral.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(342, 414, 93, -1));
+        panelGeneral.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 370, 93, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -205,19 +250,28 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        Control.getInstancia().abrirComandas();
+
         this.dispose();
-        Control.getInstancia().abrirIngredientes();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        Control.getInstancia().abrirBuscadorIngredientes(this);
+        int filaSeleccionada = tablaComandas.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            Long id = obtenerIdComanda();
+            Control.getInstancia().abrirDetallesComanda(id);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "No seleccionaste nada");
+        }
+        this.dispose();  // Cerrar la ventanaControl.getInstancia().abrirBuscadorIngredientes(this);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**

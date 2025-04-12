@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class NuevaComandaDTO {
     private Long id;
-    private String folio;
     private LocalDateTime fechaHora;
     private Double montoTotal;
     private EstadoComanda estadoComanda;
@@ -80,14 +79,6 @@ public class NuevaComandaDTO {
         this.cliente = cliente;
     }
 
-    public String getFolio() {
-        return folio;
-    }
-
-    public void setFolio(String folio) {
-        this.folio = folio;
-    }
-    
     
     
     

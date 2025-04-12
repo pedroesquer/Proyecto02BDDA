@@ -14,7 +14,8 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
+ * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
+ * Soto
  */
 @Entity
 @Table(name = "mesas")
@@ -28,13 +29,12 @@ public class Mesa implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false)
     private EstadoMesa estado;
-    
+
     @Column(name = "numero_mesa", nullable = false)
     private String numeroMesa;
-    
+
     @OneToMany(mappedBy = "mesa")
     private List<Comanda> comandas;
-    
 
     public Mesa() {
     }
@@ -44,7 +44,6 @@ public class Mesa implements Serializable {
         this.numeroMesa = numeroMesa;
     }
 
-    
     public Long getId() {
         return id;
     }
@@ -77,9 +76,6 @@ public class Mesa implements Serializable {
         this.comandas = comandas;
     }
 
-    
-    
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -102,7 +98,8 @@ public class Mesa implements Serializable {
 
     @Override
     public String toString() {
-        return "itson.sistemarestaurantedominio.Mesa[ id=" + id + " ]";
+        return "Mesa #" + getNumeroMesa();
+
     }
 
 }

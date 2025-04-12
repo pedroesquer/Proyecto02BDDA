@@ -1,70 +1,95 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package itson.sistemarestaurantepresentacion.comandas;
 
-import itson.sistemarestaurantedominio.Ingrediente;
-import itson.sistemarestaurantedominio.UnidadMedida;
-import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
-import itson.sistemarestaurantenegocio.IIngredientesBO;
+import itson.sistemarestaurantedominio.Producto;
+import itson.sistemarestaurantedominio.TipoProducto;
+import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
+import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
-import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
+import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 /**
  *
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
  * Soto
  */
-public class BuscadorComandas extends javax.swing.JFrame {
+public class BuscadorProductos extends javax.swing.JFrame {
 
-    private List<IngredienteSeleccionadoObserver> observers = new ArrayList<>();
-    private NuevoIngredienteDTO nuevoIngredienteDTO;
-    private IIngredientesBO ingredientesBO;
-    private static final Logger LOG = Logger.getLogger(BuscadorComandas.class.getName());
+    private IProductosBO productosBO;
+    private static final Logger LOG = Logger.getLogger(BuscadorProductos.class.getName());
+    private List<ProductoSeleccionadoObserver> observers = new ArrayList<>();
 
     /**
      * Constructor del frame BuscadorProductos.
+     *
+     * @param productosBO
      */
-    public BuscadorComandas(IIngredientesBO ingredientesBO) {
+    public BuscadorProductos(IProductosBO productosBO) {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setTitle("Buscador Ingredientes");
-        this.ingredientesBO = ingredientesBO;
+        this.setTitle("Buscador Productos");
+        this.productosBO = productosBO;
+//        this.llenarTablaProductos();
+        tablaProductos.removeColumn(tablaProductos.getColumnModel().getColumn(0));
         this.cargarTabla();
-        this.ocultarColumnaID();
 
     }
 
-    private void ocultarColumnaID() {
-        TableColumnModel columnModel = tablaComandas.getColumnModel();
-        TableColumn columnaID = columnModel.getColumn(0);
-        columnModel.removeColumn(columnaID);
-    }
-
+    /**
+     * Método que carga la tabla dependiendo del filtro de busqueda.
+     * 
+     */
     private void cargarTabla() {
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaComandas.getModel();
+        DefaultTableModel modeloTabla = (DefaultTableModel) tablaProductos.getModel();
         modeloTabla.setRowCount(0);
 
         String filtro = this.txtBuscar.getText();
         try {
-            List<Ingrediente> ingredientes = this.ingredientesBO.consultar(filtro);
+            List<Producto> productos = this.productosBO.consultar(filtro);
 
-            for (Ingrediente ingrediente : ingredientes) {
+            for (Producto producto : productos) {
                 modeloTabla.addRow(new Object[]{
-                    ingrediente.getId(),
-                    ingrediente.getNombre(),
-                    ingrediente.getUnidadMedida(),
-                    ingrediente.getStock()
+                    producto.getId(),
+                    producto.getNombre(),
+                    producto.getPrecio(),
+                    producto.getTipo()
                 });
             }
+
         } catch (NegocioException ex) {
             JOptionPane.showInputDialog(this, ex.getMessage());
+        }
+    }
+
+    /**
+     * Registra un nuevo observador para ser notificado cuando un jugador sea
+     * seleccionado.
+     *
+     * @param obs la clase que implementa JugadorSeleccionadoObserver
+     */
+    public void agregarObserver(ProductoSeleccionadoObserver obs) {
+        observers.add(obs);
+    }
+
+    /**
+     * Notifica a todos los observadores registrados que un jugador ha sido
+     * seleccionado.
+     *
+     * @param producto el jugador seleccionado
+     */
+    private void notificarObservers(NuevoProductoDTO producto) {
+        for (ProductoSeleccionadoObserver o : observers) {
+            o.productoSeleccionado(producto);
         }
     }
 
@@ -75,52 +100,21 @@ public class BuscadorComandas extends javax.swing.JFrame {
                 i -= 1;
             }
         }
-
     }
 
-    /**
-     * Registra un nuevo observador para ser notificado cuando un jugador sea
-     * seleccionado.
-     *
-     * @param obs la clase que implementa JugadorSeleccionadoObserver
-     */
-    public void agregarObserver(IngredienteSeleccionadoObserver obs) {
-        observers.add(obs);
-    }
-
-    /**
-     * Notifica a todos los observadores registrados que un jugador ha sido
-     * seleccionado.
-     *
-     * @param jugador el jugador seleccionado
-     */
-    private void notificarObservers(NuevoIngredienteDTO ingrediente) {
-        for (IngredienteSeleccionadoObserver o : observers) {
-            o.ingredienteSeleccionado(ingrediente);
-        }
-    }
-
-    private Long obtenerIdIngrediente() {
-        int filaSeleccionada = tablaComandas.getSelectedRow();
-        if (filaSeleccionada != -1) {
-            return Long.valueOf(tablaComandas.getModel().getValueAt(filaSeleccionada, 0).toString());
-        }
-        return null;
-    }
-
-    private void llenarTablaIngredientes() {
+    private void llenarTablaProductos() {
         try {
             String filtroBusqueda = this.txtBuscar.getText();
-            List<Ingrediente> ingredientes = this.ingredientesBO.consultar(filtroBusqueda);
+            List<Producto> productos = this.productosBO.consultar(filtroBusqueda);
             //Este objeto permite interactuar con los elementos de la tabla
-            DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaComandas.getModel();
+            DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaProductos.getModel();
             modeloTabla.setRowCount(0);
-            for (Ingrediente ingrediente : ingredientes) {
+            for (Producto producto : productos) {
                 Object[] fila = {
-                    ingrediente.getId(),
-                    ingrediente.getNombre(),
-                    ingrediente.getUnidadMedida(),
-                    ingrediente.getStock()
+                    producto.getId(),
+                    producto.getNombre(),
+                    producto.getPrecio(),
+                    producto.getTipo()
                 };
                 modeloTabla.addRow(fila);
             }
@@ -142,8 +136,8 @@ public class BuscadorComandas extends javax.swing.JFrame {
         lblBuscar = new javax.swing.JLabel();
         txtBuscar = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
-        pnlTablaComandas = new javax.swing.JScrollPane();
-        tablaComandas = new javax.swing.JTable();
+        pnlTablaProductos = new javax.swing.JScrollPane();
+        tablaProductos = new javax.swing.JTable();
         btnLimpiar = new javax.swing.JButton();
         botonSeleccionar = new javax.swing.JButton();
 
@@ -158,12 +152,12 @@ public class BuscadorComandas extends javax.swing.JFrame {
             }
         });
 
-        tablaComandas.setModel(new javax.swing.table.DefaultTableModel(
+        tablaProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Mesa", "Hora", "Total"
+                "ID", "Producto", "Precio", "Tipo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -174,14 +168,10 @@ public class BuscadorComandas extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tablaComandas.setColumnSelectionAllowed(true);
-        pnlTablaComandas.setViewportView(tablaComandas);
-        tablaComandas.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        if (tablaComandas.getColumnModel().getColumnCount() > 0) {
-            tablaComandas.getColumnModel().getColumn(0).setResizable(false);
-            tablaComandas.getColumnModel().getColumn(1).setResizable(false);
-            tablaComandas.getColumnModel().getColumn(3).setResizable(false);
-        }
+        tablaProductos.setColumnSelectionAllowed(true);
+        tablaProductos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        pnlTablaProductos.setViewportView(tablaProductos);
+        tablaProductos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
@@ -190,7 +180,7 @@ public class BuscadorComandas extends javax.swing.JFrame {
             }
         });
 
-        botonSeleccionar.setText("Seleccionar ingrediente");
+        botonSeleccionar.setText("Seleccionar producto");
         botonSeleccionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonSeleccionarActionPerformed(evt);
@@ -204,7 +194,7 @@ public class BuscadorComandas extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlTablaComandas)
+                    .addComponent(pnlTablaProductos)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -215,7 +205,7 @@ public class BuscadorComandas extends javax.swing.JFrame {
                         .addComponent(btnLimpiar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(botonSeleccionar)))
                 .addContainerGap())
         );
@@ -231,7 +221,7 @@ public class BuscadorComandas extends javax.swing.JFrame {
                         .addComponent(btnLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnBuscar)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlTablaComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlTablaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(botonSeleccionar)
                 .addContainerGap(16, Short.MAX_VALUE))
@@ -241,46 +231,50 @@ public class BuscadorComandas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        this.llenarTablaIngredientes();
+        //Aqui iria la lógica para encontrar las coincidencias
+//        this.llenarTablaProductos();
+        this.cargarTabla();
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        this.txtBuscar.setText("");  // Limpiar el campo de búsqueda
-        DefaultTableModel model = (DefaultTableModel) tablaComandas.getModel();
-        model.setRowCount(0);  // Limpiar las filas de la tabla
-        this.cargarTabla();  // Volver a cargar la tabla con los datos originales
+        this.txtBuscar.setText("");
+        this.cargarTabla();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void botonSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSeleccionarActionPerformed
-        int filaSeleccionada = tablaComandas.getSelectedRow();
+        int filaSeleccionada = tablaProductos.getSelectedRow();
         if (filaSeleccionada != -1) {
-            Long id = obtenerIdIngrediente();
-            String nombre = (String) tablaComandas.getModel().getValueAt(filaSeleccionada, 1);
-            UnidadMedida unidadMedida = (UnidadMedida) tablaComandas.getModel().getValueAt(filaSeleccionada, 2);
-
-            Integer stock = Integer.parseInt(tablaComandas.getModel().getValueAt(filaSeleccionada, 3).toString());
+            Long id = obtenerIdProducto();
+            String nombre = (String) tablaProductos.getModel().getValueAt(filaSeleccionada, 1);
+            Float precio = Float.parseFloat(tablaProductos.getModel().getValueAt(filaSeleccionada, 2).toString());
+            TipoProducto tipo = (TipoProducto) tablaProductos.getModel().getValueAt(filaSeleccionada, 3);
             //TipoProducto tipoProducto = TipoProducto.valueOf(tipo);
 
-            NuevoIngredienteDTO nuevoIngrediente = new NuevoIngredienteDTO(id, nombre, stock, unidadMedida);
-            notificarObservers(nuevoIngrediente);
+            NuevoProductoDTO nuevoProducto = new NuevoProductoDTO(id, nombre, precio, tipo);
+            notificarObservers(nuevoProducto);
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "No seleccionaste nada");
         }
-        this.dispose();  // Cerrar la ventana
-
 
     }//GEN-LAST:event_botonSeleccionarActionPerformed
 
+    private Long obtenerIdProducto() {
+        int filaSeleccionada = tablaProductos.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            return Long.valueOf(tablaProductos.getModel().getValueAt(filaSeleccionada, 0).toString());
+        }
+        return null;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonSeleccionar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel lblBuscar;
-    private javax.swing.JScrollPane pnlTablaComandas;
-    private javax.swing.JTable tablaComandas;
+    private javax.swing.JScrollPane pnlTablaProductos;
+    private javax.swing.JTable tablaProductos;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

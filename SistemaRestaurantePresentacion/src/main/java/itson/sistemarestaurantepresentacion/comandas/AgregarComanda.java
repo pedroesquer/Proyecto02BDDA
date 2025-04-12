@@ -1,26 +1,45 @@
 package itson.sistemarestaurantepresentacion.comandas;
 
+import itson.sistemarestaurantedominio.Mesa;
 import itson.sistemarestaurantenegocio.IComandasBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
+import itson.sistemarestaurantenegocio.IMesasBO;
+import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepresentacion.control.Control;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
- * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
+ * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
+ * Soto
  */
 public class AgregarComanda extends javax.swing.JFrame {
 
     private IComandasBO comandasBO;
+    private IMesasBO mesasBO;
+
     /**
      * Creates new form Productos
      */
-    public AgregarComanda(IComandasBO comandasBO) {
+    public AgregarComanda(IComandasBO comandasBO, IMesasBO mesasBO) {
         initComponents();
         this.setTitle("Comandas");
         this.setResizable(false);
-        this.setSize(760,500);
+        this.setSize(760, 500);
         this.setLocationRelativeTo(null);
         this.comandasBO = comandasBO;
+        this.mesasBO = mesasBO;
+        DefaultComboBoxModel<Mesa> modeloMesas = new DefaultComboBoxModel<>();
+        comboBoxMesa.setModel(modeloMesas);
+        try {
+            obtenerNombresMesa();
+        } catch (NegocioException ex) {
+            Logger.getLogger(AgregarComanda.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     /**
@@ -49,6 +68,7 @@ public class AgregarComanda extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         panelGeneral.setBackground(new java.awt.Color(255, 253, 211));
+        panelGeneral.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panelSuperior.setBackground(new java.awt.Color(235, 230, 208));
 
@@ -88,12 +108,15 @@ public class AgregarComanda extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        panelGeneral.add(panelSuperior, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 774, -1));
+
         btnBuscarCliente.setText("Buscar Cliente");
         btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarClienteActionPerformed(evt);
             }
         });
+        panelGeneral.add(btnBuscarCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(472, 129, 116, -1));
 
         tablaComandas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -115,12 +138,15 @@ public class AgregarComanda extends javax.swing.JFrame {
         pnlTablaComandas.setViewportView(tablaComandas);
         tablaComandas.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
+        panelGeneral.add(pnlTablaComandas, new org.netbeans.lib.awtextra.AbsoluteConstraints(152, 190, 470, 154));
+
         btnVolver1.setText("Volver");
         btnVolver1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolver1ActionPerformed(evt);
             }
         });
+        panelGeneral.add(btnVolver1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 420, 93, -1));
 
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -128,8 +154,14 @@ public class AgregarComanda extends javax.swing.JFrame {
                 btnAceptarActionPerformed(evt);
             }
         });
+        panelGeneral.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, 93, -1));
 
-        comboBoxMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mesa 1", "Mesa 2", "Mesa 3", "Mesa 4", "Mesa 5", "Mesa 6", "Mesa 7", "Mesa 8", "Mesa 9", "Mesa 10", "Mesa 11", "Mesa 12", "Mesa 13", "Mesa 14", "Mesa 15", "Mesa 16", "Mesa 17", "Mesa 18", "Mesa 19", "Mesa 20" }));
+        comboBoxMesa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxMesaActionPerformed(evt);
+            }
+        });
+        panelGeneral.add(comboBoxMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(185, 127, -1, -1));
 
         btnBuscarProducto1.setText("Buscar Producto");
         btnBuscarProducto1.addActionListener(new java.awt.event.ActionListener() {
@@ -137,63 +169,10 @@ public class AgregarComanda extends javax.swing.JFrame {
                 btnBuscarProducto1ActionPerformed(evt);
             }
         });
+        panelGeneral.add(btnBuscarProducto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 380, 116, -1));
 
         lblNombreCliente.setText("-");
-
-        javax.swing.GroupLayout panelGeneralLayout = new javax.swing.GroupLayout(panelGeneral);
-        panelGeneral.setLayout(panelGeneralLayout);
-        panelGeneralLayout.setHorizontalGroup(
-            panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelSuperior, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(panelGeneralLayout.createSequentialGroup()
-                .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addGap(211, 211, 211)
-                        .addComponent(btnVolver1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(168, 168, 168)
-                        .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panelGeneralLayout.createSequentialGroup()
-                                .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addGap(185, 185, 185)
-                        .addComponent(comboBoxMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addGap(323, 323, 323)
-                        .addComponent(btnBuscarProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(77, Short.MAX_VALUE))
-            .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGeneralLayout.createSequentialGroup()
-                    .addGap(152, 152, 152)
-                    .addComponent(pnlTablaComandas)
-                    .addGap(152, 152, 152)))
-        );
-        panelGeneralLayout.setVerticalGroup(
-            panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelGeneralLayout.createSequentialGroup()
-                .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelGeneralLayout.createSequentialGroup()
-                        .addComponent(panelSuperior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(comboBoxMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnBuscarCliente)
-                        .addComponent(lblNombreCliente)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 231, Short.MAX_VALUE)
-                .addComponent(btnBuscarProducto1)
-                .addGap(41, 41, 41)
-                .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnVolver1)
-                    .addComponent(btnAceptar))
-                .addGap(61, 61, 61))
-            .addGroup(panelGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGeneralLayout.createSequentialGroup()
-                    .addGap(190, 190, 190)
-                    .addComponent(pnlTablaComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(190, Short.MAX_VALUE)))
-        );
+        panelGeneral.add(lblNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 133, 97, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -209,9 +188,18 @@ public class AgregarComanda extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void obtenerNombresMesa() throws NegocioException {
+        DefaultComboBoxModel<Mesa> modeloMesas = (DefaultComboBoxModel<Mesa>) comboBoxMesa.getModel();
+        modeloMesas.removeAllElements(); // limpia el modelo antes de llenarlo
+
+        List<Mesa> listaMesas = mesasBO.consultarMesas();
+        for (Mesa m : listaMesas) {
+            modeloMesas.addElement(m);
+        }
+    }
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
-        this.dispose();
         Control.getInstancia().abrirMenuAdministrador();
+        this.dispose();
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     private void btnVolver1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolver1ActionPerformed
@@ -223,17 +211,20 @@ public class AgregarComanda extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnBuscarProducto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProducto1ActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnBuscarProducto1ActionPerformed
 
-   
+    private void comboBoxMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxMesaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxMesaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnBuscarProducto1;
     private javax.swing.JButton btnVolver1;
-    private javax.swing.JComboBox<String> comboBoxMesa;
+    private javax.swing.JComboBox<Mesa> comboBoxMesa;
     private javax.swing.JLabel iconChefSoft;
     private javax.swing.JLabel iconComanda;
     private javax.swing.JLabel lblNombreCliente;

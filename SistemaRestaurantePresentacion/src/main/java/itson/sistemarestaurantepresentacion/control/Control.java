@@ -7,7 +7,9 @@ import itson.sistemarestaurantenegocio.IClientesBO;
 import itson.sistemarestaurantenegocio.IComandasBO;
 import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.IIngredientesProductosBO;
+import itson.sistemarestaurantenegocio.IMesasBO;
 import itson.sistemarestaurantenegocio.IProductosBO;
+import itson.sistemarestaurantenegocio.IProductosComandaBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
 import itson.sistemarestaurantepresentacion.ingredientes.ActualizarIngredientes;
@@ -26,7 +28,9 @@ import itson.sistemarestaurantepresentacion.ingredientes.ListaIngredientes;
 import itson.sistemarestaurantepresentacion.productos.ListaProductos;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
 import itson.sistemarestaurantepresentacion.clientes.BuscadorClientes;
+import itson.sistemarestaurantepresentacion.comandas.AgregarComanda;
 import itson.sistemarestaurantepresentacion.comandas.Comandas;
+import itson.sistemarestaurantepresentacion.comandas.DetallesComanda;
 import itson.sistemarestaurantepresentacion.comandas.ListaComandas;
 import itson.sistemarestaurantepresentacion.productos.Productos;
 import itson.sistemarestaurantepresentacion.productos.FrmAgregarIngredientes;
@@ -48,6 +52,8 @@ public class Control {
     IIngredientesProductosBO ingredientesProductoBO = FabricaObjetosNegocio.crearIngredientesProductos();
     IClientesBO clientesBO = FabricaObjetosNegocio.crearClientesBO();
     IComandasBO comandasBO = FabricaObjetosNegocio.crearComandasBO();
+    IProductosComandaBO  prp = FabricaObjetosNegocio.crearProductoComandaBO();
+    IMesasBO mesasBO = FabricaObjetosNegocio.crearMesasBO();
     MenuAdministrador formMenuAdministrador;
 
     /**
@@ -246,6 +252,16 @@ public class Control {
     public void abrirListaComandas() {
         ListaComandas formListaComandas = new ListaComandas(comandasBO);
         formListaComandas.setVisible(true);
+    }
+    
+    public void abrirDetallesComanda(Long idComanda){
+        DetallesComanda formDetallesComanda = new DetallesComanda(idComanda, comandasBO, prp);
+        formDetallesComanda.setVisible(true);
+    }
+    
+    public void abrirAgregarComandas() {
+        AgregarComanda formAgregarComanda = new AgregarComanda(comandasBO, mesasBO);
+        formAgregarComanda.setVisible(true);
     }
 
 }

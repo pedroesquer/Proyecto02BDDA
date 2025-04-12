@@ -5,16 +5,13 @@
 package itson.sistemarestaurantenegocio.implementaciones;
 
 import itson.sistemarestaurantedominio.Comanda;
-import itson.sistemarestaurantedominio.Mesa;
+import itson.sistemarestaurantedominio.EstadoComanda;
 import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
 import itson.sistemarestaurantenegocio.IComandasBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepersistencia.IComandasDAO;
-import itson.sistemarestaurantepersistencia.implementaciones.MesasDAO;
-import itson.sistemarestaurantepersistencia.implementaciones.ProductosDAO;
-import itson.sistemarestaurantedominio.EstadoMesa;
-import itson.sistemarestaurantedominio.Producto;
-import itson.sistemarestaurantedominio.ProductoComanda;
+import itson.sistemarestaurantepersistencia.excepciones.CantidadInexistenteException;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import java.util.List;
 
 /**
@@ -35,25 +32,41 @@ public class ComandasBO implements IComandasBO {
 
     @Override
     public List<Comanda> consultar() throws NegocioException {
-        if(comandasDAO.consultarComanda().isEmpty()){
+        if (comandasDAO.consultarComanda().isEmpty()) {
             throw new NegocioException("No existen comandas abiertas por el momento");
         }
         return comandasDAO.consultarComanda();
     }
 
     @Override
-    public Comanda crearComanda(NuevaComandaDTO nuevaComandaDTO) throws NegocioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Comanda crearComanda(NuevaComandaDTO nuevaComandaDTO) throws NegocioException, PersistenciaException {
+        if (nuevaComandaDTO.getProductoComanda() == null) {
+            throw new NegocioException("Debes proporcionar un nombre para el producto");
+        }
+
+        return this.comandasDAO.registrar(nuevaComandaDTO);
     }
 
     @Override
-    public Comanda cerrarComanda(Long idComanda) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Comanda cerrarComanda(Long idComanda) throws NegocioException, PersistenciaException, CantidadInexistenteException {
+        if (idComanda != null) {
+            throw new NegocioException("La comanda no existe");
+        }
+        if (comandasDAO.consultarComandaIndividual(idComanda).getEstado() == EstadoComanda.CERRADA) {
+            throw new NegocioException("La comanda ya está cerrada");
+        }
+        return this.comandasDAO.cerrarComanda(idComanda);
     }
 
     @Override
-    public Comanda cancelarComanda(Long idComanda) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Comanda cancelarComanda(Long idComanda) throws NegocioException, PersistenciaException, CantidadInexistenteException {
+        if (idComanda != null) {
+            throw new NegocioException("La comanda no existe");
+        }
+        if (comandasDAO.consultarComandaIndividual(idComanda).getEstado() == EstadoComanda.CERRADA) {
+            throw new NegocioException("La comanda ya está cerrada");
+        }
+        return this.comandasDAO.cerrarComanda(idComanda);
     }
 
 }

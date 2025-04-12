@@ -4,7 +4,6 @@ import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantedominio.EstadoComanda;
 import itson.sistemarestaurantedominio.Ingrediente;
 import itson.sistemarestaurantedominio.IngredienteProducto;
-import itson.sistemarestaurantedominio.Mesa;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.ProductoComanda;
 import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
@@ -202,5 +201,11 @@ public class ComandasDAO implements IComandasDAO {
 
         TypedQuery<Comanda> query = entityManager.createQuery(criteriaQuery);
         return query.getResultList();
+    }
+
+    @Override
+    public Comanda consultarComandaIndividual(Long idComanda) {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        return entityManager.find(Comanda.class, idComanda);
     }
 }

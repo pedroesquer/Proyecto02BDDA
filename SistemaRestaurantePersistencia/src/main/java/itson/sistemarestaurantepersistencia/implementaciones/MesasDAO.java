@@ -5,10 +5,14 @@ import itson.sistemarestaurantedominio.Mesa;
 import itson.sistemarestaurantepersistencia.IMesasDAO;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
- * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela Soto
+ * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
+ * Soto
  */
 public class MesasDAO implements IMesasDAO {
 
@@ -43,7 +47,17 @@ public class MesasDAO implements IMesasDAO {
         }
         entityManager.getTransaction().commit();
     }
-    
-    
+
+    @Override
+    public List<Mesa> consultarMesas() {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Mesa> cq = cb.createQuery(Mesa.class);
+        Root<Mesa> mesaRoot = cq.from(Mesa.class);
+        cq.select(mesaRoot);
+        List<Mesa> mesas = entityManager.createQuery(cq).getResultList();
+
+        return mesas;
+    }
 
 }
