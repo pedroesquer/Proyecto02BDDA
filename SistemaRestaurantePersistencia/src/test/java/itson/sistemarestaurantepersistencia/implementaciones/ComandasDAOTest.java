@@ -5,7 +5,7 @@
 package itson.sistemarestaurantepersistencia.implementaciones;
 
 import itson.sistemarestaurantedominio.Comanda;
-import itson.sistemarestaurantedominio.Comanda_;
+import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantedominio.EstadoComanda;
 import itson.sistemarestaurantedominio.EstadoMesa;
 import itson.sistemarestaurantedominio.Mesa;

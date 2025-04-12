@@ -5,6 +5,7 @@ import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepersistencia.excepciones.CantidadInexistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,5 +20,7 @@ public interface IComandasBO {
     public abstract Comanda cancelarComanda(Long idComanda) throws NegocioException, PersistenciaException, CantidadInexistenteException;
     
     public abstract List<Comanda> consultar() throws NegocioException; 
+    
+    public abstract List<Comanda> buscarPorRangoFechas(Date desde, Date hasta);
     
 }

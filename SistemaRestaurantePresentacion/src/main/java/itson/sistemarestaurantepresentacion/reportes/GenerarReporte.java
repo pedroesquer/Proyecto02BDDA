@@ -240,7 +240,7 @@ public class GenerarReporte extends javax.swing.JFrame {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObjectFromFile(jasperFilePath);
 
             IComandasBO comandasBO = FabricaObjetosNegocio.crearComandasBO();
-            List<Comanda> comandasList = comandasBO.consultar();
+            List<Comanda> comandasList = comandasBO.buscarPorRangoFechas(fechaInicio, fechaFin);
             //Create datasource object
             JRBeanCollectionDataSource tableDatasource = new JRBeanCollectionDataSource(comandasList);
 

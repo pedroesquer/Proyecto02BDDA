@@ -4,6 +4,7 @@ import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
 import itson.sistemarestaurantepersistencia.excepciones.CantidadInexistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,4 +22,6 @@ public interface IComandasDAO {
     public abstract List<Comanda> consultarComanda();
 
     public abstract Comanda consultarComandaIndividual(Long idComanda);
+    
+    public abstract List<Comanda> buscarPorRangoFechas(Date desde, Date hasta);
 }

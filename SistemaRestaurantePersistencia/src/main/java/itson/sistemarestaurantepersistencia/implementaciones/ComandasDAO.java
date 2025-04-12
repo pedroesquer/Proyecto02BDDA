@@ -13,7 +13,9 @@ import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -207,5 +209,28 @@ public class ComandasDAO implements IComandasDAO {
     public Comanda consultarComandaIndividual(Long idComanda) {
         EntityManager entityManager = ManejadorConexiones.getEntityManager();
         return entityManager.find(Comanda.class, idComanda);
+    }
+
+    /**
+     * Método para buscar comandas dentro de una fechas especificas.
+     * @param desde
+     * @param hasta
+     * @return 
+     */
+    public List<Comanda> buscarPorRangoFechas(Date desde, Date hasta) {
+        EntityManager entityManager = ManejadorConexiones.getEntityManager();
+        // Convertimos Date a LocalDateTime
+        LocalDateTime fechaDesde = desde.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        LocalDateTime fechaHasta = hasta.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        String jpql = "SELECT c FROM Comanda c WHERE c.fechaHora BETWEEN :desde AND :hasta";
+        return entityManager.createQuery(jpql, Comanda.class)
+                .setParameter("desde", fechaDesde)
+                .setParameter("hasta", fechaHasta)
+                .getResultList();
     }
 }

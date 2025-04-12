@@ -12,6 +12,7 @@ import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepersistencia.IComandasDAO;
 import itson.sistemarestaurantepersistencia.excepciones.CantidadInexistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,6 +68,11 @@ public class ComandasBO implements IComandasBO {
             throw new NegocioException("La comanda ya está cerrada");
         }
         return this.comandasDAO.cerrarComanda(idComanda);
+    }
+
+    @Override
+    public List<Comanda> buscarPorRangoFechas(Date desde, Date hasta) {
+        return this.comandasDAO.buscarPorRangoFechas(desde, hasta);
     }
 
 }
