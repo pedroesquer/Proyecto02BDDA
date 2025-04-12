@@ -23,4 +23,6 @@ public interface IComandasBO {
     
     public abstract List<Comanda> buscarPorRangoFechas(Date desde, Date hasta);
     
+    public abstract Comanda consultarComandaIndividual(Long id) throws NegocioException;
+    
 }

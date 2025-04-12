@@ -1,5 +1,6 @@
     package itson.sistemarestaurantepresentacion.comandas;
 
+import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.dtos.AgregarProductoComandaDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
@@ -16,6 +17,7 @@ import java.util.List;
 public class AgregarDetalleComanda extends javax.swing.JFrame {
 
     private Producto producto;
+    private Comanda comanda;
     private IComandasBO comandasBO;
     private List<AgregarDetallesComandaObserver> observers = new ArrayList<>();
     /**
@@ -111,6 +113,7 @@ public class AgregarDetalleComanda extends javax.swing.JFrame {
         productoComanda.setCantidad(cantidad);
         productoComanda.setComentario(textFieldComentario.getText());
         productoComanda.setIdProducto(producto.getId());
+        productoComanda.setIdComanda(comanda.getId());
         productoComanda.setPrecioUnitario(producto.getPrecio());
         productoComanda.setImporte(producto.getPrecio() * cantidad);
         notificarObservers(productoComanda);

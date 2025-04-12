@@ -181,7 +181,7 @@ public class Comandas extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         this.dispose();
-        Control.getInstancia().abrirMenuAdministrador();
+        Control.getInstancia().abrirPantallaInicio();
     }//GEN-LAST:event_btnVolverActionPerformed
 
 

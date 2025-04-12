@@ -5,11 +5,15 @@
 package itson.sistemarestaurantenegocio.implementaciones;
 
 import itson.sistemarestaurantedominio.ProductoComanda;
+import itson.sistemarestaurantedominio.dtos.AgregarProductoComandaDTO;
 import itson.sistemarestaurantenegocio.IProductosComandaBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import itson.sistemarestaurantepersistencia.IProductosComandaDAO;
+import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import itson.sistemarestaurantepersistencia.implementaciones.ProductosComandaDAO;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,5 +35,17 @@ public class ProductosComandaBO implements IProductosComandaBO {
         return productosComanda.consultar(id);
     }
 
+    @Override
+    public ProductoComanda registrar(AgregarProductoComandaDTO agregarProductoComandaDTO) throws NegocioException {
+        if (agregarProductoComandaDTO == null) {
+            throw new NegocioException("Producto null");
+        }
+        try {
+            return productosComanda.registrar(agregarProductoComandaDTO);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ProductosComandaBO.class.getName()).log(Level.SEVERE, "Error al registrar el producto en la comanda", ex);
+        }
+        return null;
+    }
 
 }

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
@@ -43,15 +44,15 @@ public class BuscadorProductos extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setTitle("Buscador Productos");
         this.productosBO = productosBO;
-//        this.llenarTablaProductos();
         tablaProductos.removeColumn(tablaProductos.getColumnModel().getColumn(0));
         this.cargarTabla();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
     }
 
     /**
      * Método que carga la tabla dependiendo del filtro de busqueda.
-     * 
+     *
      */
     private void cargarTabla() {
         DefaultTableModel modeloTabla = (DefaultTableModel) tablaProductos.getModel();

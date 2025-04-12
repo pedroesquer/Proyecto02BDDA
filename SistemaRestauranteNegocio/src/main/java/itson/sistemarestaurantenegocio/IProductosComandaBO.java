@@ -5,6 +5,7 @@
 package itson.sistemarestaurantenegocio;
 
 import itson.sistemarestaurantedominio.ProductoComanda;
+import itson.sistemarestaurantedominio.dtos.AgregarProductoComandaDTO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
 import java.util.List;
 
@@ -15,5 +16,7 @@ import java.util.List;
 public interface IProductosComandaBO {
 
     public abstract List<ProductoComanda> consultar(Long id) throws NegocioException;
+    
+    public abstract ProductoComanda registrar(AgregarProductoComandaDTO agregarProductoComandaDTO) throws NegocioException;
 
 }

@@ -1,19 +1,20 @@
 package itson.sistemarestaurantepresentacion.comandas;
 
 import itson.sistemarestaurantepresentacion.ingredientes.*;
-import itson.sistemarestaurantedominio.Ingrediente;
+import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.ProductoComanda;
-import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
-import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
+import itson.sistemarestaurantedominio.dtos.AgregarProductoComandaDTO;
+import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantenegocio.IComandasBO;
-import itson.sistemarestaurantenegocio.IIngredientesBO;
+import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.IProductosComandaBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
+import itson.sistemarestaurantenegocio.fabrica.FabricaObjetosNegocio;
 import itson.sistemarestaurantepersistencia.excepciones.CantidadInexistenteException;
 import itson.sistemarestaurantepersistencia.excepciones.PersistenciaException;
 import itson.sistemarestaurantepresentacion.control.Control;
-import itson.sistemarestaurantepresentacion.observers.ComandaSeleccionadaObserver;
-import itson.sistemarestaurantepresentacion.observers.IngredienteSeleccionadoObserver;
+import itson.sistemarestaurantepresentacion.observers.AgregarDetallesComandaObserver;
+import itson.sistemarestaurantepresentacion.observers.ProductoSeleccionadoObserver;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +28,7 @@ import javax.swing.table.TableColumnModel;
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
  * Sooto
  */
-public class DetallesComanda extends javax.swing.JFrame implements ComandaSeleccionadaObserver {
+public class DetallesComanda extends javax.swing.JFrame implements ProductoSeleccionadoObserver, AgregarDetallesComandaObserver {
 
     /**
      * Creates new form Productos
@@ -35,6 +36,9 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
     private Long idComanda;
     private IComandasBO comandasBO;
     private IProductosComandaBO productosComandaBO;
+    private IProductosBO productosBO;
+    DefaultTableModel modeloTabla;
+
     private static final Logger LOG = Logger.getLogger(BuscadorIngredientes.class.getName());
 
     public DetallesComanda(Long idComanda, IComandasBO comandasBO, IProductosComandaBO productosComandaBO) {
@@ -48,6 +52,10 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
         this.productosComandaBO = productosComandaBO;
         this.llenarTablaComanda();
         this.ocultarColumnaID();
+        this.productosBO = FabricaObjetosNegocio.crearProductosBO();
+        modeloTabla = (DefaultTableModel) this.tablaProductosComanda.getModel();
+        modeloTabla.setRowCount(0);
+        this.llenarTablaComanda();
     }
 
     /**
@@ -97,10 +105,14 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
         pnlTablaProductosComanda = new javax.swing.JScrollPane();
         tablaProductosComanda = new javax.swing.JTable();
         btnVolver = new javax.swing.JButton();
-        lblAgregarIcon = new javax.swing.JLabel();
+        lblCancelarComanda = new javax.swing.JLabel();
+        lblAgregarProductos = new javax.swing.JLabel();
+        lblAgregarFondo = new javax.swing.JLabel();
         lblEntregar = new javax.swing.JLabel();
-        lblAgregar = new javax.swing.JLabel();
         lblEntregarComanda = new javax.swing.JLabel();
+        lblAgregarIcon = new javax.swing.JLabel();
+        lblAgregar = new javax.swing.JLabel();
+        lblCancelarFondo1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -175,23 +187,45 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
                 btnVolverActionPerformed(evt);
             }
         });
-        panelGeneral.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 410, 93, -1));
+        panelGeneral.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 93, -1));
 
-        lblAgregarIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/aniadirProducto.png"))); // NOI18N
-        lblAgregarIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblCancelarComanda.setBackground(new java.awt.Color(0, 0, 0));
+        lblCancelarComanda.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        lblCancelarComanda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCancelarComanda.setText("Cancelar comanda");
+        lblCancelarComanda.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblAgregarIconMouseClicked(evt);
+                lblCancelarComandaMouseClicked(evt);
             }
         });
-        panelGeneral.add(lblAgregarIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 110, 110));
+        panelGeneral.add(lblCancelarComanda, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 360, 170, 60));
+
+        lblAgregarProductos.setBackground(new java.awt.Color(0, 0, 0));
+        lblAgregarProductos.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        lblAgregarProductos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAgregarProductos.setText("Agregar a comanda");
+        lblAgregarProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblAgregarProductosMouseClicked(evt);
+            }
+        });
+        panelGeneral.add(lblAgregarProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, 170, 60));
+
+        lblAgregarFondo.setBackground(new java.awt.Color(0, 0, 0));
+        lblAgregarFondo.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        lblAgregarFondo.setForeground(new java.awt.Color(0, 0, 0));
+        lblAgregarFondo.setText("Cancelar");
+        lblAgregarFondo.setOpaque(true);
+        lblAgregarFondo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblAgregarFondoMouseClicked(evt);
+            }
+        });
+        panelGeneral.add(lblAgregarFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, 170, 60));
 
         lblEntregar.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         lblEntregar.setText("Entregar Comanda");
         panelGeneral.add(lblEntregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 310, -1, -1));
-
-        lblAgregar.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        lblAgregar.setText("Agregar");
-        panelGeneral.add(lblAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, -1, -1));
 
         lblEntregarComanda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/entregarComanda.png"))); // NOI18N
         lblEntregarComanda.setText("s");
@@ -202,6 +236,30 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
         });
         panelGeneral.add(lblEntregarComanda, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 170, -1, -1));
 
+        lblAgregarIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/aniadirProducto.png"))); // NOI18N
+        lblAgregarIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblAgregarIconMouseClicked(evt);
+            }
+        });
+        panelGeneral.add(lblAgregarIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 110, 110));
+
+        lblAgregar.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        lblAgregar.setText("Buscar producto");
+        panelGeneral.add(lblAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, -1, -1));
+
+        lblCancelarFondo1.setBackground(new java.awt.Color(0, 0, 0));
+        lblCancelarFondo1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        lblCancelarFondo1.setForeground(new java.awt.Color(0, 0, 0));
+        lblCancelarFondo1.setText("Cancelar");
+        lblCancelarFondo1.setOpaque(true);
+        lblCancelarFondo1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCancelarFondo1MouseClicked(evt);
+            }
+        });
+        panelGeneral.add(lblCancelarFondo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 360, 170, 60));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -210,7 +268,7 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
+            .addComponent(panelGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -220,10 +278,6 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
         Control.getInstancia().abrirComandas();
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
-
-    private void lblAgregarIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAgregarIconMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblAgregarIconMouseClicked
 
     private void lblEntregarComandaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblEntregarComandaMouseClicked
         try {
@@ -246,6 +300,45 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
 
     }//GEN-LAST:event_lblEntregarComandaMouseClicked
 
+    private void lblAgregarIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAgregarIconMouseClicked
+        Control.getInstancia().abrirBuscadorProductos(this);
+    }//GEN-LAST:event_lblAgregarIconMouseClicked
+
+    private void lblCancelarComandaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCancelarComandaMouseClicked
+        try {
+            comandasBO.cancelarComanda(idComanda);
+            JOptionPane.showMessageDialog(this, "La comanda fue cancelada exitosamente.",
+                    "Comanda cerrada", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        } catch (CantidadInexistenteException ex) {
+            JOptionPane.showMessageDialog(this, "No hay suficiente stock para completar la comanda:\n" + ex.getMessage(),
+                    "Stock insuficiente", JOptionPane.WARNING_MESSAGE);
+            Logger.getLogger(DetallesComanda.class.getName()).log(Level.WARNING, "Stock insuficiente al cerrar comanda", ex);
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error de negocio:\n" + ex.getMessage(),
+                    "Error de negocio", JOptionPane.WARNING_MESSAGE);
+            Logger.getLogger(DetallesComanda.class.getName()).log(Level.WARNING, "Error de negocio al cerrar comanda", ex);
+        } catch (PersistenciaException ex) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error al acceder a la base de datos:\n" + ex.getMessage(),
+                    "Error de persistencia", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(DetallesComanda.class.getName()).log(Level.SEVERE, "Error de persistencia al cerrar comanda", ex);
+        }
+
+
+    }//GEN-LAST:event_lblCancelarComandaMouseClicked
+
+    private void lblAgregarFondoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAgregarFondoMouseClicked
+    }//GEN-LAST:event_lblAgregarFondoMouseClicked
+
+    private void lblAgregarProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAgregarProductosMouseClicked
+        //aqui
+
+    }//GEN-LAST:event_lblAgregarProductosMouseClicked
+
+    private void lblCancelarFondo1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCancelarFondo1MouseClicked
+
+    }//GEN-LAST:event_lblCancelarFondo1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -255,7 +348,11 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
     private javax.swing.JLabel iconChefSoft;
     private javax.swing.JLabel iconComanda;
     private javax.swing.JLabel lblAgregar;
+    private javax.swing.JLabel lblAgregarFondo;
     private javax.swing.JLabel lblAgregarIcon;
+    private javax.swing.JLabel lblAgregarProductos;
+    private javax.swing.JLabel lblCancelarComanda;
+    private javax.swing.JLabel lblCancelarFondo1;
     private javax.swing.JLabel lblEntregar;
     private javax.swing.JLabel lblEntregarComanda;
     private javax.swing.JLabel lblTituloComanda;
@@ -265,8 +362,35 @@ public class DetallesComanda extends javax.swing.JFrame implements ComandaSelecc
     private javax.swing.JTable tablaProductosComanda;
     // End of variables declaration//GEN-END:variables
 
+    private void agregarProductosComanda(AgregarProductoComandaDTO productoComandaDTO) throws NegocioException {
+        productosComandaBO.registrar(productoComandaDTO);
+    }
+
+    private void actualizarTablaConProducto(AgregarProductoComandaDTO productoComandaDTO) {
+
+        Object[] fila = {
+            productoComandaDTO.getIdProducto(),
+            productosBO.consultarProductoIndividual(productoComandaDTO.getIdProducto()).getNombre(),
+            productoComandaDTO.getComentario(),
+            productoComandaDTO.getPrecioUnitario()
+        };
+        modeloTabla.addRow(fila);
+    }
+
     @Override
-    public void comandaSeleccionada(NuevaComandaDTO comanda) {
-        llenarTablaComanda();
+    public void productoSeleccionado(NuevoProductoDTO productoDTO) {
+        Producto producto = productosBO.consultarProductoIndividual(productoDTO.getId());
+        Control.getInstancia().abrirAgregarDetalleComanda(producto, this);
+
+    }
+
+    @Override
+    public void detallesProductoComandaAceptado(AgregarProductoComandaDTO productoComandaDTO) {
+        actualizarTablaConProducto(productoComandaDTO);
+        try {
+            agregarProductosComanda(productoComandaDTO);
+        } catch (NegocioException ex) {
+            Logger.getLogger(DetallesComanda.class.getName()).log(Level.SEVERE, "Error al procesar la comanda", ex);
+        }
     }
 }

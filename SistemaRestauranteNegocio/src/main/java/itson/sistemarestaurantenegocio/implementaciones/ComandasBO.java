@@ -67,12 +67,20 @@ public class ComandasBO implements IComandasBO {
         if (comandasDAO.consultarComandaIndividual(idComanda).getEstado() == EstadoComanda.CERRADA) {
             throw new NegocioException("La comanda ya está cerrada");
         }
-        return this.comandasDAO.cerrarComanda(idComanda);
+        return this.comandasDAO.cancelarComanda(idComanda);
     }
 
     @Override
     public List<Comanda> buscarPorRangoFechas(Date desde, Date hasta) {
         return this.comandasDAO.buscarPorRangoFechas(desde, hasta);
+    }
+
+    @Override
+    public Comanda consultarComandaIndividual(Long id) throws NegocioException {
+        if (id == null) {
+            throw new NegocioException("No existe este producto");
+        }
+        return this.comandasDAO.consultarComandaIndividual(id);
     }
 
 }

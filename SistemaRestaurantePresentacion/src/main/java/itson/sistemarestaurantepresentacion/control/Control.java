@@ -1,6 +1,7 @@
 package itson.sistemarestaurantepresentacion.control;
 
 import itson.sistemarestaurantedominio.Cliente;
+import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantedominio.Producto;
 import static itson.sistemarestaurantedominio.ProductoComanda_.producto;
 import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
@@ -28,6 +29,7 @@ import itson.sistemarestaurantepresentacion.ingredientes.Ingredientes;
 import itson.sistemarestaurantepresentacion.ingredientes.ListaIngredientes;
 import itson.sistemarestaurantepresentacion.productos.ListaProductos;
 import itson.sistemarestaurantepresentacion.MenuAdministrador;
+import itson.sistemarestaurantepresentacion.PantallaEntrada;
 import itson.sistemarestaurantepresentacion.clientes.BuscadorClientes;
 import itson.sistemarestaurantepresentacion.comandas.AgregarComanda;
 import itson.sistemarestaurantepresentacion.comandas.AgregarDetalleComanda;
@@ -291,5 +293,10 @@ public class Control {
     public void abrirReportes() {
         Reportes formReporteComandas = new Reportes();
         formReporteComandas.setVisible(true);
+    }
+
+    public void abrirPantallaInicio() {
+        PantallaEntrada inicio = new PantallaEntrada();
+        inicio.setVisible(true);
     }
 }

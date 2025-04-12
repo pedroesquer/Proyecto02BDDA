@@ -1,15 +1,14 @@
 package itson.sistemarestaurantepresentacion.comandas;
 
+import itson.sistemarestaurantedominio.Comanda;
 import itson.sistemarestaurantedominio.EstadoComanda;
 import itson.sistemarestaurantedominio.Mesa;
 import itson.sistemarestaurantedominio.Producto;
 import itson.sistemarestaurantedominio.ProductoComanda;
 import itson.sistemarestaurantedominio.dtos.AgregarProductoComandaDTO;
 import itson.sistemarestaurantedominio.dtos.NuevaComandaDTO;
-import itson.sistemarestaurantedominio.dtos.NuevoIngredienteDTO;
 import itson.sistemarestaurantedominio.dtos.NuevoProductoDTO;
 import itson.sistemarestaurantenegocio.IComandasBO;
-import itson.sistemarestaurantenegocio.IIngredientesBO;
 import itson.sistemarestaurantenegocio.IMesasBO;
 import itson.sistemarestaurantenegocio.IProductosBO;
 import itson.sistemarestaurantenegocio.excepciones.NegocioException;
@@ -47,8 +46,8 @@ public class AgregarComanda extends javax.swing.JFrame implements ProductoSelecc
     private IMesasBO mesasBO;
     private IProductosBO productosBO;
     private IComandasBO comandaBO;
-
     DefaultTableModel modeloTabla;
+    
 
     /**
      * Creates new form Productos
@@ -273,7 +272,6 @@ public class AgregarComanda extends javax.swing.JFrame implements ProductoSelecc
     }//GEN-LAST:event_btnBuscarProducto1ActionPerformed
 
     private void comboBoxMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxMesaActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxMesaActionPerformed
 
     private List<ProductoComanda> generarListaProductosComanda() {
@@ -285,7 +283,8 @@ public class AgregarComanda extends javax.swing.JFrame implements ProductoSelecc
             ProductoComanda producto = new ProductoComanda();
 
             // Se obtiene la cantidad (columna 1)
-            producto.setCantidad(Integer.parseInt(modelo.getValueAt(i, 1).toString()));
+            int cantidad = Integer.parseInt(modelo.getValueAt(i, 1).toString());
+            producto.setCantidad(cantidad);
 
             // Se consulta el producto usando el ID (columna 2)
             producto.setProducto(productosBO.consultarProductoIndividual(
@@ -299,7 +298,9 @@ public class AgregarComanda extends javax.swing.JFrame implements ProductoSelecc
             producto.setPrecioUnitario(Float.parseFloat(modelo.getValueAt(i, 4).toString()));
 
             // Se calcula el importe (columna 4)
-            producto.setImporte(Float.parseFloat(modelo.getValueAt(i, 4).toString()));
+            Float importe = cantidad * (Float.parseFloat(modelo.getValueAt(i, 4).toString()));
+            
+            producto.setImporte(importe);
 
             lista.add(producto);
         }
@@ -322,6 +323,11 @@ public class AgregarComanda extends javax.swing.JFrame implements ProductoSelecc
     private javax.swing.JTable tablaComandas;
     // End of variables declaration//GEN-END:variables
 
+    
+    public Comanda obtenerComanda(NuevaComandaDTO comandaDTO) throws NegocioException{
+        Comanda comanda = comandaBO.consultarComandaIndividual(comandaDTO.getId());
+        return comanda;
+    }
     @Override
     public void productoSeleccionado(NuevoProductoDTO productoDTO) {
         Producto producto = productosBO.consultarProductoIndividual(productoDTO.getId());

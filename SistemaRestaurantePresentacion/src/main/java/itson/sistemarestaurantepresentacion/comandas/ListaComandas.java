@@ -26,7 +26,7 @@ import javax.swing.table.TableColumnModel;
  * @author Pedro Morales Esquer, Juan Pablo Heras Carrazco, Victoria Valenzuela
  * Sooto
  */
-public class ListaComandas extends javax.swing.JFrame implements IngredienteSeleccionadoObserver {
+public class ListaComandas extends javax.swing.JFrame {
 
     /**
      * Creates new form Productos
@@ -110,29 +110,7 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
         columnModel.removeColumn(columnaID);
     }
 
-    /**
-     * Actualiza la tabla con los datos de un ingrediente seleccionado.
-     *
-     * @param ingredienteSeleccionado El ingrediente a mostrar en la tabla.
-     */
-    public void actualizarIngredientesSeleccionados(NuevoIngredienteDTO ingredienteSeleccionado) {
-        try {
-            DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaComandas.getModel();
-            modeloTabla.setRowCount(0); // Limpiamos la tabla antes de llenarla nuevamente
 
-            Object[] fila = {
-                ingredienteSeleccionado.getId(),
-                ingredienteSeleccionado.getNombre(),
-                ingredienteSeleccionado.getUnidadMedida(),
-                ingredienteSeleccionado.getStock()
-            };
-            modeloTabla.addRow(fila);
-
-        } catch (Exception ex) {
-            LOG.severe("No se pudo actualizar la tabla con los ingredientes seleccionados");
-            JOptionPane.showInputDialog(this, ex.getMessage());
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -290,8 +268,5 @@ public class ListaComandas extends javax.swing.JFrame implements IngredienteSele
     private javax.swing.JTable tablaComandas;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void ingredienteSeleccionado(NuevoIngredienteDTO ingrediente) {
-        actualizarIngredientesSeleccionados(ingrediente);
-    }
+
 }
