@@ -286,7 +286,7 @@ public class DetallesComanda extends javax.swing.JFrame implements ProductoSelec
                     "Comanda cerrada", JOptionPane.INFORMATION_MESSAGE);
         } catch (CantidadInexistenteException ex) {
             JOptionPane.showMessageDialog(this, "No hay suficiente stock para completar la comanda:\n" + ex.getMessage(),
-                    "Stock insuficiente", JOptionPane.WARNING_MESSAGE);
+                    "Stock insuficiente", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(DetallesComanda.class.getName()).log(Level.WARNING, "Stock insuficiente al cerrar comanda", ex);
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, "Ocurrió un error de negocio:\n" + ex.getMessage(),
@@ -310,6 +310,7 @@ public class DetallesComanda extends javax.swing.JFrame implements ProductoSelec
             JOptionPane.showMessageDialog(this, "La comanda fue cancelada exitosamente.",
                     "Comanda cerrada", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
+            Control.getInstancia().abrirMenuAdministrador();
         } catch (CantidadInexistenteException ex) {
             JOptionPane.showMessageDialog(this, "No hay suficiente stock para completar la comanda:\n" + ex.getMessage(),
                     "Stock insuficiente", JOptionPane.WARNING_MESSAGE);
